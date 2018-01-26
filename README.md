@@ -2,5 +2,7 @@
 
 Future home of Columbia's API for all data.
 
-Jonathan Zhang
 
+Jonathan Zhang
+Kathy Lau
+James Xu
