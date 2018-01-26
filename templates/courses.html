@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data ADICU</title>
+<link href="/static/css/bootstrap.min.css?v=c6f2c" rel="stylesheet">
+<link href="/static/css/bootstrap-responsive.min.css?v=02ca8" rel="stylesheet">
+<link href="/static/css/bootstrap-responsive-fluid.css?v=7d8ad" rel="stylesheet">
+<script src="/static/js/modernizr.js?v=77044"></script>
+<link href="/static/css/preview.css?v=bfd55" rel="stylesheet">
+<link href="/static/css/prometheus.css?v=2469c" rel="stylesheet">
+<link href="/static/css/menu.css?v=9e1ec" rel="stylesheet">
+</head>
+<body>
+<!-- ========================
+Header
+============================= -->
+<header>
+<div class="navbar navbar-inverse">
+<div class="navbar-inner">
+<div class="container">
+<a class="logo" href="#">ADI Data API Docs</a>
+<div class="nav-collapse collapse">
+<ul class="profileBar visible-desktop">
+
+<li class="profile">
+<a href="/login">Log In</a>
+</li>
+
+</ul>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- ========================
+Sidebar
+============================= -->
+<aside class="visible-desktop">
+<ul class="sideMenu">
+
+<li
+><a href="Authentication">Authentication</a>
+</li>
+
+<li
+><a href="Documentation">Documentation</a>
+</li>
+
+<li
+><a href="courses">courses</a>
+</li>
+
+<li
+class="active"
+
+><a href="courses (v2)">courses (v2)</a>
+</li>
+
+<li
+><a href="housing">housing</a>
+</li>
+
+</ul>
+</aside>
+
+<!-- ========================
+Content
+============================= -->
+<div id="content" class="container-fluid">
+<div class="row-fluid">
+<div class="span12">
+<section id="courses (v2)">
+<h1>courses (v2)</h1>
+<hr>
+
+<p class="lead">The courses API got a reboot to conceptually separate courses and sections.
+
+There are two courses endpoints: courses/v2/courses and courses/v2/sections.
+All the sections for a course come embedded in that course. The query
+parameters for the two are pretty disjoint for now; this should be fixed at
+some point.</p>
+
+
+
+<h2>Endpoint courses</h2>
+<h3>GET Request</h3>
+<div class="box-example">
+<p class="text-info"><a href="http://data.adicu.com/courses/v2/courses?api_token=API_TOKEN&amp;department=coms&amp;pretty=true&amp;limit=1" target="_blank">http://data.adicu.com/courses/v2/courses?api_token=API_TOKEN&amp;department=coms&amp;pretty=true&amp;limit=1</a></p>
+</div>
+<h3>Response</h3>
+<div class="box-example">
+<pre class="text-success prettyprint
+lang=js">{
+    &quot;status_code&quot;: 200,
+    &quot;data&quot;: [
+        {
+            &quot;DepartmentCode&quot;: &quot;COMS&quot;,
+            &quot;Sections&quot;: [
+                {
+                    &quot;Course&quot;: &quot;CBMF4761&quot;,
+                    &quot;Term&quot;: &quot;20131&quot;,
+                    &quot;TypeName&quot;: &quot;LECTURE&quot;,
+                    &quot;NumEnrolled&quot;: 14,
+                    &quot;Room2&quot;: null,
+                    &quot;Room1&quot;: &quot;1127&quot;,
+                    &quot;EndTime2&quot;: &quot;None&quot;,
+                    &quot;MeetsOn2&quot;: null,
+                    &quot;CampusName&quot;: &quot;MORNINGSIDE&quot;,
+                    &quot;EndTime1&quot;: &quot;17:25:00&quot;,
+                    &quot;Building1&quot;: &quot;SEELEY W. MU&quot;,
+                    &quot;Instructor1Name&quot;: &quot;PE'ER, ITSHACK&quot;,
+                    &quot;MaxSize&quot;: 75,
+                    &quot;Building2&quot;: null,
+                    &quot;CampusCode&quot;: &quot;MORN&quot;,
+                    &quot;CallNumber&quot;: 69280,
+                    &quot;MeetsOn1&quot;: &quot;MW&quot;,
+                    &quot;SectionFull&quot;: &quot;CBMF4761W001&quot;,
+                    &quot;StartTime1&quot;: &quot;16:10:00&quot;,
+                    &quot;StartTime2&quot;: &quot;None&quot;
+                }
+            ],
+            &quot;MaxUnits&quot;: 0,
+            &quot;Course&quot;: &quot;CBMF4761&quot;,
+            &quot;CourseSubtitle&quot;: &quot;COMPUTATIONAL GENOMICS&quot;,
+            &quot;MinUnits&quot;: 0,
+            &quot;Description&quot;: &quot;Provides comprehensive introduction to computational techniques for analyzing genomic data including DNA, RNA and protein structures; microarrays; transcription and regulation; regulatory, metabolic and protein interaction networks. The course covers sequence analysis algorithms, dynamic programming, hidden Markov models, phylogenetic analysis, Bayesian network techniques, neural networks, clustering algorithms, support vector machines, Boolean models of regulatory networks, flux based analysis of metabolic networks and scale-free network models. The course provides self-contained introduction to relevant biological mechanisms and methods.&quot;,
+            &quot;NumFixedUnits&quot;: 30,
+            &quot;DepartmentName&quot;: &quot;COMPUTER SCIENCE&quot;,
+            &quot;SchoolName&quot;: &quot;INTERFACULTY&quot;,
+            &quot;CourseTitle&quot;: &quot;COMPUTATIONAL GENOMICS&quot;,
+            &quot;Approval&quot;: &quot;&quot;
+        }
+    ],
+    &quot;status_txt&quot;: &quot;OK&quot;
+}</pre>
+</div>
+
+<h3>Query Parameters</h3>
+
+<h4>title</h4>
+<p class="prettyprint"><span class="tag">string</span></p>
+
+<h4>courseid</h4>
+<p class="prettyprint"><span class="tag">string</span></p>
+
+<h4>school</h4>
+<p class="prettyprint"><span class="tag">string</span></p>
+
+<h4>department</h4>
+<p class="prettyprint"><span class="tag">string</span></p>
+
+<h4>description</h4>
+<p class="prettyprint"><span class="tag">string (be careful with this pretty please, it's an expensive query)</span></p>
+
+<h4>course</h4>
+<p class="prettyprint"><span class="tag">string</span></p>
+
+<h4>course_full</h4>
+<p class="prettyprint"><span class="tag">string</span></p>
+
+
+
+<h2>Endpoint sections</h2>
+<h3>GET Request</h3>
+<div class="box-example">
+<p class="text-info"><a href="http://data.adicu.com/courses/v2/sections?api_token=API_TOKEN&amp;not_full=false&amp;pretty=true&amp;limit=1" target="_blank">http://data.adicu.com/courses/v2/sections?api_token=API_TOKEN&amp;not_full=false&amp;pretty=true&amp;limit=1</a></p>
+</div>
+<h3>Response</h3>
+<div class="box-example">
+<pre class="text-success prettyprint
+lang=js">{
+    &quot;status_code&quot;: 200,
+    &quot;data&quot;: [
+        {
+            &quot;Term&quot;: &quot;20131&quot;,
+            &quot;CampusName&quot;: &quot;BARNARD COLLEGE&quot;,
+            &quot;StartTime2&quot;: &quot;None&quot;,
+            &quot;StartTime1&quot;: &quot;13:10:00&quot;,
+            &quot;Course&quot;: &quot;SPAN1102&quot;,
+            &quot;CampusCode&quot;: &quot;CBAR&quot;,
+            &quot;Instructor1Name&quot;: &quot;ARCE-FERNANDEZ, MARIA I&quot;,
+            &quot;Building1&quot;: &quot;MILBANK HALL&quot;,
+            &quot;Building2&quot;: null,
+            &quot;NumEnrolled&quot;: 16,
+            &quot;CallNumber&quot;: 511,
+            &quot;MeetsOn1&quot;: &quot;MTWR&quot;,
+            &quot;SectionFull&quot;: &quot;SPAN1102W013&quot;,
+            &quot;EndTime1&quot;: &quot;14:15:00&quot;,
+            &quot;EndTime2&quot;: &quot;None&quot;,
+            &quot;MeetsOn2&quot;: null,
+            &quot;TypeName&quot;: &quot;LANGUAGE&quot;,
+            &quot;MaxSize&quot;: 15,
+            &quot;Room2&quot;: null,
+            &quot;Room1&quot;: &quot;237&quot;
+        }
+    ],
+    &quot;status_txt&quot;: &quot;OK&quot;
+}</pre>
+</div>
+
+<h3>Query Parameters</h3>
+
+<h4>class_type</h4>
+<p class="prettyprint"><span class="tag">string</span></p>
+
+<h4>meets_on</h4>
+<p class="prettyprint"><span class="tag">string</span></p>
+
+<h4>ends_at</h4>
+<p class="prettyprint"><span class="tag"> time: HH:MM</span></p>
+
+<h4>not_full</h4>
+<p class="prettyprint"><span class="tag">boolean</span></p>
+
+<h4>campus</h4>
+<p class="prettyprint"><span class="tag">string</span></p>
+
+<h4>professor</h4>
+<p class="prettyprint"><span class="tag">string</span></p>
+
+<h4>term</h4>
+<p class="prettyprint"><span class="tag">string</span></p>
+
+<h4>students_less_than</h4>
+<p class="prettyprint"><span class="tag">int</span></p>
+
+<h4>section_full</h4>
+<p class="prettyprint"><span class="tag">string</span></p>
+
+<h4>starts_at</h4>
+<p class="prettyprint"><span class="tag"> time HH:MM</span></p>
+
+<h4>courseid</h4>
+<p class="prettyprint"><span class="tag">string</span></p>
+
+<h4>starts_after</h4>
+<p class="prettyprint"><span class="tag">time HH:MM</span></p>
+
+<h4>starts_before</h4>
+<p class="prettyprint"><span class="tag">time HH:MM</span></p>
+
+<h4>call_number</h4>
+<p class="prettyprint"><span class="tag">int</span></p>
+
+<h4>ends_before</h4>
+<p class="prettyprint"><span class="tag">time: HH:MM</span></p>
+
+<h4>ends_after</h4>
+<p class="prettyprint"><span class="tag">time: HH:MM</span></p>
+
+<h4>building</h4>
+<p class="prettyprint"><span class="tag">string</span></p>
+
+<h4>course</h4>
+<p class="prettyprint"><span class="tag"> string </span></p>
+
+
+
+
+</section>
+</div>
+</div>
+</div>
+
+<!-- ========================
+Javascripts
+============================= -->
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="/static/js/menu.js?v=7e9c4"></script>
+<script src="/static/js/bootstrap.min.js?v=81784"></script>
+</body>
+</html>

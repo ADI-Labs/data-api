@@ -99,7 +99,7 @@ ENV/
 
 # mypy
 .mypy_cache/
-
+*.pyc
 # jz
 .idea/
 .DS_Store
