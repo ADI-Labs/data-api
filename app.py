@@ -59,6 +59,7 @@ def login():
             <p><input type=submit value=Login>
         </form>
         ''')
+        #return redirect(url_for('index'))
 
 
 # somewhere to logout
@@ -96,6 +97,6 @@ def load_user(request):
                 return user
     return None
 
-    
+
 if __name__ == "__main__":
     app.run()
