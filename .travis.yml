@@ -10,4 +10,4 @@ install:
 
 script:
   - pep8
-#  - flask test
+  - flask test
