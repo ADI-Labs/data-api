@@ -4,6 +4,7 @@ python:
 
 before_install:
   - pip install --upgrade pip
+  - export FLASK_APP=run.py
 
 install:
   - pip install -r requirements.txt
