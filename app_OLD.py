@@ -37,7 +37,7 @@ class User(UserMixin):
         return "%d/%s/%s" % (self.id, self.email, self.password)
 
 
-# create some users with ids 1 to 20
+# some users with ids 1 to 20
 users = [User(id) for id in range(1, 21)]
 
 
