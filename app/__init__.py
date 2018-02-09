@@ -9,11 +9,11 @@ api = Api()
 
 login_manager = LoginManager()
 login_manager.login_view = "login"
-
+bootstrap = Bootstrap()
 
 def create_app(name=__name__):
     app = Flask(name)
-    bootstrap = Bootstrap(app)  # noqa: F841
+    bootstrap.init_app(app)
     app.config.update(
         DEBUG=True,
         SECRET_KEY=os.environ.get('SECRET_KEY', 'secret_xxx')

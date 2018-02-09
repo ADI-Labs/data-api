@@ -33,3 +33,29 @@ class User(UserMixin):
 
     def __repr__(self):
         return "%d/%s/%s" % (self.id, self.email, self.password)
+
+
+db = None
+
+
+class Course(db.Model):
+    _tablename_ = 'courses'
+    name=db.Column(db.String(64), unique = True)
+
+    def __repr__(self):
+        return '<Course %r>' % self.name
+
+class Dining(db.Model):
+    _tablename_ = 'dining'
+    name = db.Column(db.String(64), unique=True)
+
+    def __repr__(self):
+        return '<Dining %r>' % self.name
+
+
+class Student(db.Model):
+    _tablename_ = 'students'
+    name = db.Column(db.String(64), unique=True)
+
+    def __repr__(self):
+        return '<Student %r>' % self.name
