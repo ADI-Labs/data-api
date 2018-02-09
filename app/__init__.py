@@ -11,6 +11,7 @@ login_manager = LoginManager()
 login_manager.login_view = "login"
 bootstrap = Bootstrap()
 
+
 def create_app(name=__name__):
     app = Flask(name)
     bootstrap.init_app(app)

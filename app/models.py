@@ -39,14 +39,15 @@ db = None
 
 
 class Course(db.Model):
-    _tablename_ = 'courses'
-    name=db.Column(db.String(64), unique = True)
+    __tablename__ = 'courses'
+    name = db.Column(db.String(64), unique=True)
 
     def __repr__(self):
         return '<Course %r>' % self.name
 
+
 class Dining(db.Model):
-    _tablename_ = 'dining'
+    __tablename__ = 'dining'
     name = db.Column(db.String(64), unique=True)
 
     def __repr__(self):
@@ -54,7 +55,7 @@ class Dining(db.Model):
 
 
 class Student(db.Model):
-    _tablename_ = 'students'
+    __tablename__ = 'students'
     name = db.Column(db.String(64), unique=True)
 
     def __repr__(self):
