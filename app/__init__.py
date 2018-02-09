@@ -13,7 +13,7 @@ login_manager.login_view = "login"
 
 def create_app(name=__name__):
     app = Flask(name)
-    bootstrap = Bootstrap(app) # noqa: F841
+    bootstrap = Bootstrap(app)  # noqa: F841
     app.config.update(
         DEBUG=True,
         SECRET_KEY=os.environ.get('SECRET_KEY', 'secret_xxx')
