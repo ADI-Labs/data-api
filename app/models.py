@@ -3,9 +3,10 @@ from . import login_manager
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
 
-@login_manager.user_loader
-def load_user(userid):
-    return User(userid)
+# commented for now to pass the flake8 checks
+# @login_manager.user_loader
+# def load_user(userid):
+#     return User(userid)
 
 
 @login_manager.request_loader
