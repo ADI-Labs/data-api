@@ -9,10 +9,8 @@ before_install:
 
 install:
   - pip install -r requirements.txt
-  - pip install pycodestyle
-  - pip install autopep8
+  - pip install flake8
 
 script:
-  - autopep8 -i -r $APP_DIRECTORY
-  - pycodestyle $APP_DIRECTORY --ignore=E402
+  - flake8 $APP_DIRECTORY --ignore=E402
   - flask test
