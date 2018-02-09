@@ -3,16 +3,14 @@ python:
   - "3.6"
 
 before_install:
-  - pip install --upgrade
+  - pip install --upgrade pip
   - export FLASK_APP=run.py
   - export APP_DIRECTORY=app
 
 install:
   - pip install -r requirements.txt
-  - pip install pep8
-  - pip install autopep8
+  - pip install flake8
 
 script:
-  - autopep8 -i -r $APP_DIRECTORY
-  - pep8 $APP_DIRECTORY --ignore=E402
+  - flake8 $APP_DIRECTORY --ignore=E402
   - flask test

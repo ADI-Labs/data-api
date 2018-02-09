@@ -11,12 +11,20 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
+
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                   <li><a href="{{ url_for('main.dining') }}">Dining</a></li>
                   <li><a href="{{ url_for('main.housing') }}">Housing</a></li>
                   <li><a href="{{ url_for('main.courses') }}">Courses</a></li>
+
+                <a class="navbar-brand" href="{{ url_for('main.home') }}">Twitter Demo</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="{{ url_for('main.home') }}">Home</a></li>
+
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
 {#                    {% if current_user.is_authenticated %}#}
@@ -37,3 +45,5 @@
     {% endblock %}
     </div>
 {% endblock %}
+
+
