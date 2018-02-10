@@ -9,7 +9,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 #     return User(userid)
 
 
-
 @login_manager.request_loader
 def load_user(request):
     token = request.headers.get('Authorization')
@@ -45,22 +44,21 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
 
     def generate_confirmation_token(self, expiration=3600):
-        s =  Serializer('xxx', expiration)
-        return s.dumps( {'id': self.uni} )
+        s = Serializer('xxx', expiration)
+        return s.dumps({'id': self.uni})
 
     @staticmethod
     def verify(self, token):
         s = Serializer('xxx')
         try:
             data = s.loads(token)
-        except:
+        except Exception:
             return False
         if data.get('confirm') != self.id:
             return False
         self.confirm = True
         db.session.add(self)
         return True
-
 
     def __repr__(self):
         return "%s/%s/%s" % (self.uni, self.email, self.password)

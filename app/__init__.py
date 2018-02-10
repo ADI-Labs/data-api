@@ -12,14 +12,16 @@ db = SQLAlchemy()
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
+
 def create_app(name=__name__):
     app = Flask(name)
     app.config.update(
         DEBUG=True,
         SECRET_KEY=os.environ.get('SECRET_KEY', 'secret_xxx'),
-        SQLALCHEMY_DATABASE_URI='sqlite:///' + os.path.join(basedir, 'data.sqlite'),
-        SQLALCHEMY_TRACK_MODIFICATIONS = False,
-        SQLALCHEMY_COMMIT_ON_TEARDOWN = True
+        SQLALCHEMY_DATABASE_URI='sqlite:///' +
+        os.path.join(basedir, 'data.sqlite'),
+        SQLALCHEMY_TRACK_MODIFICATIONS=False,
+        SQLALCHEMY_COMMIT_ON_TEARDOWN=True
     )
 
     db.init_app(app)
