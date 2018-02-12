@@ -61,9 +61,7 @@ class User(UserMixin, db.Model):
         return True
 
     def __repr__(self):
-
         return "%d/%s/%s" % (self.id, self.email, self.password)
-
 
 
 class Course(db.Model):
@@ -88,3 +86,4 @@ class Student(db.Model):
 
     def __repr__(self):
         return '<Student %r>' % self.name
+    
