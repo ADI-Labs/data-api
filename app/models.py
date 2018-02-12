@@ -1,6 +1,7 @@
 from flask_login import UserMixin
-from . import login_manager
-
+from . import login_manager, db
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from werkzeug.security import generate_password_hash, check_password_hash
 
 # commented for now to pass the flake8 checks
 # @login_manager.user_loader
@@ -24,12 +25,40 @@ def load_user(request):
     return None
 
 
-class User(UserMixin):
+class User(UserMixin, db.Model):
 
-    def __init__(self, id):
-        self.id = id
-        self.email = "email" + str(id)
-        self.password = self.email + "_secret"
+    uni = db.Column(db.String(120), primary_key=True)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password_hash = db.Column(db.String(120), unique=False, nullable=False)
+    school = db.Column(db.String(120), unique=False, nullable=False)
+
+    @property
+    def password(self):
+        raise AttributeError('password is not a readable attribute')
+
+    @password.setter
+    def password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def verify_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+    def generate_confirmation_token(self, expiration=3600):
+        s = Serializer('xxx', expiration)
+        return s.dumps({'id': self.uni})
+
+    @staticmethod
+    def verify(self, token):
+        s = Serializer('xxx')
+        try:
+            data = s.loads(token)
+        except Exception:
+            return False
+        if data.get('confirm') != self.id:
+            return False
+        self.confirm = True
+        db.session.add(self)
+        return True
 
     def __repr__(self):
-        return "%d/%s/%s" % (self.id, self.email, self.password)
+        return "%s/%s/%s" % (self.uni, self.email, self.password)
