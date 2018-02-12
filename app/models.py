@@ -86,4 +86,3 @@ class Student(db.Model):
 
     def __repr__(self):
         return '<Student %r>' % self.name
-    
