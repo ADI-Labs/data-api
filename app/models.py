@@ -66,7 +66,7 @@ class User(UserMixin, db.Model):
 
 class Course(db.Model):
     __tablename__ = 'courses'
-    name = db.Column(db.String(64), unique=True)
+    name = db.Column(db.String(64), unique=True, primary_key=True)
 
     def __repr__(self):
         return '<Course %r>' % self.name
@@ -74,7 +74,7 @@ class Course(db.Model):
 
 class Dining(db.Model):
     __tablename__ = 'dining'
-    name = db.Column(db.String(64), unique=True)
+    name = db.Column(db.String(64), unique=True, primary_key=True)
 
     def __repr__(self):
         return '<Dining %r>' % self.name
@@ -82,7 +82,7 @@ class Dining(db.Model):
 
 class Student(db.Model):
     __tablename__ = 'students'
-    name = db.Column(db.String(64), unique=True)
+    name = db.Column(db.String(64), unique=True, primary_key=True)
 
     def __repr__(self):
         return '<Student %r>' % self.name
