@@ -66,7 +66,24 @@ class User(UserMixin, db.Model):
 
 class Course(db.Model):
     __tablename__ = 'courses'
-    name = db.Column(db.String(64), unique=True, primary_key=True)
+    callNumber = db.Column(db.Integer, unique=True, primary_key=True)
+    courseId = db.Column(db.String(64), unique=True, primary_key=True)
+    courseName = db.Column(db.String(), unique = True)
+    divisionCode = db.Column(db.String()_
+    creditAmount = db.Column(db.Integer)
+    prefixName = db.Column(db.String(64))
+    prefixLongName = db.Column(db.String(64))
+    instructorName = db.Column(db.String(64))
+    approval = db.Column(db.String(64))
+    schoolCode = db.Column(db.String(4))
+    schoolName = db.Column(db.String(128))
+    campusCode = db.Column(db.String(4))
+    campusName = db.Column(db.String(128))
+    term = db.Column(db.String(64), unique=True)
+    typeCode = db.Column(db.String(2))
+    typeName = db.Column(db.String(64))
+    numEnrolled = db.Column(db.Integer))
+
 
     def __repr__(self):
         return '<Course %r>' % self.name
