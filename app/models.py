@@ -63,9 +63,13 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return "%d/%s/%s" % (self.id, self.email, self.password)
 
+
 profs = db.Table('profs',
-                 db.Column('course_id', db.String, db.ForeignKey('courses.course_id'), primary_key=True),
-                 db.Column('uni', db.String, db.ForeignKey('teachers.uni'), primary_key=True))
+                 db.Column('course_id', db.String,
+                           db.ForeignKey('courses.course_id'), primary_key=True),
+                 db.Column('uni', db.String,
+                           db.ForeignKey('teachers.uni'), primary_key=True))
+
 
 class Course(db.Model):
     __tablename__ = 'courses'
@@ -93,13 +97,11 @@ class Course(db.Model):
     num_fixed_unit = db.Column(db.Integer)
     class_notes = db.Column(db.String(256))
     meeting_times = db.Column(db.String(64))
-    profs = db.relationship('Teacher', secondary=profs, backref=db.backref('courses'))
+    profs = db.relationship('Teacher', secondary=profs,
+                            backref=db.backref('courses'))
 
     def __repr__(self):
         return '<Course %r>' % self.course_id
-
-
-
 
 
 class Dining(db.Model):
@@ -134,5 +136,3 @@ class Teacher(db.Model):
 
     def __repr__(self):
         return '<Teacher %r>' % self.name
-
-

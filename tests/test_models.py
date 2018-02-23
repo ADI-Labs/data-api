@@ -3,7 +3,6 @@ from unittest import TestCase
 from app.models import Course, Student
 
 
-
 class BasicTest(TestCase):
     def setUp(self):
         self.app = create_app('testing')
@@ -35,10 +34,9 @@ class BasicTest(TestCase):
         db.session.add(student)
         db.session.commit()
 
-
-
         self.assertEquals(student,
-                         db.session.query(Student).filter_by(uni='test6666')[0])
+                         db.session.query(Student)
+                          .filter_by(uni='test6666')[0])
         db.session.rollback()
 
     def test_course_model(self):
@@ -51,6 +49,7 @@ class BasicTest(TestCase):
 
         db.session.add(course)
         db.session.commit()
-        self.assertEquals(course, db.session.query(Course).filter_by(course_id='')[0])
+        self.assertEquals(course,
+                          db.session.query(Course).filter_by(course_id='')[0])
 
         db.session.rollback()
