@@ -1,7 +1,5 @@
 from flask_login import UserMixin
 from . import login_manager
-from werkzeug.security import generate_password_hash, check_password_hash
-
 
 # commented for now to pass the flake8 checks
 # @login_manager.user_loader
