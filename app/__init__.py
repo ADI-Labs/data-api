@@ -1,13 +1,18 @@
 from flask import Flask
 from flask_restful import Api
 from flask_login import LoginManager
+from flask_bootstrap import Bootstrap
+
+
 from flask_sqlalchemy import SQLAlchemy
 import os
 
 
 api = Api()
+
 login_manager = LoginManager()
 login_manager.login_view = "login"
+bootstrap = Bootstrap()
 db = SQLAlchemy()
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -15,6 +20,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 def create_app(name=__name__):
     app = Flask(name)
+    bootstrap.init_app(app)
     app.config.update(
         DEBUG=True,
         SECRET_KEY=os.environ.get('SECRET_KEY', 'secret_xxx'),
