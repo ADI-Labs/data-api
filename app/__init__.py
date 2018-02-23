@@ -2,6 +2,7 @@ from flask import Flask
 from flask_restful import Api
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
+from flask_bootstrap import Bootstrap
 import os
 
 
@@ -27,6 +28,7 @@ def create_app(name=__name__):
     db.init_app(app)
     api.init_app(app)
     login_manager.init_app(app)
+    bootstrap = Bootstrap(app)
 
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
