@@ -63,30 +63,43 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return "%d/%s/%s" % (self.id, self.email, self.password)
 
+profs = db.Table('profs',
+                 db.Column('course_id', db.String, db.ForeignKey('courses.course_id'), primary_key=True),
+                 db.Column('uni', db.String, db.ForeignKey('teachers.uni'), primary_key=True))
 
 class Course(db.Model):
     __tablename__ = 'courses'
-    callNumber = db.Column(db.Integer, unique=True, primary_key=True)
-    courseId = db.Column(db.String(64), unique=True, primary_key=True)
-    courseName = db.Column(db.String(), unique = True)
-    divisionCode = db.Column(db.String()_
-    creditAmount = db.Column(db.Integer)
-    prefixName = db.Column(db.String(64))
-    prefixLongName = db.Column(db.String(64))
-    instructorName = db.Column(db.String(64))
-    approval = db.Column(db.String(64))
-    schoolCode = db.Column(db.String(4))
-    schoolName = db.Column(db.String(128))
-    campusCode = db.Column(db.String(4))
-    campusName = db.Column(db.String(128))
-    term = db.Column(db.String(64), unique=True)
-    typeCode = db.Column(db.String(2))
-    typeName = db.Column(db.String(64))
-    numEnrolled = db.Column(db.Integer))
+    course_id = db.Column(db.String(64), unique=True, primary_key=True, nullable=False)
 
+    call_number = db.Column(db.Integer, unique=True)
+    course_name = db.Column(db.String(120), unique=True)
+    bulletin_flags = db.Column(db.String(10))
+    division_code = db.Column(db.String())
+    credit_amount = db.Column(db.Integer)
+    prefix_name = db.Column(db.String(64))
+    prefix_long_name = db.Column(db.String(64))
+    instructor_name = db.Column(db.String(64))
+    approval = db.Column(db.String(64))
+    school_code = db.Column(db.String(4))
+    school_name = db.Column(db.String(128))
+    campus_code = db.Column(db.String(4))
+    campus_name = db.Column(db.String(128))
+    term = db.Column(db.String(64))
+    type_code = db.Column(db.String(2))
+    type_name = db.Column(db.String(64))
+    num_enrolled = db.Column(db.Integer)
+    max_size = db.Column(db.Integer)
+    min_units = db.Column(db.Integer)
+    num_fixed_unit = db.Column(db.Integer)
+    class_notes = db.Column(db.String(256))
+    meeting_times = db.Column(db.String(64))
+    profs = db.relationship('Teacher', secondary=profs, backref=db.backref('courses'))
 
     def __repr__(self):
-        return '<Course %r>' % self.name
+        return '<Course %r>' % self.course_id
+
+
+
 
 
 class Dining(db.Model):
@@ -99,7 +112,27 @@ class Dining(db.Model):
 
 class Student(db.Model):
     __tablename__ = 'students'
-    name = db.Column(db.String(64), unique=True, primary_key=True)
+    uni = db.Column(db.String(8), unique=True, primary_key=True)
+
+    email = db.Column(db.String(64), unique=True, nullable=False)
+    name = db.Column(db.String(64), nullable=False)
+    title = db.Column(db.String(128), nullable=True)
+    department = db.Column(db.String(128), nullable=False)
+    address = db.Column(db.String(512), nullable=False)
+    tel = db.Column(db.String(32), nullable=True)
+    fax = db.Column(db.String(32), nullable=True)
+    home = db.Column(db.String(64), nullable=True)
 
     def __repr__(self):
-        return '<Student %r>' % self.name
+        return '<Student %r>' % self.uni
+
+
+class Teacher(db.Model):
+    __tablename__='teachers'
+    name = db.Column(db.String(100))
+    uni = db.Column(db.String(7), primary_key=True)
+
+    def __repr__(self):
+        return '<Teacher %r>' % self.name
+
+
