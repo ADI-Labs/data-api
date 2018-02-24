@@ -47,7 +47,7 @@ def register():
                     school=form.school.data)
         db.session.add(user)
         db.session.commit()
-        #token = user.generate_confirmation_token()
+        # token = user.generate_confirmation_token()
         flash('You can now login.')
         return redirect(url_for('auth.login'))
     return render_template('register.html', form=form)

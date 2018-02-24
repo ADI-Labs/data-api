@@ -3,14 +3,15 @@ from . import login_manager, db
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from werkzeug.security import generate_password_hash, check_password_hash
 
+
 # commented for now to pass the flake8 checks
 @login_manager.user_loader
 def load_user(userid):
     try:
         user = User.query.filter_by(id=userid).first()
         return user
-    except:
-        return none
+    except Exception:
+        return None
 
 
 @login_manager.request_loader
