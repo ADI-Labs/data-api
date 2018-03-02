@@ -5,7 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 
 # commented for now to pass the flake8 checks
-@login_manager.user_loader # noqa: F811
+@login_manager.user_loader
 def load_user(userid):
     try:
         user = User.query.filter_by(id=userid).first()
@@ -15,7 +15,7 @@ def load_user(userid):
 
 
 @login_manager.request_loader
-def load_user(request):
+def load_user_from_request(request):
     token = request.headers.get('Authorization')
     if token is None:
         token = request.args.get('token')
