@@ -5,7 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 
 # commented for now to pass the flake8 checks
-@login_manager.user_loader
+@login_manager.user_loader # noqa: F811
 def load_user(userid):
     try:
         user = User.query.filter_by(id=userid).first()
