@@ -6,11 +6,12 @@ before_install:
   - pip install --upgrade pip
   - export FLASK_APP=run.py
   - export APP_DIRECTORY=app
+  - export TEST_DIRECTORY=tests
 
 install:
   - pip install -r requirements.txt
   - pip install flake8
 
 script:
-  - flake8 $APP_DIRECTORY --ignore=E402
+  - flake8 $APP_DIRECTORY $TEST_DIRECTORY --ignore=E402
   - flask test

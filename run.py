@@ -1,12 +1,14 @@
-from app import create_app, db
+from app import create_app, db, mail
 from app.models import User
 
 
 app = create_app()
 
+
 @app.shell_context_processor
 def make_shell_context():
-    return dict(app=app, db=db, User=User)
+    return dict(app=app, db=db, mail=mail, User=User)
+
 
 @app.cli.command()
 def test():
