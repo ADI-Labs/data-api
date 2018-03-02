@@ -10,6 +10,7 @@ def make_shell_context():
     return dict(app=app, db=db, mail=mail, User=User)
 
 
+
 @app.cli.command()
 def test():
     """Run unit tests from command line"""
