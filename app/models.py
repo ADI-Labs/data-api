@@ -3,11 +3,6 @@ from . import login_manager, db
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from werkzeug.security import generate_password_hash, check_password_hash
 
-# commented for now to pass the flake8 checks
-# @login_manager.user_loader
-# def load_user(userid):
-#     return User(userid)
-
 
 @login_manager.request_loader
 def load_user(request):
@@ -73,10 +68,10 @@ profs = db.Table('profs',
 
 class Course(db.Model):
     __tablename__ = 'courses'
-    course_id = db.Column(db.String(64), unique=True, primary_key=True, nullable=False)
+    course_id = db.Column(db.String(64), primary_key=True, nullable=False)
 
-    call_number = db.Column(db.Integer, unique=True)
-    course_name = db.Column(db.String(120), unique=True)
+    call_number = db.Column(db.Integer)
+    course_name = db.Column(db.String(120))
     bulletin_flags = db.Column(db.String(10))
     division_code = db.Column(db.String())
     credit_amount = db.Column(db.Integer)
@@ -88,15 +83,16 @@ class Course(db.Model):
     school_name = db.Column(db.String(128))
     campus_code = db.Column(db.String(4))
     campus_name = db.Column(db.String(128))
-    term = db.Column(db.String(64))
+    term = db.Column(db.String(64), primary_key=True)
     type_code = db.Column(db.String(2))
     type_name = db.Column(db.String(64))
     num_enrolled = db.Column(db.Integer)
     max_size = db.Column(db.Integer)
     min_units = db.Column(db.Integer)
-    num_fixed_unit = db.Column(db.Integer)
+    num_fixed_units = db.Column(db.Integer)
     class_notes = db.Column(db.String(256))
     meeting_times = db.Column(db.String(64))
+
     profs = db.relationship('Teacher', secondary=profs,
                             backref=db.backref('courses'))
 
@@ -119,7 +115,7 @@ class Student(db.Model):
     email = db.Column(db.String(64), unique=True, nullable=False)
     name = db.Column(db.String(64), nullable=False)
     title = db.Column(db.String(128), nullable=True)
-    department = db.Column(db.String(128), nullable=False)
+    department = db.Column(db.String(128), nullable=True)
     address = db.Column(db.String(512), nullable=False)
     tel = db.Column(db.String(32), nullable=True)
     fax = db.Column(db.String(32), nullable=True)
@@ -136,3 +132,4 @@ class Teacher(db.Model):
 
     def __repr__(self):
         return '<Teacher %r>' % self.name
+
