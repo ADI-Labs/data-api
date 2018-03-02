@@ -102,7 +102,7 @@ class Course(db.Model):
 
 class Dining(db.Model):
     __tablename__ = 'dining'
-    name = db.Column(db.String(64), unique=True, primary_key=True)
+    name = db.Column(db.String(64))
 
     def __repr__(self):
         return '<Dining %r>' % self.name

@@ -1,6 +1,7 @@
 from app import create_app, db
 from unittest import TestCase
 from app.models import Course, Student
+import requests
 
 
 class BasicTest(TestCase):
@@ -53,3 +54,7 @@ class BasicTest(TestCase):
                           db.session.query(Course).filter_by(course_id='')[0])
 
         db.session.rollback()
+
+    def test_course_ep(self):
+        response = requests.get("127.0.0.1:5000/api/course/20181/ACCT5001B200")
+        self.assertEquals(response.course_name, "Accounting I: Financial Accoun")
