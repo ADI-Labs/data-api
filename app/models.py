@@ -4,22 +4,6 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
-@login_manager.request_loader
-def load_user(request):
-    token = request.headers.get('Authorization')
-    if token is None:
-        token = request.args.get('token')
-
-    if token is not None:
-        username, password = token.split(":")  # naive token
-        user_entry = User.get(username)
-        if user_entry is not None:
-            user = User(user_entry[0], user_entry[1])
-            if user.password == password:
-                return user
-    return None
-
-
 class User(UserMixin, db.Model):
 
     uni = db.Column(db.String(120), primary_key=True)
@@ -102,6 +86,7 @@ class Course(db.Model):
 
 class Dining(db.Model):
     __tablename__ = 'dining'
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
 
     def __repr__(self):

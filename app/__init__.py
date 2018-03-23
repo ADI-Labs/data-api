@@ -7,8 +7,6 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 
 
-
-
 login_manager = LoginManager()
 login_manager.login_view = "login"
 bootstrap = Bootstrap()
@@ -39,7 +37,7 @@ def create_app(name=__name__):
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
 
-    from .api import api as api_blueprint
+    from .api import api_bp as api_blueprint
     app.register_blueprint(api_blueprint, url_prefix='/api')
 
     return app
