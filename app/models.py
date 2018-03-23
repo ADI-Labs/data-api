@@ -120,7 +120,6 @@ class Dining(db.Model):
 class Student(db.Model):
     __tablename__ = 'students'
     uni = db.Column(db.String(8), unique=True, primary_key=True)
-
     email = db.Column(db.String(64), unique=True, nullable=False)
     name = db.Column(db.String(64), nullable=False)
     title = db.Column(db.String(128), nullable=True)
