@@ -1,22 +1,33 @@
 from flask_login import UserMixin
-from . import db
+from . import login_manager, db
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from werkzeug.security import generate_password_hash, check_password_hash
 
-# @login_manager.request_loader
-# def load_user(request):
-#     token = request.headers.get('Authorization')
-#     if token is None:
-#         token = request.args.get('token')
-#
-#     if token is not None:
-#         username, password = token.split(":")  # naive token
-#         user_entry = User.get(username)
-#         if user_entry is not None:
-#             user = User(user_entry[0], user_entry[1])
-#             if user.password == password:
-#                 return user
-#     return None
+
+# commented for now to pass the flake8 checks
+@login_manager.user_loader
+def load_user(userid):
+    try:
+        user = User.query.filter_by(id=userid).first()
+        return user
+    except Exception:
+        return None
+
+
+@login_manager.request_loader
+def load_user_from_request(request):
+    token = request.headers.get('Authorization')
+    if token is None:
+        token = request.args.get('token')
+
+    if token is not None:
+        username, password = token.split(":")  # naive token
+        user_entry = User.get(username)
+        if user_entry is not None:
+            user = User(user_entry[0], user_entry[1])
+            if user.password == password:
+                return user
+    return None
 
 
 class User(UserMixin, db.Model):

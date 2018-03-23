@@ -9,6 +9,26 @@ import os
 app = create_app()
 
 
+@app.shell_context_processor
+def make_shell_context():
+    return dict(app=app,
+                db=db,
+                User=User,
+                Student=Student,
+                Course=Course,
+                Dining=Dining,
+                clear=clear,
+                sqlIt=parse_and_store)
+
+
+@app.cli.command()
+def test():
+    """Run unit tests from command line"""
+    from unittest import TestLoader, TextTestRunner
+    suite = TestLoader().discover('tests')
+    TextTestRunner(verbosity=2).run(suite)
+
+
 def parse_and_store():
     db.create_all()
     data=json.load(open('app/courses.json'))
@@ -42,23 +62,3 @@ def parse_and_store():
 
 def clear():
     os.system('clear')
-
-
-@app.shell_context_processor
-def make_shell_context():
-    return dict(app=app,
-                db=db,
-                User=User,
-                Student=Student,
-                Course=Course,
-                Dining=Dining,
-                clear=clear,
-                sqlIt=parse_and_store)
-
-
-@app.cli.command()
-def test():
-    """Run unit tests from command line"""
-    from unittest import TestLoader, TextTestRunner
-    suite = TestLoader().discover('tests')
-    TextTestRunner(verbosity=2).run(suite)
