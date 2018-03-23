@@ -9,7 +9,6 @@ import os
 
 login_manager = LoginManager()
 login_manager.login_view = "login"
-bootstrap = Bootstrap()
 db = SQLAlchemy()
 bootstrap = Bootstrap()
 
