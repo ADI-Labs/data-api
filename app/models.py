@@ -32,7 +32,7 @@ def load_user_from_request(request):
 
 class User(UserMixin, db.Model):
 
-    uni = db.Column(db.String(120), primary_key=True)
+    id = db.Column(db.String(120), primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(120), unique=False, nullable=False)
     school = db.Column(db.String(120), unique=False, nullable=False)
@@ -50,7 +50,7 @@ class User(UserMixin, db.Model):
 
     def generate_confirmation_token(self, expiration=3600):
         s = Serializer('xxx', expiration)
-        return s.dumps({'id': self.uni})
+        return s.dumps({'id': self.id})
 
     @staticmethod
     def verify(self, token):
@@ -65,9 +65,6 @@ class User(UserMixin, db.Model):
         db.session.add(self)
         return True
 
-    def __repr__(self):
-        return "%d/%s/%s" % (self.id, self.email, self.password)
-
 
 profs = db.Table('profs',
                  db.Column('course_id', db.String,
@@ -81,7 +78,7 @@ profs = db.Table('profs',
 class Course(db.Model):
     __tablename__ = 'courses'
     course_id = db.Column(db.String(64), primary_key=True, nullable=False)
-
+    term = db.Column(db.String(64), primary_key=True)
     call_number = db.Column(db.Integer)
     course_name = db.Column(db.String(120))
     bulletin_flags = db.Column(db.String(10))
@@ -95,7 +92,6 @@ class Course(db.Model):
     school_name = db.Column(db.String(128))
     campus_code = db.Column(db.String(4))
     campus_name = db.Column(db.String(128))
-    term = db.Column(db.String(64), primary_key=True)
     type_code = db.Column(db.String(2))
     type_name = db.Column(db.String(64))
     num_enrolled = db.Column(db.Integer)
