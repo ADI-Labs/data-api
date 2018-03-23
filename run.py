@@ -16,4 +16,4 @@ def test():
     """Run unit tests from command line"""
     from unittest import TestLoader, TextTestRunner
     suite = TestLoader().discover('tests')
-    TextTestRunner(verbosity=2).run(suite)
+    TextTestRunner(verbosity=2, buffer=False).run(suite)

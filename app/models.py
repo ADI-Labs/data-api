@@ -4,12 +4,10 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
-# commented for now to pass the flake8 checks
 @login_manager.user_loader
 def load_user(userid):
     try:
-        user = User.query.filter_by(id=userid).first()
-        return user
+        return User.query.get(int(userid))
     except Exception:
         return None
 
@@ -31,8 +29,8 @@ def load_user_from_request(request):
 
 
 class User(UserMixin, db.Model):
-
-    id = db.Column(db.String(120), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    uni = db.Column(db.String(120), unique=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(120), unique=False, nullable=False)
     school = db.Column(db.String(120), unique=False, nullable=False)

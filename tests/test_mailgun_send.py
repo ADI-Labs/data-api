@@ -6,9 +6,12 @@ from unittest import TestCase
 class EmailTest(TestCase):
     def setUp(self):
         self.app = create_app('email_test')
-        self.app.config['TESTING'] = True
+        self.app.config.update(
+            TESTING=True
+        )
         self.app_context = self.app.app_context()
         self.app_context.push()
+
 
     def tearDown(self):
         self.app_context.pop()
@@ -16,7 +19,7 @@ class EmailTest(TestCase):
     def test_single_text_email(self):
         recipients = ['jz2814@columbia.edu']
         msg = Message('TEST', body='testing', recipients=recipients)
-
+        self.assertTrue(self.app.config['TESTING'])
         self.assertIsNotNone(msg.sender)
 
         with mail.record_messages() as outbox:
