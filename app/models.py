@@ -1,7 +1,22 @@
 from flask_login import UserMixin
-from . import login_manager, db
+from . import db
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from werkzeug.security import generate_password_hash, check_password_hash
+
+# @login_manager.request_loader
+# def load_user(request):
+#     token = request.headers.get('Authorization')
+#     if token is None:
+#         token = request.args.get('token')
+#
+#     if token is not None:
+#         username, password = token.split(":")  # naive token
+#         user_entry = User.get(username)
+#         if user_entry is not None:
+#             user = User(user_entry[0], user_entry[1])
+#             if user.password == password:
+#                 return user
+#     return None
 
 
 class User(UserMixin, db.Model):
@@ -45,9 +60,11 @@ class User(UserMixin, db.Model):
 
 profs = db.Table('profs',
                  db.Column('course_id', db.String,
-                           db.ForeignKey('courses.course_id'), primary_key=True),
+                           db.ForeignKey('courses.course_id'),
+                           primary_key=True),
                  db.Column('uni', db.String,
-                           db.ForeignKey('teachers.uni'), primary_key=True))
+                           db.ForeignKey('teachers.uni'),
+                           primary_key=True))
 
 
 class Course(db.Model):
@@ -111,10 +128,9 @@ class Student(db.Model):
 
 
 class Teacher(db.Model):
-    __tablename__='teachers'
+    __tablename__ = 'teachers'
     name = db.Column(db.String(100))
     uni = db.Column(db.String(7), primary_key=True)
 
     def __repr__(self):
         return '<Teacher %r>' % self.name
-
