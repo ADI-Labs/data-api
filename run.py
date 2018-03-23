@@ -42,8 +42,8 @@ def parse_and_store():
 
 def clear():
     os.system('clear')
-
-
+    
+    
 @app.shell_context_processor
 def make_shell_context():
     return dict(app=app,
@@ -54,8 +54,8 @@ def make_shell_context():
                 Dining=Dining,
                 clear=clear,
                 sqlIt=parse_and_store)
-
-
+  
+  
 @app.cli.command()
 def test():
     """Run unit tests from command line"""
