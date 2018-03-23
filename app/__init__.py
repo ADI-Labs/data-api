@@ -18,7 +18,6 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 def create_app(name=__name__):
     app = Flask(name)
-    bootstrap.init_app(app)
     app.config.update(
         DEBUG=True,
         SECRET_KEY=os.environ.get('SECRET_KEY', 'secret_xxx'),
