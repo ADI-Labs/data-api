@@ -30,3 +30,8 @@ def auth():
 @main.route('/docs')
 def docs():
     return render_template('main/docs.html')
+
+
+@main.route('/home')
+def home():
+    return render_template('base.html')

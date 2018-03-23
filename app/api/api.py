@@ -11,10 +11,16 @@ class Courses(Resource):
     def get(self, cid, term):
         result = db.session.query(Course)\
             .filter_by(term=term).filter_by(course_id=cid).scalar()
+        datum = {}
+
         if result is None:
             abort(404, message="Course {} for term {} doesn't exist"
                   .format(cid, term))
-        return jsonify(result)
+
+        for course in result.__mapper__.columns.keys():
+            datum[course] = getattr(result, course)
+
+        return jsonify(datum)
 
     """we are not going to have sets and deletes"""
 

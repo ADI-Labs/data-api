@@ -39,5 +39,4 @@ def create_app(name=__name__):
 
     from .api import api_bp as api_blueprint
     app.register_blueprint(api_blueprint, url_prefix='/api')
-
     return app
