@@ -4,15 +4,16 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
-# commented for now to pass the flake8 checks
-@login_manager.user_loader
-def load_user(userid):
-    try:
-        user = User.query.filter_by(id=userid).first()
-        return user
-    except Exception:
-        return None
 
+# commented for now to pass the flake8 checks
+# @login_manager.user_loader
+# def load_user(userid):
+#     try:
+#         user = User.query.filter_by(id=userid).first()
+#         return user
+#     except Exception:
+#         return None
+      
 
 @login_manager.request_loader
 def load_user_from_request(request):
@@ -64,3 +65,81 @@ class User(UserMixin, db.Model):
         self.confirm = True
         db.session.add(self)
         return True
+
+    def __repr__(self):
+        return "%d/%s/%s" % (self.id, self.email, self.password)
+
+
+profs = db.Table('profs',
+                 db.Column('course_id', db.String,
+                           db.ForeignKey('courses.course_id'), primary_key=True),
+                 db.Column('uni', db.String,
+                           db.ForeignKey('teachers.uni'), primary_key=True))
+
+
+class Course(db.Model):
+    __tablename__ = 'courses'
+    course_id = db.Column(db.String(64), primary_key=True, nullable=False)
+
+    call_number = db.Column(db.Integer)
+    course_name = db.Column(db.String(120))
+    bulletin_flags = db.Column(db.String(10))
+    division_code = db.Column(db.String())
+    credit_amount = db.Column(db.Integer)
+    prefix_name = db.Column(db.String(64))
+    prefix_long_name = db.Column(db.String(64))
+    instructor_name = db.Column(db.String(64))
+    approval = db.Column(db.String(64))
+    school_code = db.Column(db.String(4))
+    school_name = db.Column(db.String(128))
+    campus_code = db.Column(db.String(4))
+    campus_name = db.Column(db.String(128))
+    term = db.Column(db.String(64), primary_key=True)
+    type_code = db.Column(db.String(2))
+    type_name = db.Column(db.String(64))
+    num_enrolled = db.Column(db.Integer)
+    max_size = db.Column(db.Integer)
+    min_units = db.Column(db.Integer)
+    num_fixed_units = db.Column(db.Integer)
+    class_notes = db.Column(db.String(256))
+    meeting_times = db.Column(db.String(64))
+
+    profs = db.relationship('Teacher', secondary=profs,
+                            backref=db.backref('courses'))
+
+    def __repr__(self):
+        return '<Course %r>' % self.course_id
+
+
+class Dining(db.Model):
+    __tablename__ = 'dining'
+    name = db.Column(db.String(64))
+
+    def __repr__(self):
+        return '<Dining %r>' % self.name
+
+
+class Student(db.Model):
+    __tablename__ = 'students'
+    uni = db.Column(db.String(8), unique=True, primary_key=True)
+
+    email = db.Column(db.String(64), unique=True, nullable=False)
+    name = db.Column(db.String(64), nullable=False)
+    title = db.Column(db.String(128), nullable=True)
+    department = db.Column(db.String(128), nullable=True)
+    address = db.Column(db.String(512), nullable=False)
+    tel = db.Column(db.String(32), nullable=True)
+    fax = db.Column(db.String(32), nullable=True)
+    home = db.Column(db.String(64), nullable=True)
+
+    def __repr__(self):
+        return '<Student %r>' % self.uni
+
+
+class Teacher(db.Model):
+    __tablename__='teachers'
+    name = db.Column(db.String(100))
+    uni = db.Column(db.String(7), primary_key=True)
+
+    def __repr__(self):
+        return '<Teacher %r>' % self.name

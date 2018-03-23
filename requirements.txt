@@ -1,6 +1,7 @@
 aniso8601==2.0.0
 click==6.7
 Flask==0.12.2
+Flask-Bootstrap==3.3.7.1
 Flask-Login==0.4.1
 Flask-RESTful==0.3.6
 itsdangerous==0.24
@@ -11,5 +12,3 @@ six==1.11.0
 Werkzeug==0.14.1
 itsdangerous==0.24
 Flask-SQLAlchemy==2.3.2
-Flask-Bootstrap==3.1.1.2
-Flask-WTF==0.14.2
