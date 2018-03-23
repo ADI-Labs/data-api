@@ -21,6 +21,7 @@ def make_shell_context():
                 sqlIt=parse_and_store)
 
 
+
 @app.cli.command()
 def test():
     """Run unit tests from command line"""

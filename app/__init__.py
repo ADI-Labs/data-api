@@ -4,6 +4,7 @@ from flask_bootstrap import Bootstrap
 
 
 from flask_sqlalchemy import SQLAlchemy
+from flask_bootstrap import Bootstrap
 import os
 
 
@@ -11,6 +12,7 @@ login_manager = LoginManager()
 login_manager.login_view = "login"
 bootstrap = Bootstrap()
 db = SQLAlchemy()
+bootstrap = Bootstrap()
 
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -30,6 +32,7 @@ def create_app(name=__name__):
 
     db.init_app(app)
     login_manager.init_app(app)
+    bootstrap.init_app(app)
 
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)

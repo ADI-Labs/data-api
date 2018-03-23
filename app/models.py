@@ -65,6 +65,9 @@ class User(UserMixin, db.Model):
         db.session.add(self)
         return True
 
+    def __repr__(self):
+        return "%s/%s/%s" % (self.uni, self.email, self.password)
+
 
 profs = db.Table('profs',
                  db.Column('course_id', db.String,
