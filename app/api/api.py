@@ -20,7 +20,7 @@ class Courses(Resource):
         for course in result.__mapper__.columns.keys():
             datum[course] = getattr(result, course)
 
-        response={"status": "200", "reason": "OK", "data": datum}
+        response = {"status": "200", "reason": "OK", "data": datum}
 
         return jsonify(response)
 
