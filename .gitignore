@@ -84,6 +84,7 @@ celerybeat-schedule
 
 #sql data
 data.sqlite
+*.sqlite
 # virtualenv
 .venv
 venv/
