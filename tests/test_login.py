@@ -17,6 +17,11 @@ class LoginTest(TestCase):
         db.drop_all()
         self.app_context.pop()
 
+    def test_token(self):
+        token = User.generate_confirmation_token(self)
+        print ("token:\n\n" + token)
+        print ("Aosdasodsad" + User.verify(self, token))
+
     def test_register_login(self):
         #register a new account
         res = self.client.post('/auth/register', data={

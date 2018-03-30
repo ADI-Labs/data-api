@@ -50,23 +50,21 @@ class User(UserMixin, db.Model):
 
     def generate_confirmation_token(self, expiration=3600):
         s = Serializer('xxx', expiration)
-        return s.dumps({'id': self.id})
+        token = s.dumps({'id': self.id})
+        print (s.loads(token))
+        return token
 
     @staticmethod
-    def verify(self, token):
+    def verify(token):
         s = Serializer('xxx')
         try:
             data = s.loads(token)
         except Exception:
-            return False
-        if data.get('confirm') != self.id:
-            return False
-        self.confirm = True
-        db.session.add(self)
-        return True
+            return None
+        return User.query.get(data['id'])
 
     def __repr__(self):
-        return "%s/%s/%s" % (self.uni, self.email, self.password)
+        return "%s/%s" % (self.id, self.email)
 
 
 profs = db.Table('profs',
