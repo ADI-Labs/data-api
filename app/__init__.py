@@ -1,18 +1,19 @@
 from flask import Flask
-from flask_restful import Api
 from flask_login import LoginManager
+
+
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
 from flask_bootstrap import Bootstrap
 import os
 
 
-api = Api()
 login_manager = LoginManager()
 login_manager.login_view = "login"
 db = SQLAlchemy()
 mail = Mail()
 bootstrap = Bootstrap()
+
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -34,7 +35,6 @@ def create_app(name=__name__):
     )
 
     db.init_app(app)
-    api.init_app(app)
     login_manager.init_app(app)
     mail.init_app(app)
     bootstrap.init_app(app)
@@ -45,4 +45,6 @@ def create_app(name=__name__):
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
 
+    from .api import api_bp as api_blueprint
+    app.register_blueprint(api_blueprint, url_prefix='/api')
     return app

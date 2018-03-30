@@ -14,4 +14,4 @@ install:
 
 script:
   - flake8 $APP_DIRECTORY $TEST_DIRECTORY --ignore=E402
-  - flask test
+  - python -m unittest discover tests
