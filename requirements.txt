@@ -13,3 +13,4 @@ itsdangerous==0.24
 Flask-SQLAlchemy==2.3.2
 Flask-Bootstrap==3.1.1.2
 Flask-WTF==0.14.2
+requests
