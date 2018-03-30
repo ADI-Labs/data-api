@@ -24,7 +24,7 @@ class Courses(Resource):
 
             response = {"status": "200", "reason": "OK", "data": datum}
         else:
-            response={"status": "300", "reason": "Invalid or no token"}
+            response = {"status": "300", "reason": "Invalid or no token"}
 
         return jsonify(response)
 
