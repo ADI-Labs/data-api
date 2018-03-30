@@ -3,6 +3,7 @@ from app.models import User
 from app.models import Course
 from app.models import Dining, Student
 import json
+import requests
 
 import os
 

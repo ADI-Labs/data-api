@@ -8,7 +8,7 @@ api = Api(api_bp)
 
 
 class Courses(Resource):
-    def get(self, cid, term):
+    def get(self, cid, term, key):
         result = db.session.query(Course)\
             .filter_by(term=term).filter_by(course_id=cid).scalar()
         datum = {}
@@ -20,9 +20,11 @@ class Courses(Resource):
         for course in result.__mapper__.columns.keys():
             datum[course] = getattr(result, course)
 
-        return jsonify(datum)
+        response={"status": "200", "reason": "OK", "data": datum}
+
+        return jsonify(response)
 
     """we are not going to have sets and deletes"""
 
 
-api.add_resource(Courses, '/courses/<term>/<cid>')
+api.add_resource(Courses, '/courses/<term>/<cid>/<key>')
