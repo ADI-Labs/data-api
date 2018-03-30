@@ -7,7 +7,8 @@ class EmailTest(TestCase):
     def setUp(self):
         self.app = create_app('email_test')
         self.app.config.update(
-            TESTING=True
+            TESTING=True,
+            MAIL_DEFAULT_SENDER='postmaster@api.adicu.com'
         )
         self.app_context = self.app.app_context()
         self.app_context.push()
@@ -19,6 +20,8 @@ class EmailTest(TestCase):
         recipients = ['jz2814@columbia.edu']
         msg = Message('TEST', body='testing', recipients=recipients)
         self.assertTrue(self.app.config['TESTING'])
+
+        # defaults to environment variable $MAILGUN_USERNAME
         self.assertIsNotNone(msg.sender)
 
         with mail.record_messages() as outbox:
