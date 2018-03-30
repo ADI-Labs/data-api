@@ -18,9 +18,10 @@ class EmailTest(TestCase):
 
     def test_single_text_email(self):
         recipients = ['jz2814@columbia.edu']
-        msg = Message('TEST', body='testing', recipients=recipients)
+        msg = Message('TEST', body='testing', recipients=recipients, sender=self.app.config['MAIL_DEFAULT_SENDER'])
         self.assertTrue(self.app.config['TESTING'])
 
+        print(self.app.config)
         # defaults to environment variable $MAILGUN_USERNAME
         self.assertIsNotNone(msg.sender)
 
