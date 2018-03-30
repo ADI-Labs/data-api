@@ -1,6 +1,5 @@
 from app import create_app, db
 from unittest import TestCase
-from app.models import User
 
 
 class LoginTest(TestCase):

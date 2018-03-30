@@ -12,7 +12,6 @@ class EmailTest(TestCase):
         self.app_context = self.app.app_context()
         self.app_context.push()
 
-
     def tearDown(self):
         self.app_context.pop()
 
