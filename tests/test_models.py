@@ -21,5 +21,3 @@ class BasicTest(TestCase):
     def test_app_exists(self):
         self.assertFalse(self.app is None)
 
-    def test_app_is_testing(self):
-        self.assertTrue(self.app.config['TESTING'])
