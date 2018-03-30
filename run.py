@@ -1,7 +1,6 @@
-from app import create_app, db
+from app import create_app, db, mail
 from app.models import User
-from app.models import Course
-from app.models import Dining, Student
+from app.models import Course, Dining, Student
 import json
 import requests
 
@@ -15,6 +14,7 @@ def make_shell_context():
     return dict(app=app,
                 db=db,
                 User=User,
+                mail=mail,
                 Student=Student,
                 Course=Course,
                 Dining=Dining,
@@ -28,7 +28,7 @@ def test():
     """Run unit tests from command line"""
     from unittest import TestLoader, TextTestRunner
     suite = TestLoader().discover('tests')
-    TextTestRunner(verbosity=2).run(suite)
+    TextTestRunner(verbosity=2, buffer=False).run(suite)
 
 
 def parse_and_store():

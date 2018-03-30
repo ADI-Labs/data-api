@@ -82,9 +82,6 @@ celerybeat-schedule
 # dotenv
 .env
 
-#sql data
-data.sqlite
-*.sqlite
 # virtualenv
 .venv
 venv/
@@ -106,3 +103,6 @@ new_venv/
 # jz
 .idea/
 .DS_Store
+
+# sqlite
+*.sqlite
