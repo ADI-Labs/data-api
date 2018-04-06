@@ -23,6 +23,16 @@ class Courses(Resource):
         return jsonify(datum)
 
     """we are not going to have sets and deletes"""
+    
+class Student(db.Model):
+    __tablename__ = 'students'
+    uni = db.Column(db.String(8), unique=True, primary_key=True)
+    name = db.Column(db.String(64), nullable=False)
+    title = db.Column(db.String(128), nullable=True)
+    department = db.Column(db.String(128), nullable=True)
+
+    def __repr__(self):
+        return '<Student %r>' % self.uni
 
 
 api.add_resource(Courses, '/courses/<term>/<cid>')
