@@ -86,7 +86,7 @@ celerybeat-schedule
 .venv
 venv/
 ENV/
-
+new_venv/
 # Spyder project settings
 .spyderproject
 .spyproject
@@ -103,3 +103,6 @@ ENV/
 # jz
 .idea/
 .DS_Store
+
+# sqlite
+*.sqlite

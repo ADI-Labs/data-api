@@ -1,3 +1,11 @@
-<html>
-Hello World!
-</html>
+{% extends 'base.html' %}
+{% block page_content %}
+Hello,
+
+{% if current_user.is_authenticated %}
+  Hi {{ current_user.email }}
+{% else %}
+  Stranger
+{% endif %} !
+
+{% endblock %}
