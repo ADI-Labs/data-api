@@ -1,7 +1,7 @@
-from app import create_app, db
+from app import create_app, db, mail
 from app.models import User
-from app.models import Course
-from app.models import Dining, Student
+from app.models import Course, Dining, Student
+from requests import Session
 import json
 
 import os
@@ -14,11 +14,11 @@ def make_shell_context():
     return dict(app=app,
                 db=db,
                 User=User,
+                mail=mail,
                 Student=Student,
                 Course=Course,
                 Dining=Dining,
-                clear=clear,
-                sqlIt=parse_and_store)
+                clear=clear)
 
 
 
@@ -27,13 +27,15 @@ def test():
     """Run unit tests from command line"""
     from unittest import TestLoader, TextTestRunner
     suite = TestLoader().discover('tests')
-    TextTestRunner(verbosity=2).run(suite)
+    TextTestRunner(verbosity=2, buffer=False).run(suite)
 
+@app.cli.command()
+def populate_courses(url=''):
 
-def parse_and_store():
     db.create_all()
+
     data=json.load(open('app/courses.json'))
-    for datum in data:
+    for i, datum in enumerate(data):
         course = Course(course_id=datum["Course"],
                         call_number=datum["CallNumber"],
                         course_name=datum["CourseTitle"],
@@ -59,6 +61,9 @@ def parse_and_store():
 
         db.session.add(course)
         db.session.commit()
+        if i % 10 == 0:
+            print(f'\rSuccessfully added {i} courses...')
+    print()
 
 
 def clear():

@@ -4,12 +4,10 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
-# commented for now to pass the flake8 checks
 @login_manager.user_loader
 def load_user(userid):
     try:
-        user = User.query.filter_by(id=userid).first()
-        return user
+        return User.query.get(int(userid))
     except Exception:
         return None
 
@@ -31,8 +29,8 @@ def load_user_from_request(request):
 
 
 class User(UserMixin, db.Model):
-
-    id = db.Column(db.String(120), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    uni = db.Column(db.String(120), unique=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(120), unique=False, nullable=False)
     school = db.Column(db.String(120), unique=False, nullable=False)
@@ -106,7 +104,7 @@ class Course(db.Model):
                             backref=db.backref('courses'))
 
     def __repr__(self):
-        return '<Course %r>' % self.course_id
+        return f'<Course {self.course_id}>'
 
 
 class Dining(db.Model):
@@ -115,7 +113,7 @@ class Dining(db.Model):
     name = db.Column(db.String(64))
 
     def __repr__(self):
-        return '<Dining %r>' % self.name
+        return f'<Dining {self.name}>'
 
 
 class Student(db.Model):
@@ -131,7 +129,7 @@ class Student(db.Model):
     home = db.Column(db.String(64), nullable=True)
 
     def __repr__(self):
-        return '<Student %r>' % self.uni
+        return f'<Student {self.uni}>' % self.uni
 
 
 class Teacher(db.Model):
@@ -140,4 +138,4 @@ class Teacher(db.Model):
     uni = db.Column(db.String(7), primary_key=True)
 
     def __repr__(self):
-        return '<Teacher %r>' % self.name
+        return f'<Teacher {self.name}>' % self.name
