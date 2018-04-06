@@ -15,16 +15,12 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <ul class="nav navbar-nav">
-                    <li><a href="{{ url_for('main.home') }}">Introduction</a></li>
-
-                </ul>
+                    <li><a class="navbar-brand" href="{{ url_for('main.home') }}">Data API</a></li>
                     <li><a href="{{ url_for('main.dining') }}">Dining</a></li>
                     <li><a href="{{ url_for('main.housing') }}">Housing</a></li>
                     <li><a href="{{ url_for('main.courses') }}">Courses</a></li>
                     <li><a href="{{ url_for('main.courses') }}">Courses</a></li>
-            </div>
-            <div class="navbar-collapse collapse">
+                </ul>
                 <ul class="nav navbar-nav navbar-right">
                     {% if current_user.is_authenticated %}
                     <li><a href="{{ url_for('auth.logout') }}">Sign Out</a></li>
@@ -38,6 +34,12 @@
 {% endblock %}
 
 {% block content %}
+    {% for message in get_flashed_messages() %}
+        <div class="alert alert-warning">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{ message }}
+        </div>
+    {% endfor %}
     <div class="container">
     {% block page_content %}
 {#    Custom HTML goes here#}

@@ -8,10 +8,10 @@ install:
 - pip install -r requirements.txt
 - pip install flake8
 script:
-- flake8 $APP_DIRECTORY $TEST_DIRECTORY --ignore=E402
+- flake8 $APP_DIRECTORY $TEST_DIRECTORY --ignore=E402 --max-line-length=120
 - python -m unittest discover tests
 env:
   global:
   - APP_DIRECTORY=app
   - TEST_DIRECTORY=tests
-  - FLASK_APP=run.py
+  - FLASK_APP=run.pyt

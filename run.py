@@ -1,6 +1,5 @@
 from app import create_app, db, mail
-from app.models import User
-from app.models import Course, Dining, Student
+from app.models import Course, Dining, Student, User
 import json
 import os
 from scrapy.crawler import CrawlerProcess
