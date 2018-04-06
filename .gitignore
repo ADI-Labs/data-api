@@ -106,3 +106,6 @@ new_venv/
 
 # sqlite
 *.sqlite
+
+#data
+data/full/
