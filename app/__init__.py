@@ -20,7 +20,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 def create_app(name=__name__):
     app = Flask(name)
-    database_uri = f"sqlite:///{os.path.join(basedir, 'data.sqlite')}"
+    database_uri = "sqlite:///"+os.path.join(basedir, 'data.sqlite')
     app.config.update(
         DEBUG=True,
         SECRET_KEY=os.environ.get('SECRET_KEY', 'secret_xxx'),
