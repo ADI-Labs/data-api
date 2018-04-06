@@ -9,7 +9,7 @@ import scrapy
 
 app = create_app()
 
-ITEM_PIPELINES = {'scrapy.pipelines.files.FilesPipeline': 1}
+ITEM_PIPELINES = {'scrapy.pipelinvimes.files.FilesPipeline': 1}
 
 FILES_STORE = './data/'
 uni = ""
