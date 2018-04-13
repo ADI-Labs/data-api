@@ -4,7 +4,6 @@ import json
 import os
 from scrapy.crawler import CrawlerProcess
 import hashlib
-import getpass
 import scrapy
 
 app = create_app()
@@ -12,8 +11,12 @@ app = create_app()
 ITEM_PIPELINES = {'scrapy.pipelinvimes.files.FilesPipeline': 1}
 
 FILES_STORE = './data/'
-uni = ""
-pwd = ""
+config = json.load(open("./config.json"))
+LOGIN = config["login"]
+
+uni = LOGIN["uni"]
+pwd = LOGIN["password"]
+
 URL = "http://opendataservice.columbia.edu/api/9/json/download"
 
 
@@ -79,16 +82,14 @@ def clear():
     os.system('clear')
 
 
+@app.cli.command()
 def get_courses():
-    # for some reason flask shell chooses python 2.7 by default
-    uni = raw_input("Your UNI: ")
-    pwd = getpass.getpass("Your PWD: ")
     crwl = CrawlerProcess(
         {'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'})
     crwl.crawl(GetJson)
     crwl.start()
     sha = hashlib.sha1()
-    sha.update(URL)
+    sha.update(URL.encode('utf-8'))
     name = sha.hexdigest()
     parse_and_store(FILES_STORE+"full/"+name)
 
@@ -111,8 +112,6 @@ class GetJson(scrapy.Spider):
     }
 
     def parse(self, response):
-        print(uni)
-        print(pwd)
         return [scrapy.FormRequest.from_response
                 (response,
                  formdata={'username': uni, 'password': pwd},
