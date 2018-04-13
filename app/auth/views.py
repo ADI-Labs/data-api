@@ -52,9 +52,6 @@ def register():
         db.session.commit()
         flash('You can now login.')
         return redirect(url_for('auth.login'))
-<<<<<<< HEAD
-    return render_template('register.html', form=form)
-=======
     return render_template('auth/register.html', form=form)
 
 
@@ -68,4 +65,3 @@ def confirm(token):
     else:
         flash('The confirmation link is invalid or has expired')
     return redirect(url_for('index'))
->>>>>>> upstream/master

@@ -5,7 +5,7 @@ import os
 from scrapy.crawler import CrawlerProcess
 import hashlib
 import getpass
-import scrapy
+#import scrapy
 
 app = create_app()
 
