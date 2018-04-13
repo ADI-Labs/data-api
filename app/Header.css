@@ -1,0 +1,39 @@
+.navbar-header,
+.sidebar-header,
+header,
+.sidebar-container .navbar .navbar-toggle:focus,
+.sidebar-container .navbar .navbar-toggle:hover {
+  background-color: #222;
+}
+
+.navbar-header,
+.sidebar-header,
+header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 5em;
+}
+
+header.header-div {
+  padding: 1em;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.header-logo {
+  height: 3em;
+}
+
+/*
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}*/
+
+.header-title {
+  display: inline-block;
+  font-size: 1em;
+}
