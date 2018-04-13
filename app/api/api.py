@@ -26,7 +26,8 @@ class Courses(Resource):
             datum['status'] = 200
             datum['data'] = [remove_hidden_attr(result.__dict__)]
         else:
-            datum['status'] = 500
+            datum['status'] = 400
+            datum['error'] = "User couldn't be verified"
             datum['data'] = {}
         return jsonify(datum)
 
