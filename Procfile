@@ -1,2 +1,3 @@
-release: flask get_courses
-web: gunicorn run:app
+web:
+flask get_courses
+gunicorn run:app
