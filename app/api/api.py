@@ -31,4 +31,5 @@ class Courses(Resource):
             datum['data'] = {}
         return jsonify(datum)
 
+
 api.add_resource(Courses, '/courses/<term>/<cid>/<key>')
