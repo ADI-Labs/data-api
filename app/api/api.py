@@ -30,43 +30,6 @@ class Courses(Resource):
             datum['error'] = "User couldn't be verified"
             datum['data'] = {}
         return jsonify(datum)
-
-    """we are not going to have sets and deletes"""
-
-
-
-"""
-class Dining(Resource):
-    def get(self, term, key):
-        datum = {}
-        if User.verify(self, key):
-            result = Dining.query.filter_by(course_id=cid, term=term).first()
-
-            if result is None:
-                abort(404, status=400, message=f'Dining {cid} for term {term} does not exist')
-
-            datum['status'] = 200
-            datum['data'] = [remove_hidden_attr(result.__dict__)]
-        else:
-            datum['status'] = 500
-            datum['data'] = {}
-        return jsonify(datum)
-
-
-class Housing(Resource):
-    datum = {}
-    if User.verify(self, key):
-        result = Housing.query.filter_by(course_id=cid, term=term).first()
-
-        if result is None:
-            abort(404, status=400, message=f'Housing {cid} for term {term} does not exist')
-
-        datum['status'] = 200
-        datum['data'] = [remove_hidden_attr(result.__dict__)]
-    else:
-        datum['status'] = 500
-        datum['data'] = {}
-    return jsonify(datum)
-"""
+        
 
 api.add_resource(Courses, '/courses/<term>/<cid>/<key>')

@@ -49,7 +49,6 @@ class User(UserMixin, db.Model):
     def generate_confirmation_token(self, expiration=3600):
         s = Serializer('xxx', expiration)
         token = s.dumps({'id': self.id})
-        print (s.loads(token))
         return token
 
     @staticmethod
