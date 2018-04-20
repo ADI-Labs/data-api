@@ -16,11 +16,11 @@ bootstrap = Bootstrap()
 
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-
+storedir = '/storage'
 
 def create_app(name=__name__):
     app = Flask(name)
-    database_uri = "sqlite:///" + os.path.join(basedir, 'data.sqlite')
+    database_uri = "sqlite:///" + os.path.join(storedir, 'data.sqlite')
     app.config.update(
         DEBUG=True,
         SECRET_KEY=os.environ.get('SECRET_KEY', 'secret_xxx'),
