@@ -1,4 +1,4 @@
-from flask_login import login_user, login_required, logout_user
+from flask_login import login_user, login_required, logout_user, current_user
 from flask import redirect, render_template, flash, url_for, request
 from .. import db
 from ..models import User
@@ -55,9 +55,8 @@ def register():
     return render_template('auth/register.html', form=form)
 
 
-@auth.route('/token/<uni>', methods=["GET", "POST"])
+@auth.route('/token', methods=["GET"])
 @login_required
-def gen_token(uni):
-    user = User.query.filter_by(uni=uni).first()
-    token = user.generate_confirmation_token()
+def gen_token():
+    token = current_user.generate_confirmation_token()
     return render_template('auth/token.html', api_key=token)
