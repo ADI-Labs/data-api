@@ -31,7 +31,5 @@ class Courses(Resource):
             datum['data'] = {}
         return jsonify(datum)
 
-    """we are not going to have sets and deletes"""
 
-
-api.add_resource(Courses, '/courses/<term>/<cid>')
+api.add_resource(Courses, '/courses/<term>/<cid>/')
