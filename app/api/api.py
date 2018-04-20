@@ -33,6 +33,8 @@ class Courses(Resource):
 
     """we are not going to have sets and deletes"""
 
+
+
 """
 class Dining(Resource):
     def get(self, term, key):
