@@ -28,15 +28,23 @@ class Courses(Resource):
 
     """we are not going to have sets and deletes"""
     
-class Student(db.Model):
-    __tablename__ = 'students'
-    uni = db.Column(db.String(8), unique=True, primary_key=True)
-    name = db.Column(db.String(64), nullable=False)
-    title = db.Column(db.String(128), nullable=True)
-    department = db.Column(db.String(128), nullable=True)
+class Student(Resource):
+    def get(cid):
+    #def get(self, cid, key):
+        datum = {}
+        #if User.verify(self, key):
+        #   result = Student.query.filter_by(course_id=cid).first()
 
-    def __repr__(self):
-        return '<Student %r>' % self.uni
+        if result is None:
+            abort(404, status=400, message=f'Course {cid} does not exist')
+
+            datum['status'] = 200;
+            datum['data'] = [remove_hidden_attr(result.__dict__)]
+        else:
+            datum['status'] = 500
+            datum['data'] = {}
+        return jsonify(datum)
+
 
 
 api.add_resource(Courses, '/courses/<term>/<cid>')

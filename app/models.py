@@ -121,17 +121,12 @@ class Dining(db.Model):
 class Student(db.Model):
     __tablename__ = 'students'
     uni = db.Column(db.String(8), unique=True, primary_key=True)
-    email = db.Column(db.String(64), unique=True, nullable=False)
     name = db.Column(db.String(64), nullable=False)
     title = db.Column(db.String(128), nullable=True)
     department = db.Column(db.String(128), nullable=True)
-    address = db.Column(db.String(512), nullable=False)
-    tel = db.Column(db.String(32), nullable=True)
-    fax = db.Column(db.String(32), nullable=True)
-    home = db.Column(db.String(64), nullable=True)
 
     def __repr__(self):
-        return f'<Student {self.uni}>' % self.uni
+        return '<Student %r>' % self.uni
 
 
 class Teacher(db.Model):

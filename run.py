@@ -26,9 +26,7 @@ def make_shell_context():
                 Student=Student,
                 Course=Course,
                 Dining=Dining,
-                clear=clear,
-                sqlIt=parse_and_store,
-                GetJson=GetJson,
+                get_students= get_students,
                 get_courses=get_courses
                 )
 
@@ -74,6 +72,16 @@ def parse_and_store(path):
         db.session.add(course)
         db.session.commit()
 
+    studentData = get_students();
+    for datum in data:
+        student = Student(uni = datum["uni"],
+                          name = datum["name"],
+                          title = datum["title"],
+                          department = datum["dept"]
+                          )
+        db.session.add(student)
+        db.session.commit()
+
 
 def clear():
     os.system('clear')
@@ -81,7 +89,7 @@ def clear():
 
 def get_courses():
     # for some reason flask shell chooses python 2.7 by default
-    uni = raw_input("Your UNI: ")
+    uni = input("Your UNI: ")
     pwd = getpass.getpass("Your PWD: ")
     crwl = CrawlerProcess(
         {'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'})
@@ -91,6 +99,10 @@ def get_courses():
     sha.update(URL)
     name = sha.hexdigest()
     parse_and_store(FILES_STORE+"full/"+name)
+
+def get_students():
+    data = json.load(open('compileUnis.json')); 
+    return data;
 
 
 class JSON(scrapy.Item):
@@ -122,3 +134,5 @@ class GetJson(scrapy.Spider):
 
     def after_login(self, response):
         yield JSON(file_urls=[URL])
+
+
