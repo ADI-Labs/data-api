@@ -62,7 +62,7 @@ class User(UserMixin, db.Model):
         return User.query.get(data['id'])
 
     def __repr__(self):
-        return "%s/%s" % (self.id, self.email)
+        return f'<User {self.uni} {self.email}>'
 
 
 profs = db.Table('profs',
