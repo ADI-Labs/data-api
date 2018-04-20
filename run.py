@@ -75,15 +75,6 @@ def parse_and_store(path):
         db.session.add(course)
         db.session.commit()
 
-    studentData = get_students();
-    for datum in data:
-        student = Student(uni = datum["uni"],
-                          name = datum["name"],
-                          title = datum["title"],
-                          department = datum["dept"]
-                          )
-        db.session.add(student)
-        db.session.commit()
 
 
 def clear():
@@ -104,9 +95,21 @@ def get_courses():
     name = sha.hexdigest()
     parse_and_store(FILES_STORE+"full/"+name)
 
+@app.cli.command()
 def get_students():
     data = json.load(open('compileUnis.json')); 
     return data;
+
+def parse_and_store_students():
+    data = get_students();
+    for datum in data:
+        student = Student(uni = datum["uni"],
+                          name = datum["name"],
+                          title = datum["title"],
+                          department = datum["dept"]
+                          )
+        db.session.add(student)
+        db.session.commit()
 
 
 class JSON(scrapy.Item):
