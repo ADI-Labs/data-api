@@ -1,5 +1,5 @@
 from flask import render_template, request
-from ..models import Course, Teacher, Dining, Student
+from ..models import Course, Dining, Student
 from . import main
 
 
