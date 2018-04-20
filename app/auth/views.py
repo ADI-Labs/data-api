@@ -55,13 +55,8 @@ def register():
     return render_template('auth/register.html', form=form)
 
 
-@auth.route('/confirm/<token>')
+@auth.route('/token', methods=["GET"])
 @login_required
-def confirm(token):
-    if current_user.confirmed:
-        return redirect(url_for('index'))
-    if current_user.confirm(token):
-        flash('You have confirmed your account')
-    else:
-        flash('The confirmation link is invalid or has expired')
-    return redirect(url_for('index'))
+def gen_token():
+    token = current_user.generate_confirmation_token()
+    return render_template('auth/token.html', api_key=token)
