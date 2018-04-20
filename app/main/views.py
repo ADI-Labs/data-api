@@ -18,16 +18,15 @@ def search(term, where):
         things = remove_hidden_attr(one.__dict__)
         for attr in things:
             s_able = str(things[attr]).lower()
-            if s_able.find(term)!=-1:
-
+            if s_able.find(term) != -1:
                 # from here, ifs become essential since
                 # returnables are very dependent on
                 # model type
 
                 if where == Course:
-                    result.append({"course_id":things["course_id"],
-                                   "term":things["term"],
-                                   "name":things["course_name"]})
+                    result.append({"course_id": things["course_id"],
+                                   "term": things["term"],
+                                   "name": things["course_name"]})
                 # more ifs based on models here
                 continue
 
