@@ -6,7 +6,31 @@
 <section id="courses (v2)">
 <h1>Courses</h1>
 <hr>
-
+<form method='post'>
+    <ul>
+        <input class="form-control lead" name="searchTerm" placeholder="Search for courses with names, term, call number here"/>
+    </ul>
+    <ul>
+        <input class="hidden" name="submit" type="submit" value='search' />
+    </ul>
+</form>
+{% if results != [] %}
+<table class="table-striped table-bordered center-block" padding width="90%" border="">
+    {% for item in results %}
+        <tr width="100%">
+            <td >
+                {{ item["name"] }}
+            </td>
+            <td >
+                {{ item["course_id"] }}
+            </td>
+            <td >
+                {{ item["term"] }}
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+{% endif %}
 <p class="lead">The courses API got a reboot to conceptually separate courses and sections.
 
 There are two courses endpoints: courses/v2/courses and courses/v2/sections.
