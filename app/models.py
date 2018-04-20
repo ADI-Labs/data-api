@@ -73,6 +73,7 @@ profs = db.Table('profs',
                            primary_key=True))
 
 
+# this can include a search function
 class Course(db.Model):
     __tablename__ = 'courses'
     course_id = db.Column(db.String(64), primary_key=True, nullable=False)
