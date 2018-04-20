@@ -64,7 +64,7 @@ class User(UserMixin, db.Model):
         return True
 
     def __repr__(self):
-        return "%s/%s/%s" % (self.uni, self.email, self.password)
+        return f'<User {self.uni} {self.email}>'
 
 
 profs = db.Table('profs',
