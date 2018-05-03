@@ -59,4 +59,4 @@ def register():
 @login_required
 def token():
     token = current_user.generate_confirmation_token()
-    return render_template('auth/token.html', api_key=str(token))
+    return render_template('auth/token.html', api_key=token.decode('UTF-8'))
