@@ -4,6 +4,9 @@
 
 Provides an API for student programmers to access information on Columbia resources, such as housing, courses, dining, and student and faculty directories.
 
+The API can be accessed here:
+http://data.cdsscu.com/home
+
 The documentation for the API is provided here: https://docs.google.com/document/d/1YW2meOaDT6LEmJ8xcCDemSlCwW4FyWJQwpJrg1vFNyk/edit?usp=sharing
 
 # Motivation
