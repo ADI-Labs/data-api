@@ -17,8 +17,12 @@ Users first need to create an account using a uni email address. After account c
 # Team Members
 
 Jonathan Zhang (Product Manager)
+
 Amanda Zong
+
 Yishak Tofik Mohammed
+
 Kathy Lau
+
 James Xu
 
