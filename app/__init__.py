@@ -16,7 +16,10 @@ bootstrap = Bootstrap()
 
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-storedir = '/storage'
+
+# UNCOMMENT BELOW LINE FOR DEPLOY
+# storedir = '/storage'
+storedir = './'
 
 def create_app(name=__name__):
     app = Flask(name)
