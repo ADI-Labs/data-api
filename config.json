@@ -1,2 +1,6 @@
-{"login":{"uni": $uni, "password": $password}}
-{}
+{
+"login": {
+    "uni": "test",
+    "password": "test"
+
+}
