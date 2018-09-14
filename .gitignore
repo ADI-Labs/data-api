@@ -109,3 +109,4 @@ new_venv/
 
 #data
 data/full/
+config.json

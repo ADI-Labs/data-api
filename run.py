@@ -29,10 +29,6 @@ def make_shell_context():
                 Student=Student,
                 Course=Course,
                 Dining=Dining,
-                clear=clear,
-                sqlIt=parse_and_store,
-                GetJson=GetJson,
-                get_courses=get_courses
                 )
 
 
