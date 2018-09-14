@@ -11,14 +11,8 @@ app = create_app()
 ITEM_PIPELINES = {'scrapy.pipelines.files.FilesPipeline': 1}
 
 FILES_STORE = './data/'
-config = json.load(open("./config.json"))
-login = config.get("login")
-
-uni = login.get("uni") if login else None
-pwd = login.get("password") if login else None
 
 URL = "http://opendataservice.columbia.edu/api/9/json/download"
-
 
 @app.shell_context_processor
 def make_shell_context():
@@ -109,9 +103,13 @@ class GetJson(scrapy.Spider):
     }
 
     def parse(self, response):
+        uni = os.environ.get('UNI')
+        password = os.environ.get('PWD')
+        if uni is None or password is None:
+            raise Exception('you must give a uni and password')
         return [scrapy.FormRequest.from_response
                 (response,
-                 formdata={'username': uni, 'password': pwd},
+                 formdata={'username': uni, 'password': password},
                  formxpath='//form[@id="fm1"]',
                  callback=self.after_login,
                  dont_filter=True)]
