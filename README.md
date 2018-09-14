@@ -10,5 +10,5 @@ Future home of Columbia's API for all data.
 
 
 Deployment:
-git remote add dokku@208.68.37.106:data-api
+git remote add dokku dokku@208.68.37.106:data-api
 git push dokku master
