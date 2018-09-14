@@ -57,6 +57,6 @@ def register():
 
 @auth.route('/token', methods=["GET"])
 @login_required
-def gen_token():
+def token():
     token = current_user.generate_confirmation_token()
-    return render_template('auth/token.html', api_key=token)
+    return render_template('auth/token.html', api_key=token.decode('UTF-8'))

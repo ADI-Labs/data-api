@@ -16,7 +16,7 @@ class Courses(Resource):
     def get(self, cid, term):
         key = parser.parse_args()["key"]
         datum = {}
-        if User.verify(self, key):
+        if User.verify(key):
             result = Course.query.filter_by(course_id=cid, term=term).first()
 
             if result is None:

@@ -110,3 +110,4 @@ env/
 
 #data
 data/full/
+config.json
