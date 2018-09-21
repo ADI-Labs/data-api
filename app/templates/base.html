@@ -2,7 +2,7 @@
 {%  import "bootstrap/wtf.html" as wtf %}
 
 {% block navbar %}
- <div class="navbar navbar-inverse" role="navigation">
+ <div class="navbar navbar-inverse cu-blue" role="navigation">
         <div class="container">
             <div class="navbar_header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -46,4 +46,10 @@
 
     {% endblock %}
     </div>
+{% endblock %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet"
+      href="{{url_for('static', filename='assets/base.css')}}">
 {% endblock %}
