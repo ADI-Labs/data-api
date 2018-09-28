@@ -20,7 +20,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 # UNCOMMENT BELOW LINE FOR DEPLOY
 # storedir = '/storage'
 storedir = './'
-
+print("TESTING")
 
 def create_app(name=__name__):
     app = Flask(name)
