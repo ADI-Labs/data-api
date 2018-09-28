@@ -22,6 +22,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 storedir = './'
 print("TESTING")
 
+
 def create_app(name=__name__):
     app = Flask(name)
     database_uri = "sqlite:///" + os.path.join(storedir, 'data.sqlite')
