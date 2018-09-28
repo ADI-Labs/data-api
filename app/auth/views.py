@@ -42,9 +42,9 @@ def logout():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
+        uni = form.uni.data
         email = form.email.data
-        uni_ind = email.find('@')
-        user = User(uni=email[:uni_ind],
+        user = User(uni=uni,
                     email=email,
                     password=form.password.data,
                     school=form.school.data)

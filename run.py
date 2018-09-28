@@ -43,7 +43,7 @@ def test():
 def parse_and_store(path):
     db.drop_all()
     db.create_all()
-
+    print("Right before print path")
     print(path)
     data = json.load(open(path))
     for datum in data:
