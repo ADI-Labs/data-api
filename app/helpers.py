@@ -3,6 +3,7 @@ import os
 from scrapy.crawler import CrawlerProcess
 import hashlib
 import json
+from datetime import datetime
 from . import db
 from .models import Course
 # --------------------------------------------------------
@@ -44,19 +45,36 @@ class CourseSpider(scrapy.Spider):
     def after_login(self, response):
         yield JSON(file_urls=[COURSES_URL])
 
+
 def get_courses():
     # for some reason flask shell chooses python 2.7 by default
-    crwl = CrawlerProcess(
-       {'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'})
-    crwl.crawl(CourseSpider)
-    crwl.start()
     sha = hashlib.sha1()
     sha.update(COURSES_URL.encode('utf-8'))
     name = sha.hexdigest()
+
+    filepath = os.path.join(FILES_STORE, "full", name)
+    if os.path.isfile(filepath):
+        print("file already exists!")
+        return
+
+    crwl = CrawlerProcess(
+       {'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'})
+
+    # Downloads data from courses
+    crwl.crawl(CourseSpider)
+    crwl.start()
+
     parse_and_store(os.path.join(FILES_STORE, "full", name))
+    print("database created!")
 
 
 def parse_and_store(path):
+    '''
+    Needs to run within an app_context!
+
+    :param path:
+    :return:
+    '''
     db.drop_all()
     db.create_all()
 

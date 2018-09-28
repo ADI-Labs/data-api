@@ -6,9 +6,11 @@ import os
 
 
 app = create_app()
+
 print("creating database...")
-get_courses()
-print("database created!")
+with app.app_context():
+    get_courses()
+
 
 @app.shell_context_processor
 def make_shell_context():
@@ -24,7 +26,8 @@ def make_shell_context():
 
 @app.cli.command()
 def courses():
-    get_courses()
+    with app.app_context():
+        get_courses()
 
 
 @app.cli.command()
