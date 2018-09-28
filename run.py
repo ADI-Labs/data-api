@@ -12,10 +12,10 @@ ITEM_PIPELINES = {'scrapy.pipelines.files.FilesPipeline': 1}
 
 FILES_STORE = './data/'
 config = json.load(open("./config.json"))
-LOGIN = config["login"]
+login = config.get("login")
 
-uni = LOGIN["uni"]
-pwd = LOGIN["password"]
+uni = login.get("uni") if login else None
+pwd = login.get("password") if login else None
 
 URL = "http://opendataservice.columbia.edu/api/9/json/download"
 
