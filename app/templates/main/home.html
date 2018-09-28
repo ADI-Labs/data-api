@@ -1,15 +1,33 @@
 {% extends 'base.html' %}
 {% block content %}
-<div id="content" class="container-fluid">
+<!-- <div id="content" class="container-fluid">
+    <div class = "container-fluid">
+        <img class="img-responsive" src="https://www.w3schools.com/w3images/lights.jpg" alt="DataBanner">
+    </div>
     <div class="row-fluid">
         <div class="span12">
             <h3>
-                    About DATA@CU:
+                    About DATA@CU:Data@CU is an ADI-Labs project that aims to provide an API for all Columbia-related data and become the go-to source of data exclusively for student developers at Columbia
             </h3>
             <p>
-                 Data@CU is a project that aims to provide an API for all Columbia-related data and become the go-to source of data exclusively for student developers at Columbia. In addition to providing an API for available data, DATA@CU aims to perform data analytics where fit and provide that as part of the API as well.
+                 
             </p>
         </div>
     </div>
+</div> -->
+
+<div class="hero-image">
+  <div class="hero-text">
+    <h1 style="font-size:50px">DATA@CU</h1>
+    <h4>The go-to source of data for student developers at Columbia!</h4>
+    <!-- <p>Data@CU is an ADI-Labs project that aims to provide an API for all Columbia-related data.</p> -->
+  </div>
 </div>
+
+{% endblock %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet"
+      href="{{url_for('static', filename='assets/home.css')}}">
 {% endblock %}
