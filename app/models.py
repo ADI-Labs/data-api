@@ -62,6 +62,18 @@ class User(UserMixin, db.Model):
             return None
         return User.query.get(data['id'])
 
+    def confirm(self, token):
+        s = Serializer('xxx')
+        try:
+            data = s.loads(token)
+        except:
+            return False
+        if data.get('confirm') != self.id:
+            return False
+        self.confirmed = True
+        db.session.add(self)
+        return True
+
     def __repr__(self):
         return f'<User {self.uni} {self.email}>'
 
