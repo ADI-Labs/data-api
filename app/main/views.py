@@ -1,6 +1,7 @@
 from flask import render_template, request
 from ..models import Course, Dining, Student
 from . import main
+from ..docs import QueryParameter
 
 
 def remove_hidden_attr(d):
@@ -47,9 +48,11 @@ def courses():
         term = request.form["searchTerm"]
         print(term)
         search_results = search(term, Course)
-
     print(search_results)
-    return render_template('main/courses.html', results=search_results)
+
+    parameters = QueryParameter.getCourseParameters()
+    
+    return render_template('main/courses.html', results=search_results, parameters=parameters)
 
 
 # not implementable yet. Model hasn't been built
