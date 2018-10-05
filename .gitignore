@@ -88,6 +88,7 @@ venv/
 ENV/
 new_venv/
 env/
+data_env/
 # Spyder project settings
 .spyderproject
 .spyproject
@@ -110,4 +111,5 @@ env/
 
 #data
 data/full/
-config.json
+app/config.json
+envirio/
