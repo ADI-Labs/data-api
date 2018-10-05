@@ -95,6 +95,24 @@ lang=js">{
 
 <h3>Query Parameters</h3>
 
+{% if parameters != [] %}
+<table class="table table-bordered">
+    {% for item in parameters %}
+    <tr width="100%">
+            <td >
+                {{ item["name"] }}
+            </td>
+            <td >
+                {{ item["par_type"] }}
+            </td>
+            <td >
+                {{ item["description"] }}
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
 <h4>title</h4>
 <p class="prettyprint"><span class="tag">string</span></p>
 
