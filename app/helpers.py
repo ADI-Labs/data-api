@@ -5,12 +5,13 @@ import hashlib
 import json
 from . import db
 from .models import Course
+import json
 # --------------------------------------------------------
 
 ITEM_PIPELINES = {'scrapy.pipelines.files.FilesPipeline': 1}
 FILES_STORE = './data'
 COURSES_URL = "http://opendataservice.columbia.edu/api/9/json/download"
-
+config = json.load(open("./app/config.json"))
 
 class JSON(scrapy.Item):
     title = scrapy.Field()
@@ -26,12 +27,15 @@ class CourseSpider(scrapy.Spider):
 
     custom_settings = {
         "ITEM_PIPELINES": {'scrapy.pipelines.files.FilesPipeline': 1},
-        "FILES_STORE": FILES_STORE
+        "FILES_STORE": FILES_STORE,
+        "MEDIA_ALLOW_REDIRECTS": True
     }
 
     def parse(self, response):
-        uni = os.environ.get('UNI')
-        password = os.environ.get('UNI_PASSWORD')
+        uni = str(config["login"]["uni"])
+        password = str(config["login"]["password"])
+        # uni="ytm2102"
+        # password="Breadedteasandchocolate4!"
         if uni is None or password is None:
             raise Exception('you must give a uni and password')
         return [scrapy.FormRequest.from_response
