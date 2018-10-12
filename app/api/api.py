@@ -158,4 +158,4 @@ class Courses(Resource):
 
 # api/courses/search dynamically searches by whatever parameters they input
 # api/courses/term/course_id passes a specific course
-api.add_resource(Courses, '/courses/<typ>') 
+api.add_resource(Courses, '/courses/<typ>')

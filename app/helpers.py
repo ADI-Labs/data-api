@@ -12,6 +12,7 @@ FILES_STORE = './data'
 COURSES_URL = "http://opendataservice.columbia.edu/api/9/json/download"
 config = json.load(open("./app/config.json"))
 
+
 class JSON(scrapy.Item):
     title = scrapy.Field()
     file_urls = scrapy.Field()
