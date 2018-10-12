@@ -114,3 +114,6 @@ data/full/
 app/config.json
 envirio/
 config.json
+
+#environment
+.vscode/
