@@ -25,8 +25,7 @@ def login():
             if next is None or next.startswith('/'):
                 next = url_for('main.home')
             return redirect(next)
-        flash('Invalid username or password.')
-        print('flashed')
+        flash('Invalid username or password.', 'danger')
     return render_template('auth/login.html', form=form)
 
 

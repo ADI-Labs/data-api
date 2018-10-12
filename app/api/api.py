@@ -105,7 +105,7 @@ class Courses(Resource):
                 message=f"Bad Request. GET api/courses/select?" +
                 "or api/courses/search?")
 
-        args = parser.parse_args()
+        args = parser.parse_args(strict=True)
         key = args["key"]
         datum = {}
 
