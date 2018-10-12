@@ -87,6 +87,7 @@ celerybeat-schedule
 venv/
 ENV/
 new_venv/
+env/
 data_env/
 # Spyder project settings
 .spyderproject
@@ -112,3 +113,4 @@ data_env/
 data/full/
 app/config.json
 envirio/
+config.json

@@ -1,7 +1,7 @@
 from flask import render_template, request
 from ..models import Course, Dining, Student
 from . import main
-
+import os
 
 def remove_hidden_attr(d):
     return {key: value for key, value in d.items() if key[0] != '_'}
@@ -32,6 +32,20 @@ def search(term, where):
 
     return result
 
+def get_parameters(filename):
+    parameters = []
+    
+    new_path = os.path.abspath('./app/static/metadata/courses.txt')
+    
+    f= open(new_path,"r")
+
+    lines = f.readlines()
+    for line in lines:
+        line_data = line.split(", ")
+        parameters.append({"name": line_data[0], "type": line_data[1], "description": line_data[2]})
+
+    return parameters
+
 
 @main.route('/')
 def base():
@@ -47,9 +61,9 @@ def courses():
         term = request.form["searchTerm"]
         print(term)
         search_results = search(term, Course)
-
     print(search_results)
-    return render_template('main/courses.html', results=search_results)
+    
+    return render_template('main/courses.html', results=search_results, parameters=get_parameters('courses.txt'))
 
 
 # not implementable yet. Model hasn't been built
