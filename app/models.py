@@ -143,7 +143,7 @@ class Student(db.Model):
     home = db.Column(db.String(64), nullable=True)
 
     def __repr__(self):
-        return f'<Student {self.uni}>' % self.uni
+        return f'<Student {self.uni}>'
 
 
 class Teacher(db.Model):
@@ -152,4 +152,4 @@ class Teacher(db.Model):
     uni = db.Column(db.String(7), primary_key=True)
 
     def __repr__(self):
-        return f'<Teacher {self.name}>' % self.name
+        return f'<Teacher {self.name}>'
