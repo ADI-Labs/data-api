@@ -13,6 +13,11 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Log in')
 
 
+class ResetPasswordForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Length(1, 64), Email()])
+    submit = SubmitField("Submit")
+
+
 class ChangePasswordForm(FlaskForm):
 
     password = PasswordField('New Password',

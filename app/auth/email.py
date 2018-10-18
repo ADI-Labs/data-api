@@ -15,7 +15,7 @@ app.config['MAIL_PASSWORD'] = ""  # os.environ.get('EMAIL_PASSWORD")
 
 
 def send_email(to, subject, template, **kwargs):
-    msg = Message(subject=app.config['MAIL_SUBJECT_PREFIX']+ subject,
+    msg = Message(subject=app.config['MAIL_SUBJECT_PREFIX'] + subject,
                   sender=app.config['MAIL_USERNAME'], recipients=[to])
     msg.body = render_template(template + '.txt', **kwargs)
     msg.html = render_template(template + '.html', **kwargs)

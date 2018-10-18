@@ -3,8 +3,8 @@ from flask import redirect, render_template, flash, url_for, request
 from .. import db
 from ..models import User
 from . import auth
-from .forms import LoginForm, RegistrationForm, RegeneratePasswordForm
-# from .email import send_email
+from .forms import LoginForm, RegistrationForm, ChangePasswordForm, ResetPasswordForm
+from .email import send_email
 
 
 @auth.route("/")
@@ -41,7 +41,9 @@ def logout():
 
 @auth.route('/register', methods=["GET", "POST"])
 def register():
+    print("Inside register;")
     form = RegistrationForm()
+    print("Form was just made")
     if form.validate_on_submit():
         uni = form.uni.data
         email = form.email.data
@@ -59,13 +61,14 @@ def register():
         return redirect(url_for('auth.login'))
     return render_template('auth/register.html', form=form)
 
+
 @auth.route('/confirm/<token>')
 def confirm(token):
     if current_user.confirm(token):
         flash('You have confirmed your account. Thank you.')
 
     else:
-       flash("The confirmation link is invalid or has expired.")
+        flash("The confirmation link is invalid or has expired.")
     return redirect(url_for('main.index'))
 
 
@@ -78,12 +81,19 @@ def token():
 
 @auth.route('/forgot_password', methods=["GET"])
 def forgot_password():
-    form = RegeneratePasswordForm()
+    form = ResetPasswordForm()
     if form.validate_on_submit():
         email = form.email.data
-        password = form.password.data
         user = User.query.filter_by(email=email).first()
         if user and user.is_confirmed:
-            pass
+
+            flash('A password reset link has been sent to your email address.')
+
+            return render_template('auth/forgot_password.html')  ## Just for trial
+        else:
+            flash("There is no account registered with your email address.")
+    return render_template('auth/forgot_password.html', form=form)  ## Just for trial
+
+
 
 
