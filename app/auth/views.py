@@ -3,7 +3,7 @@ from flask import redirect, render_template, flash, url_for, request
 from .. import db
 from ..models import User
 from . import auth
-from .forms import LoginForm, RegistrationForm, ChangePasswordForm, ResetPasswordForm
+from .forms import LoginForm, RegistrationForm,  ResetPasswordForm
 from .email import send_email
 
 
@@ -89,11 +89,7 @@ def forgot_password():
 
             flash('A password reset link has been sent to your email address.')
 
-            return render_template('auth/forgot_password.html')  ## Just for trial
+            return render_template('auth/forgot_password.html')  # Just for trial
         else:
             flash("There is no account registered with your email address.")
-    return render_template('auth/forgot_password.html', form=form)  ## Just for trial
-
-
-
-
+    return render_template('auth/forgot_password.html', form=form)  # Just for trial
