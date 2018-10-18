@@ -21,6 +21,7 @@ class ChangePasswordForm(FlaskForm):
     password2 = PasswordField('Retype your password', validators=[DataRequired()])
     submit = SubmitField("Change Password")
 
+
 class RegistrationForm(FlaskForm):
     email = StringField(
         'Email', validators=[

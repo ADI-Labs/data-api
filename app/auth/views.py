@@ -84,5 +84,6 @@ def forgot_password():
         password = form.password.data
         user = User.query.filter_by(email=email).first()
         if user and user.is_confirmed:
+            pass
 
 
