@@ -1,0 +1,23 @@
+course_id, String, primary_key=True
+term, String, primary_key=True
+call_number, Integer, I am a valid description
+course_name, String, I am a valid description
+bulletin_flags, String, I am a valid description
+division_code, String, I am a valid description
+credit_amount, Integer, I am a valid description
+prefix_name, String, I am a valid description
+prefix_long_name, String, I am a valid description
+instructor_name, String, I am a valid description
+approval, String, I am a valid description
+school_code, String, I am a valid description
+school_name, String, I am a valid description
+campus_code, String, I am a valid description
+campus_name, String, I am a valid description
+type_code, String, I am a valid description
+type_name, String, I am a valid description
+num_enrolled, Integer, I am a valid description
+max_size, Integer, I am a valid description
+min_units, Integer, I am a valid description
+num_fixed_units, Integer, I am a valid description
+class_notes, String, I am a valid description
+meeting_times, String, I am a valid description
