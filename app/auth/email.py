@@ -10,7 +10,9 @@ app.config['MAIL_SENDER'] = 'ADICU: data@adicu.com'
 app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = "brukbekele333@gmail.com"  # os.environ.get("EMAIL_USERNAME")
+app.config['MAIL_USERNAME'] = "brukbekele333@gmail.com"
+# os.environ.get("EMAIL_USERNAME")
+
 app.config['MAIL_PASSWORD'] = ""  # os.environ.get('EMAIL_PASSWORD")
 
 

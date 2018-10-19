@@ -40,6 +40,3 @@ def test():
 
 def clear():
     os.system('clear')
-
-
-

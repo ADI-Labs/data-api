@@ -20,7 +20,8 @@ def login():
         password = form.password.data
         user = User.query.filter_by(email=email).first()
         print(user)
-        if user is not None and user.verify_password(password) and user.is_confirmed:
+        if user is not None and user.verify_password(password) \
+                and user.is_confirmed:
             login_user(user, form.remember_me.data)
             next = request.args.get('next')
             if next is None or next.startswith('/'):
@@ -89,7 +90,10 @@ def forgot_password():
 
             flash('A password reset link has been sent to your email address.')
 
-            return render_template('auth/forgot_password.html')  # Just for trial
+            return render_template('auth/forgot_password.html')
+            # Just for trial
+
         else:
             flash("There is no account registered with your email address.")
-    return render_template('auth/forgot_password.html', form=form)  # Just for trial
+    return render_template('auth/forgot_password.html', form=form)
+    # Just for trial

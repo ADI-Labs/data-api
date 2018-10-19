@@ -66,7 +66,7 @@ class User(UserMixin, db.Model):
         s = Serializer('xxx')
         try:
             data = s.loads(token)
-        except:
+        except Exception:
             return False
         if data.get('confirm') != self.id:
             return False

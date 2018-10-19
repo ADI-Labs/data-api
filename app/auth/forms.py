@@ -14,16 +14,20 @@ class LoginForm(FlaskForm):
 
 
 class ResetPasswordForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(), Length(1, 64), Email()])
+    email = StringField('Email', validators=[DataRequired(),
+                                             Length(1, 64), Email()])
     submit = SubmitField("Submit")
 
 
 class ChangePasswordForm(FlaskForm):
-
+    message = "Passwords must match"
     password = PasswordField('New Password',
                              validators=[DataRequired(),
-                                         EqualTo('password2', message="Passwords must match")])
-    password2 = PasswordField('Retype your password', validators=[DataRequired()])
+                                         EqualTo('password2',
+                                                 message=message)])
+
+    password2 = PasswordField('Retype your password',
+                              validators=[DataRequired()])
     submit = SubmitField("Change Password")
 
 
