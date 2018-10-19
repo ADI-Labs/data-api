@@ -21,7 +21,7 @@ class JSON(scrapy.Item):
 
 class CourseSpider(scrapy.Spider):
     name = 'coursespider'
-    start_urls = ["https://cas.columbia.edu/cas/login?service=" +
+    start_urls = ["https://cas.columbia.edu/cas/login?service=" +   
                   "ias-qmss&destination=http://opendataservice." +
                   "columbia.edu/user/wind"]
 
@@ -32,6 +32,7 @@ class CourseSpider(scrapy.Spider):
     }
 
     def parse(self, response):
+        print("Existing settings: %s" % self.settings.attributes.keys()) 
         uni = str(config["login"]["uni"])
         password = str(config["login"]["password"])
         if uni is None or password is None:
@@ -55,8 +56,12 @@ def get_courses():
 
     filepath = os.path.join(FILES_STORE, "full", name)
     if os.path.isfile(filepath):
-        print("file already exists!")
+        print("course data is downloaded")
         return
+    else:
+        print("scraping and storing course data...")
+        db.drop_all()
+        db.create_all()
 
     crwl = CrawlerProcess(
         {'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'})
@@ -76,10 +81,6 @@ def parse_and_store(path):
     :param path:
     :return:
     '''
-    db.drop_all()
-    db.create_all()
-
-    print(path)
     data = json.load(open(path))
     for datum in data:
         course = Course(course_id=datum["Course"],
