@@ -73,7 +73,7 @@ def get_courses():
         parse_and_store(filepath)
 
     # rename to keep old files     
-    os.rename(filepath,os.path.join(FILES_STORE, "full","test.json"))
+    # os.rename(filepath,os.path.join(FILES_STORE, "full","test.json"))
 
 
 def check_differences(existing_course, new_course):
@@ -119,5 +119,5 @@ def parse_and_store(path):
             check_differences(existing_course, new_course) 
         else:
             db.session.add(existing_course)
-        db.session.commit()
+        db.session.commit() 
     print("database created and up to date!")
