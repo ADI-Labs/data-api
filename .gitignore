@@ -110,6 +110,7 @@ data_env/
 *.sqlite
 
 #data
+utils/data
 data/full/
 app/config.json
 envirio/
