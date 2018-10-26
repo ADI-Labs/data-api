@@ -41,7 +41,7 @@ def clear():
 
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(func=courses, trigger="interval", seconds=3)
+scheduler.add_job(func=courses, trigger="interval", seconds=302400)
 scheduler.start()
 
 # Shut down the scheduler when exiting the app
