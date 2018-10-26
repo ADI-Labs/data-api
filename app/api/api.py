@@ -13,39 +13,9 @@ def remove_hidden_attr(d):
 class Courses(Resource):
     def process_args(args):
         final_args = {}
-        # parameters = [
-        # 'course_id',
-        # 'term',
-        # 'course_name',
-        # 'call_number',
-        # 'bulletin_flags',
-        # 'division_code',
-        # 'credit_amount',
-        # 'prefix_name',
-        # 'prefix_long_name',
-        # 'instructor_name',
-        # 'approval',
-        # 'school_code',
-        # 'school_name',
-        # 'campus_code',
-        # 'campus_name',
-        # 'type_code',
-        # 'type_name',
-        # 'num_enrolled',
-        # 'max_size',
-        # 'min_units',
-        # 'num_fixed_units',
-        # 'class_notes',
-        # 'meeting_times']
         del args['key']
 
         for k in args.keys():
-            # if k not in parameters:
-            #     return k
-            # else:
-                # if user did not pass a value for the parameter then it will
-                # show up in args as None this confuses the sqllite db because
-                # it will look for None in db, so remove it
             if args[k] is not None:
                 final_args[k] = args[k]
 
@@ -105,7 +75,7 @@ class Courses(Resource):
                 message=f"Bad Request. GET api/courses/select?" +
                 "or api/courses/search?")
 
-        args = parser.parse_args()
+        args = parser.parse_args(strict=True)
         key = args["key"]
         datum = {}
 

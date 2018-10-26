@@ -20,8 +20,6 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 # UNCOMMENT BELOW LINE FOR DEPLOY
 # storedir = '/storage'
 storedir = './'
-print("TESTING")
-
 
 def create_app(name=__name__):
     app = Flask(name)
@@ -36,7 +34,8 @@ def create_app(name=__name__):
         MAIL_PORT=587,
         MAIL_USERNAME=os.environ.get('MAILGUN_USERNAME'),
         MAIL_PASSWORD=os.environ.get('MAILGUN_PASSWORD'),
-        MAIL_DEFAULT_SENDER=os.environ.get('MAILGUN_USERNAME')
+        MAIL_DEFAULT_SENDER=os.environ.get('MAILGUN_USERNAME'),
+        ERROR_404_HELP = False
     )
 
     db.init_app(app)

@@ -104,7 +104,7 @@ class Course(db.Model):
                             backref=db.backref('courses'))
 
     def __repr__(self):
-        return f'<Course {self.course_id}>'
+        return f'<Course {self.course_id} {self.course_name} {self.term}>'
 
 
 class Dining(db.Model):

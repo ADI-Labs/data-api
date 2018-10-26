@@ -11,7 +11,7 @@
         <input class="form-control lead" name="searchTerm" placeholder="Search for courses with names, term, call number here"/>
     </ul>
     <ul>
-        <input class="hidden" name="submit" type="submit" value='search' />
+        <input name="submit" type="submit" value='search' />
     </ul>
 </form>
 {% if results != [] %}
@@ -94,6 +94,33 @@ lang=js">{
 </div>
 
 <h3>Query Parameters</h3>
+
+{% if parameters != [] %}
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in parameters %}
+            <tr width="100%">
+                <td >
+                    {{ item["name"] }}
+                </td>
+                <td >
+                    {{ item["type"] }}
+                </td>
+                <td >
+                    {{ item["description"] }}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
 
 <h4>title</h4>
 <p class="prettyprint"><span class="tag">string</span></p>
