@@ -38,8 +38,7 @@ class RegistrationForm(FlaskForm):
                 1, 64), Email()])
     uni = StringField(
         'UNI', validators=[
-            DataRequired(), Length(1, 15)]
-            )
+            DataRequired(), Length(1, 15)])
     password = PasswordField(
         'Password',
         validators=[

@@ -3,7 +3,7 @@ from flask import redirect, render_template, flash, url_for, request
 from .. import db
 from ..models import User
 from . import auth
-from .forms import LoginForm, RegistrationForm,  ResetPasswordForm
+from .forms import LoginForm, RegistrationForm, ResetPasswordForm
 from .emails import send_email
 
 
