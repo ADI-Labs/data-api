@@ -1,0 +1,32 @@
+body, html {
+    height: 100%;
+    margin: 0px;
+    /* font-family: Arial, Helvetica, sans-serif; */
+}
+
+.api-page {
+  padding-top: 20pt;
+}
+
+.panel > .panel-heading {
+    background-color: #77bad6;
+}
+
+.panel {
+    border-color: #77bad6;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.btn {
+    border-color: #77bad6;
+    color: black;
+}
+
+.panel-text {
+    padding-left: 20px;
+}
+
+/* .method-btn {
+    color: white;
+    padding-right: 20pt; 
+} */
