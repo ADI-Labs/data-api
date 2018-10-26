@@ -4,7 +4,7 @@ from .. import db
 from ..models import User
 from . import auth
 from .forms import LoginForm, RegistrationForm,  ResetPasswordForm
-from .email import send_email
+from .emails import send_email
 
 
 @auth.route("/")
