@@ -122,7 +122,7 @@ def parse_and_store(path):
         else: 
             print('new course!')
             db.session.add(new_course)
-            db.session.commit() 
+        db.session.commit() 
 
         existing_course = Course.query.get((datum["Course"], datum["Term"]))
         print(existing_course, existing_course.num_enrolled)
@@ -139,8 +139,6 @@ def check_differences(existing_course, new_course):
         if existing_data[key] != new_data[key]:
             print('There is a difference!')
             print((getattr(existing_course, key)))
-            existing_course.__dict__[key] = new_data[key]
+            setattr(existing_course, key, new_data[key])
             print((getattr(existing_course, key)))
-            db.session.add(existing_course)
-            db.session.commit() 
-    return existing_course
+    db.session.flush()
