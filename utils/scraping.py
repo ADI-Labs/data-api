@@ -1,4 +1,4 @@
-
+#!/usr/bin/env python
 import re
 import robobrowser
 import json
@@ -43,7 +43,18 @@ def replace_breaks(item, delimiter):
 
 def parse_information(rows):
 
-	info = dict()
+	info = {
+				'Name': True, \
+				'UNI': True, \
+				'Email': True, \
+				'Department': True, \
+				'Title': True, \
+				'Address': True, \
+				'Home Addr': True,
+				'Campus Tel': True, \
+				'Tel': True
+			}
+
 	# print(rows)
 
 
@@ -52,11 +63,23 @@ def parse_information(rows):
 
 	for row in rows:
 		name = row.find('th')
+
 		# This means that it is table header which contains name
 		if name == None:
 
-		 	stuff = row.find_all('td')
-		 	print(stuff)
+		 	items = row.find_all('td')
+		 	field = None
+		 	for item in items:
+
+		 		print(item.find(class_='align_rb'))
+
+		 		txt = item.text
+		 		
+		 		if ':' in txt and info[txt.replace(':', '')] == True:
+		 			field = 
+
+		 		# if txt != '\u00a0' and txt != '':
+		 		# 	info[field] = txt
 
 
 		else:
