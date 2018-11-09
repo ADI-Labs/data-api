@@ -1,3 +1,4 @@
+
 import re
 import robobrowser
 import json
@@ -11,7 +12,8 @@ initial_url = 'https://cas.columbia.edu/cas/login?TARGET=' + \
 	'browse%2Fstudents%3Ffilter.lnameFname%3D2%26filter.initialLetter%3DA'
 
 
-url_base = 'https://directory.columbia.edu/people/browse/students'
+url_base = 'https://directory.columbia.edu'
+browse_url = url_base + '/people/browse/students'
 
 #get login information from config file in root directory
 config = json.load(open('../app/config.json'))
@@ -39,50 +41,70 @@ def replace_breaks(item, delimiter):
 #	{'Name': <student name>, 'Address': <address>, 'Email': <email>, 'Phone': <phone>}
 #
 
-def parse_information(person):
+def parse_information(rows):
 
 	info = dict()
+	# print(rows)
 
 
 
-	data = person.find_all('td')
+	# data = person.find_all('td')
 
-	#Get name
-	info['Name'] = data[0].text
+	for row in rows:
+		name = row.find('th')
+		# This means that it is table header which contains name
+		if name == None:
 
-
-	#Get department and title
-	information = data[1].find_all('div')
-	for field in information:
-		field = replace_breaks(field, ' ')
-		text = field.text
-		fields = text.split(':')
-		info[fields[0]] = fields[1]
+		 	stuff = row.find_all('td')
+		 	print(stuff)
 
 
-	#Get address
-	if data[2].text != None:
-		info['Address'] = replace_breaks(data[2], ' ').text
-	else:
-		info['Address'] = ''
+		else:
+		 	info['Name'] = name.text
 
 
 
-	#Get email and phone number
-	contact_info = replace_breaks(data[3], ':').text
-	contact_info = contact_info.split(':')
+
+
+
+
+
+	# #Get name
+	# info['Name'] = data[0].text
+
+
+	# #Get department and title
+	# information = data[1].find_all('div')
+	# for field in information:
+	# 	field = replace_breaks(field, ' ')
+	# 	text = field.text
+	# 	fields = text.split(':')
+	# 	info[fields[0]] = fields[1]
+
+
+	# #Get address
+	# if data[2].text != None:
+	# 	info['Address'] = replace_breaks(data[2], ' ').text
+	# else:
+	# 	info['Address'] = ''
+
+
+
+	# #Get email and phone number
+	# contact_info = replace_breaks(data[3], ':').text
+	# contact_info = contact_info.split(':')
 	
-	#Has email and phone number
-	if len(contact_info)==2:
-		info['Email'] = contact_info[0]
-		info['Phone'] = contact_info[1]
-	else:
-		info['Email'] = contact_info[0]
+	# #Has email and phone number
+	# if len(contact_info)==2:
+	# 	info['Email'] = contact_info[0]
+	# 	info['Phone'] = contact_info[1]
+	# else:
+	# 	info['Email'] = contact_info[0]
 
 
-	for key, value in info.items():
-		if value == '\u00a0':
-			info[key] = ''
+	# for key, value in info.items():
+	# 	if value == '\u00a0':
+	# 		info[key] = ''
 
 	students.append(info)
 
@@ -97,18 +119,27 @@ def get_data(browser):
 	num_pages = int(last_page[len(last_page)-1])
 	query_format = '?page='
 
-	for pageNumber in range(0, num_pages+1):
-		url = url_base + query_format + str(pageNumber)
-		browser.open(url)
-		table = browser.find(class_='table_results')
-		
-		people = table.find_all('tr')
-		
+	# for pageNumber in range(0, num_pages+1):
+	# 	url = url_base + query_format + str(pageNumber)
+	# 	browser.open(url)
 
-		#The first table row (0th element of array) is always the row containing the labels
-		for integer in range(1, len(people)):
-			parse_information(people[integer])
+	table = browser.find(class_='table_results')	
+	people = table.find_all('tr')
+			
+	links = []
+	#The first table row (0th element of array) is always the row containing the labels
+	for integer in range(1, len(people)):
+		link = people[integer].find_all('a')
+		if len(link) > 0:
+			links.append(url_base+link[0]['href'])
 
+	while len(links)!=0:
+		link = links.pop(0)
+		browser.open(link)
+		rows = browser.find(class_='table_results_indiv').find_all('tr')
+		# print(rows)
+		parse_information(rows)
+		break
 
 
 def writeFile():
@@ -124,6 +155,7 @@ def writeFile():
 		else:
 			file.write(',\n')
 	file.write(']')
+	file.close()
 
 
 
@@ -145,24 +177,24 @@ if __name__=='__main__':
 	print('Getting data from ', initial_url)
 	#Get data for first letter
 	get_data(browser)
-
-	pages = browser.find(class_='name_form_az').find_all('a')
-
-
-	#This gets the links to each intial web page (i.e page 0) that contains a query for an alphabetical character
-	web_pages = []
-	for page in pages:
-		if page.has_attr('href'):
-			web_pages.append(page['href'])
+	print(students)
+	# pages = browser.find(class_='name_form_az').find_all('a')
 
 
-	#This iterates through each web page
-	for page in web_pages:
-		time.sleep(5)
-		url = url_base+page
-		print('Getting data from ', url)
-		browser.open(url)
-		get_data(browser)
+	# #This gets the links to each intial web page (i.e page 0) that contains a query for an alphabetical character
+	# web_pages = []
+	# for page in pages:
+	# 	if page.has_attr('href'):
+	# 		web_pages.append(page['href'])
 
 
-	writeFile()
+	# #This iterates through each web page
+	# for page in web_pages:
+	# 	time.sleep(5)
+	# 	url = browse_url+page
+	# 	print('Getting data from ', url)
+	# 	browser.open(url)
+	# 	get_data(browser)
+
+
+	# writeFile()
