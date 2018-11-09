@@ -1,7 +1,5 @@
 from flask import Flask
 from flask_login import LoginManager
-
-
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
 from flask_bootstrap import Bootstrap
@@ -25,7 +23,7 @@ def create_app(name=__name__):
     app = Flask(name)
     database_uri = "sqlite:///" + os.path.join(storedir, 'data.sqlite')
     app.config.update(
-        DEBUG=True,
+        DEBUG=False,
         SECRET_KEY=os.environ.get('SECRET_KEY', 'secret_xxx'),
         SQLALCHEMY_DATABASE_URI=database_uri,
         SQLALCHEMY_TRACK_MODIFICATIONS=False,

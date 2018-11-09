@@ -4,12 +4,13 @@ from app.helpers import get_courses
 import os
 import atexit
 from apscheduler.schedulers.background import BackgroundScheduler
+import datetime 
 
 app = create_app()
 
 print("checking courses...")
 with app.app_context():
-    get_courses()
+    get_courses(str(datetime.date.today()))
 
 
 @app.shell_context_processor
@@ -25,8 +26,7 @@ def make_shell_context():
 
 def courses():
     with app.app_context():
-        get_courses()
-
+        get_courses(str(datetime.date.today()))
 
 @app.cli.command()
 def test():
@@ -40,11 +40,11 @@ def clear():
     os.system('clear')
 
 
-scheduler = BackgroundScheduler()
-scheduler.add_job(func=courses, trigger="interval", seconds=302400)
-scheduler.start()
+# scheduler = BackgroundScheduler()
+# scheduler.add_job(func=courses, trigger="interval", seconds=5)
+# scheduler.start()
 
-# Shut down the scheduler when exiting the app
-atexit.register(lambda: scheduler.shutdown())
+# # Shut down the scheduler when exiting the app
+# atexit.register(lambda: scheduler.shutdown())
 
 

@@ -28,7 +28,8 @@ class CourseSpider(scrapy.Spider):
     custom_settings = {
         "ITEM_PIPELINES": {'scrapy.pipelines.files.FilesPipeline': 1},
         "FILES_STORE": FILES_STORE,
-        "MEDIA_ALLOW_REDIRECTS": True
+        "MEDIA_ALLOW_REDIRECTS": True,
+        "REACTOR_THREADPOOL_MAXSIZE": 20
     }
 
     def parse(self, response):
@@ -47,21 +48,24 @@ class CourseSpider(scrapy.Spider):
     def after_login(self, response):
         yield JSON(file_urls=[COURSES_URL])
 
+def remove_hidden_attr(d):
+    return {key: value for key, value in d.items() if key[0] != '_'}
 
-def get_courses():
+
+def get_courses(date):
     # for some reason flask shell chooses python 2.7 by default
-    sha = hashlib.sha1()
-    sha.update(COURSES_URL.encode('utf-8'))
-    name = sha.hexdigest()
+    # sha = hashlib.sha1()
+    # sha.update(COURSES_URL.encode('utf-8'))
+    # name = sha.hexdigest()
+    name = 'test.json'
 
     filepath = os.path.join(FILES_STORE, "full", name)
     if os.path.isfile('app/data.sqlite') and os.path.isfile(filepath):
         print("course data is downloaded and DB has data")
-        print("updating...")
-        parse_and_store(filepath)
+        print("updating...\n")
     else:
-        print("scraping and storing course data...")
-        # db.drop_all()
+        print("scraping and storing course data...\n")
+        db.drop_all()
         db.create_all()
 
         crwl = CrawlerProcess(
@@ -70,15 +74,10 @@ def get_courses():
         crwl.crawl(CourseSpider)
         crwl.start()
 
-        parse_and_store(filepath)
+    parse_and_store(filepath)
 
     # rename to keep old files     
-    # os.rename(filepath,os.path.join(FILES_STORE, "full","test.json"))
-
-
-def check_differences(existing_course, new_course):
-    pass
-
+    # os.rename(filepath,os.path.join(FILES_STORE, "full",f"courses-{date}.json"))
 
 def parse_and_store(path):
     '''
@@ -100,7 +99,7 @@ def parse_and_store(path):
                         min_units=datum["MinUnits"],
                         num_fixed_units=datum["NumFixedUnits"],
                         term=datum["Term"],
-                        campus_name=datum["CampusName"],
+                        campus_name=datum["CampusName"],    
                         campus_code=datum["CampusCode"],
                         school_code=datum["SchoolCode"],
                         school_name=datum["SchoolName"],
@@ -113,11 +112,35 @@ def parse_and_store(path):
                         )
         
         existing_course = Course.query.get((new_course.course_id, new_course.term))
-        print(existing_course)
-        if existing_course == None:    
+
+        if existing_course:   
+            print(new_course, datum["NumEnrolled"])
+            print(existing_course, existing_course.num_enrolled) 
             # check for differences objects and then update 
-            check_differences(existing_course, new_course) 
-        else:
-            db.session.add(existing_course)
-        db.session.commit() 
+            existing_course = check_differences(existing_course, new_course)
+            # db.session.delete(existing_course) 
+        else: 
+            print('new course!')
+            db.session.add(new_course)
+            db.session.commit() 
+
+        existing_course = Course.query.get((datum["Course"], datum["Term"]))
+        print(existing_course, existing_course.num_enrolled)
     print("database created and up to date!")
+
+
+def check_differences(existing_course, new_course):
+    existing_data = remove_hidden_attr(existing_course.__dict__)
+    new_data = remove_hidden_attr(new_course.__dict__)
+    # print(existing_data)
+    # print(new_data)
+    for key in existing_data.keys():
+        print(key)
+        if existing_data[key] != new_data[key]:
+            print('There is a difference!')
+            print((getattr(existing_course, key)))
+            existing_course.__dict__[key] = new_data[key]
+            print((getattr(existing_course, key)))
+            db.session.add(existing_course)
+            db.session.commit() 
+    return existing_course

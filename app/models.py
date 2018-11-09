@@ -78,11 +78,10 @@ class Course(db.Model):
     __tablename__ = 'courses'
     course_id = db.Column(db.String(64), primary_key=True, nullable=False)
     term = db.Column(db.String(64), primary_key=True)
-    call_number = db.Column(db.Integer)
+    call_number = db.Column(db.String(120))
     course_name = db.Column(db.String(120))
     bulletin_flags = db.Column(db.String(10))
     division_code = db.Column(db.String())
-    credit_amount = db.Column(db.Integer)
     prefix_name = db.Column(db.String(64))
     prefix_long_name = db.Column(db.String(64))
     instructor_name = db.Column(db.String(64))
@@ -93,13 +92,12 @@ class Course(db.Model):
     campus_name = db.Column(db.String(128))
     type_code = db.Column(db.String(2))
     type_name = db.Column(db.String(64))
-    num_enrolled = db.Column(db.Integer)
-    max_size = db.Column(db.Integer)
-    min_units = db.Column(db.Integer)
-    num_fixed_units = db.Column(db.Integer)
+    num_enrolled = db.Column(db.String(120))
+    max_size = db.Column(db.String(120))
+    min_units = db.Column(db.String(120))
+    num_fixed_units = db.Column(db.String(120))
     class_notes = db.Column(db.String(256))
-    meeting_times = db.Column(db.String(64))
-
+    
     profs = db.relationship('Teacher', secondary=profs,
                             backref=db.backref('courses'))
 
