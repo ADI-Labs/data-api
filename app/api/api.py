@@ -102,7 +102,7 @@ class Courses(Resource):
             abort(
                 400,
                 status=400,
-                message=f"Bad Request. GET api/courses/select?" +
+                message=f"Bad Request. GET api/courses/select?" +\
                 "or api/courses/search?")
 
         args = parser.parse_args()
@@ -130,8 +130,8 @@ class Courses(Resource):
                         abort(
                             404,
                             status=404,
-                            message="Course with course_id = " +
-                            f"{args['course_id']} and term = " +
+                            message="Course with course_id = " +\
+                            f"{args['course_id']} and term = " +\
                             "{args['term']} does not exist")
                     else:
                         datum['status'] = 200
