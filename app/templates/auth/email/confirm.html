@@ -5,19 +5,20 @@
     <title>Title</title>
 </head>
 <body>
-Dear {{user.username}}
+<b>Welcome to Data@CU!</b><br><br>
 
-Welcome to Data@CU!
 
 To confirm your account please click on the following link.
 
 
 {{url_for('auth.confirm', token=token, _external=True)}}
 
-Sincerely,
+Sincerely,<br>
 
-The Data@CU Team
+The Data@CU Team <br>
 
-Note: You can not reply to this email.
+Note:  Please do not reply to this email.
+
+
 </body>
 </html>

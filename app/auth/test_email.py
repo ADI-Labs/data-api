@@ -1,34 +1,19 @@
 # from flask_mail import Message
 # from emails import mail, app
+from flask import render_template
 import requests
 import os
-from flask import render_template
 import sys
-
-app = Flask(__name__)
-#
-# msg = Message('test subject', sender='bbz2103@columbia.edu',
-#               recipients=['brukbekele333@gmail.com',
-#                           'ytm2102@columbia.edu',
-#                           'km3290@columbia.edu'])
-# msg.body = 'text body'
-# msg.html = '<b> HTML </b> body'
-# print("About to try and send.")
-# with app.app_context():
-#     print("Inside the app.context")
-#     mail.send(msg)
-
-
-# recipients = ['bbz2103@columbia.edu']
 
 
 def send_simple_message(recipients, **kwargs):
+    key = os.environ.get("MAILGUN_KEY")
+    print('The key extracted is: ', key)
     with app.app_context():
-        print("In send simple_message")
-        template = "auth/email/confirm.html"
+        template = 'auth/email/confirm.html'
         request = requests.post(
             "https://api.mailgun.net/v3/api.adicu.com/messages",
-            auth=("api", "key-43b2ffe1fe0c4e268748307f4ec70406"),
+            auth=("api", key),
             data={
                 "from": "Data@CU data@cu.adicu.com",
                 "to": recipients,
@@ -65,8 +50,6 @@ def send_mail(recipients=None, subject=None, text=None, template=None, **kwargs)
         print("Got an exception.")
         return False
 
-#send_simple_message()
-# send_mail(token="asldkfajdsflk"
 
 def main():
     print(sys.argv)

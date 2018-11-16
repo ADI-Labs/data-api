@@ -17,7 +17,7 @@ app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 app.config['MAIL_USERNAME'] = os.environ.get("EMAIL_USERNAME")
 app.config['MAIL_PASSWORD'] = os.environ.get("EMAIL_PASSWORD")
-
+app.config["SERVER_NAME"] = "data.adicu.com"
 
 mail = Mail(app)
 
@@ -30,10 +30,12 @@ def send_email(to, subject, template, **kwargs):
     mail.send(msg)
 
 
-def send_message(recipients=None, subject=None, text=None, template=None, **kwargs):
+def send_message(recipients=None, subject=None,
+                 text=None, template=None, **kwargs):
     try:
         key = os.environ.get('MAILGUN_KEY')
         print("In send message")
+        print("The key is: ", key)
         request = requests.post(
             "https://api.mailgun.net/v3/api.adicu.com/messages",
             auth=("api", key),
@@ -42,7 +44,7 @@ def send_message(recipients=None, subject=None, text=None, template=None, **kwar
                 "to": recipients,
                 "subject": subject,
                 "text": text,
-                #"html": render_template(template),
+                "html": render_template(template, **kwargs),
             })
         print("Status: {0}".format(request.status_code))
         print("Body: {0}".format(request.text))
@@ -52,5 +54,3 @@ def send_message(recipients=None, subject=None, text=None, template=None, **kwar
         # print("Status: {0}".format(request.status_code))
         # print("Body: {0}".format(request.text))
         return False
-
-

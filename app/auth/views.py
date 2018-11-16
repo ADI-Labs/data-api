@@ -60,15 +60,16 @@ def register():
             token = user.generate_confirmation_token()
             print("Token:",token)
             print("Email:",user.email)
-            cmd_str = "python app/auth/test_email.py "+user.email
-            os.system(cmd_str)
+            # cmd_str = "python app/auth/test_email.py "+user.email
+            # os.system(cmd_str)
             print("Right before send_message")
             send_message(recipients=[user.email],
                      subject="DATA@CU Email Testing",
                      text="This is your user confirmation link",
                      template='auth/email/confirm.html',
-                     ##token=token
-                     )
+                     token=token,
+                     user=user
+                         )
             print("send message passed")
             flash("A confirmation email has been sent to your email address.")
             return redirect(url_for('auth.login'))

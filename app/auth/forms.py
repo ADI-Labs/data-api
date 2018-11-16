@@ -6,6 +6,7 @@ from ..models import User
 
 VALID_SUFFIX = ["columbia.edu", "barnard.edu"]
 
+
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Length(1, 64),
                                              Email()])
@@ -57,5 +58,5 @@ class RegistrationForm(FlaskForm):
         if User.query.filter_by(email=field.data).first():
             raise ValidationError('Email already registered')
         elif email[-12:] != VALID_SUFFIX[0] and email[-11:] != VALID_SUFFIX[1]:
-            raise ValidationError("Invalid Email. Email address needs to be Columbia or Barnard affiliated.")
-
+            email_err = "Email address need to be columbia.edu or barndard.edu"
+            raise ValidationError(email_err)
