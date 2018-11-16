@@ -13,7 +13,7 @@
             <input class="form-control lead" name="searchTerm" placeholder="Search for courses with a specific name, term, call number here"/>
         </div>
         <div>
-            <input name="submit" type="submit" value='search' />
+            <input class="btn" name="submit" type="submit" value='Search' />
         </div>
     </form>
     {% if results != [] %}
@@ -38,14 +38,14 @@
     <h3>There are two courses endpoints: courses/select and courses/search.</h3>
     <br>
     
-    <div class="panel panel-default endpoint-select" data-toggle="collapse" data-target="#demo">
+    <div class="panel panel-default endpoint-select" data-toggle="collapse" data-target="#select_panel">
         <div class="panel-heading"><h4>Select</h4></div>
         <div class="panel-body">
             <button type="button" disabled class="btn">GET</button>
             <span class="panel-text">/api/courses/select?course_id=course_id&term=term&key=key</span>
         </div>
     </div>
-    <div id="demo" class="collapse">
+    <div id="select_panel" class="collapse">
         <h3>GET Request</h3>
         <div class="box-example">
         <p class="text-info">http://data.adicu.com/api/courses/&lt;term&gt;/&lt;cid&gt;?key=API_TOKEN</p>
@@ -99,14 +99,14 @@
         </div>
     </div>
 
-    <div class="panel panel-default endpoint-select" data-toggle="collapse" data-target="#demo2">
+    <div class="panel panel-default endpoint-select" data-toggle="collapse" data-target="#search_panel">
         <div class="panel-heading"><h4>Search</h4></div>
         <div class="panel-body">
             <button type="button" disabled class="btn method-btn">GET</button>
             <span class="panel-text">/api/courses/search?course_name=course_name&key=key</span>
         </div>
     </div>
-    <div id="demo2" class="collapse">
+    <div id="search_panel" class="collapse">
         <h3>GET Request</h3>
         <div class="box-example">
         <p class="text-info"><a href="http://data.adicu.com/courses/v2/sections?api_token=API_TOKEN&amp;not_full=false&amp;pretty=true&amp;limit=1" target="_blank">http://data.adicu.com/courses/v2/sections?api_token=API_TOKEN&amp;not_full=false&amp;pretty=true&amp;limit=1</a></p>
@@ -150,10 +150,10 @@
     <h3>The query parameters for the two endpoints are the same.</h3>
     <br>
 
-    <div class="panel panel-default" data-toggle="collapse" data-target="#demo3">
+    <div class="panel panel-default" data-toggle="collapse" data-target="#query_panel">
         <div class="panel-body">Query Parameters</div>
     </div>
-    <div id="demo3" class="collapse">
+    <div id="query_panel" class="collapse">
 
         {% if parameters != [] %}
         <table class="table table-bordered">
