@@ -21,8 +21,8 @@ class JSON(scrapy.Item):
 
 class CourseSpider(scrapy.Spider):
     name = 'coursespider'
-    start_urls = ["https://cas.columbia.edu/cas/login?service=" +   
-                  "ias-qmss&destination=http://opendataservice." +
+    start_urls = ["https://cas.columbia.edu/cas/login?service="
+                  "ias-qmss&destination=http://opendataservice."
                   "columbia.edu/user/wind"]
 
     custom_settings = {

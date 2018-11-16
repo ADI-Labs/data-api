@@ -79,8 +79,8 @@ class Courses(Resource):
             abort(
                 400,
                 status=400,
-                message=f"Bad Request. GET api/courses/select?" +
-                "or api/courses/search?")
+                message=f"Bad Request. GET api/courses/select?"
+                f"or api/courses/search?")
 
         args = parser.parse_args(strict=True)
         key = args["key"]
@@ -107,9 +107,9 @@ class Courses(Resource):
                         abort(
                             404,
                             status=404,
-                            message="Course with course_id = " +
-                            f"{args['course_id']} and term = " +
-                            "{args['term']} does not exist")
+                            message=f"Course with course_id = "
+                                    f"{args['course_id']} and term = "
+                                    f"{args['term']} does not exist")
                     else:
                         datum['status'] = 200
                         datum['data'] = remove_hidden_attr(result.__dict__)
