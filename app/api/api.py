@@ -131,8 +131,8 @@ class Courses(Resource):
                             404,
                             status=404,
                             message=f"Course with course_id = "\
-                                f"{args['course_id']} and term = "\
-                                f"{args['term']} does not exist")
+                                    f"{args['course_id']} and term = "\
+                                    f"{args['term']} does not exist")
                     else:
                         datum['status'] = 200
                         datum['data'] = remove_hidden_attr(result.__dict__)
