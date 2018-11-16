@@ -60,13 +60,15 @@ def get_courses(date):
     name = 'test.json'
 
     filepath = os.path.join(FILES_STORE, "full", name)
-    if os.path.isfile('app/data.sqlite') and os.path.isfile(filepath):
-        print("course data is downloaded and DB has data")
+
+    if not os.path.isfile('app/data.sqlite'): 
+        db.create_all()
+
+    if os.path.isfile(filepath):
+        print("course data is downloaded")
         print("updating...\n")
     else:
         print("scraping and storing course data...\n")
-        db.drop_all()
-        db.create_all()
 
         crwl = CrawlerProcess(
             {'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'})
@@ -88,34 +90,40 @@ def parse_and_store(path):
     '''
     data = json.load(open(path))
     for datum in data:
-        new_course = Course(course_id=datum["Course"],
-                        call_number=datum["CallNumber"],
-                        course_name=datum["CourseTitle"],
-                        bulletin_flags=datum["BulletinFlags"],
-                        division_code=datum["DivisionCode"],
-                        class_notes=datum["ClassNotes"],
-                        num_enrolled=datum["NumEnrolled"],
-                        max_size=datum["MaxSize"],
-                        min_units=datum["MinUnits"],
-                        num_fixed_units=datum["NumFixedUnits"],
-                        term=datum["Term"],
-                        campus_name=datum["CampusName"],    
-                        campus_code=datum["CampusCode"],
-                        school_code=datum["SchoolCode"],
-                        school_name=datum["SchoolName"],
-                        approval=datum["Approval"],
-                        prefix_name=datum["PrefixName"],
-                        prefix_long_name=datum["PrefixLongname"],
-                        instructor_name=datum["Instructor1Name"],
-                        type_name=datum["TypeName"],
-                        type_code=datum["TypeCode"]
-                        )
+        new_course = Course(term = datum['Term'],
+            course_id = datum['Course'],
+            prefix_name = datum["PrefixName"],
+            prefix_long_name = datum["PrefixLongname"],
+            division_code = datum["DivisionCode"],
+            division_name = datum['DivisionName'],
+            campus_code = datum["CampusCode"],
+            campus_name = datum["CampusName"],    
+            school_code = datum["SchoolCode"],
+            school_name = datum["SchoolName"],
+            department_code = datum['DepartmentCode'],
+            department_name = datum['DepartmentName'],
+            subterm_code = datum['SubtermCode'],
+            subterm_name = datum['SubtermName'],
+            call_number = datum["CallNumber"],
+            num_enrolled = datum["NumEnrolled"],
+            max_size = datum["MaxSize"],
+            enrollment_status = datum['EnrollmentStatus'],
+            num_fixed_units = datum['NumFixedUnits'],
+            min_units = datum['MinUnits'],
+            max_units = datum['MaxUnits'],
+            course_name=datum["CourseTitle"],
+            type_code = datum['TypeCode'],
+            type_name = datum['TypeName'],
+            approval = datum["Approval"],
+            bulletin_flags = datum["BulletinFlags"],
+            class_notes = datum["ClassNotes"],
+            meeting_times = datum['Meets1'],
+            instructor_name = datum["Instructor1Name"]
+            )
         
-        existing_course = Course.query.get((new_course.course_id, new_course.term))
-
+        existing_course = Course.query.get((new_course.term, new_course.course_id))
         if existing_course:   
-            print(new_course, datum["NumEnrolled"])
-            print(existing_course, existing_course.num_enrolled) 
+            print('old course, checking for updates...')
             # check for differences objects and then update 
             existing_course = check_differences(existing_course, new_course)
             # db.session.delete(existing_course) 
@@ -125,20 +133,17 @@ def parse_and_store(path):
         db.session.commit() 
 
         existing_course = Course.query.get((datum["Course"], datum["Term"]))
-        print(existing_course, existing_course.num_enrolled)
     print("database created and up to date!")
 
 
 def check_differences(existing_course, new_course):
     existing_data = remove_hidden_attr(existing_course.__dict__)
     new_data = remove_hidden_attr(new_course.__dict__)
-    # print(existing_data)
-    # print(new_data)
+
     for key in existing_data.keys():
-        print(key)
         if existing_data[key] != new_data[key]:
             print('There is a difference!')
-            print((getattr(existing_course, key)))
+            print("old", getattr(existing_course, key))
             setattr(existing_course, key, new_data[key])
-            print((getattr(existing_course, key)))
+            print("new", getattr(existing_course, key))
     db.session.flush()
