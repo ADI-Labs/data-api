@@ -19,6 +19,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 # storedir = '/storage'
 storedir = './'
 
+
 def create_app(name=__name__):
     app = Flask(name)
     database_uri = "sqlite:///" + os.path.join(storedir, 'data.sqlite')
@@ -33,7 +34,7 @@ def create_app(name=__name__):
         MAIL_USERNAME=os.environ.get('MAILGUN_USERNAME'),
         MAIL_PASSWORD=os.environ.get('MAILGUN_PASSWORD'),
         MAIL_DEFAULT_SENDER=os.environ.get('MAILGUN_USERNAME'),
-        ERROR_404_HELP = False
+        ERROR_404_HELP=False
     )
 
     db.init_app(app)

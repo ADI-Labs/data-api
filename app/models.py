@@ -87,7 +87,7 @@ class Course(db.Model):
     school_code = db.Column(db.String(4))
     school_name = db.Column(db.String(128))
     department_code = db.Column(db.String(256))
-    department_name = db.Column(db.String(256))    
+    department_name = db.Column(db.String(256))
     subterm_code = db.Column(db.String(4))
     subterm_name = db.Column(db.String(4))
     call_number = db.Column(db.String(120))
@@ -102,11 +102,10 @@ class Course(db.Model):
     type_name = db.Column(db.String(64))
     approval = db.Column(db.String(64))
     bulletin_flags = db.Column(db.String(10))
-    class_notes = db.Column(db.String(256)) 
+    class_notes = db.Column(db.String(256))
     meeting_times = db.Column(db.String(256))
     instructor_name = db.Column(db.String(64))
 
-    
     profs = db.relationship('Teacher', secondary=profs,
                             backref=db.backref('courses'))
 
