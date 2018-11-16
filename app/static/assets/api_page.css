@@ -1,0 +1,37 @@
+body, html {
+    height: 100%;
+    margin: 0px;
+    /* font-family: Arial, Helvetica, sans-serif; */
+}
+
+.api-page {
+  padding-top: 20pt;
+}
+
+.panel > .panel-heading {
+    background-color: #77bad6;
+}
+
+.panel {
+    
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+    
+}
+
+.panel:hover {
+    box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.2), 0 9px 30px 0 rgba(0, 0, 0, 0.19);
+}
+
+.btn {
+    border-color: #77bad6;
+    color: black;
+}
+
+.panel-text {
+    padding-left: 20px;
+}
+
+/* .method-btn {
+    color: white;
+    padding-right: 20pt; 
+} */
