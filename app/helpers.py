@@ -73,7 +73,7 @@ def get_courses(date):
 
         crwl = CrawlerProcess(
             {'USER_AGENT': 'Mozilla/4.0'
-             	' (compatible; MSIE 7.0; Windows NT 5.1)'})
+                ' (compatible; MSIE 7.0; Windows NT 5.1)'})
         # Downloads data from courses
         crwl.crawl(CourseSpider)
         crwl.start()
