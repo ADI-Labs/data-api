@@ -15,6 +15,7 @@ initial_url = 'https://cas.columbia.edu/cas/login?TARGET=' + \
 url_base = 'https://directory.columbia.edu'
 browse_url = url_base + '/people/browse/students'
 
+
 #get login information from config file in root directory
 config = json.load(open('../app/config.json'))
 LOGIN = config['login']
@@ -23,8 +24,11 @@ password = LOGIN['password']
 
 
 
+
 #Array that stores JSON objects containing student data
 students = []
+
+
 
 
 def replace_breaks(item, delimiter):
@@ -32,6 +36,19 @@ def replace_breaks(item, delimiter):
 		br.replace_with(delimiter)
 
 	return item
+
+
+
+
+#This parses the email address from text
+def get_addr(text):
+
+	addr = text.find_all('a')[0]
+
+	return addr.text
+
+
+
 
 
 
@@ -52,8 +69,9 @@ def parse_information(rows):
 				'Address': True, \
 				'Home Addr': True,
 				'Campus Tel': True, \
-				'Tel': True
-			}
+				'Tel': True, \
+				'FAX': True
+	}
 
 	# print(rows)
 
@@ -69,65 +87,47 @@ def parse_information(rows):
 
 		 	items = row.find_all('td')
 		 	field = None
-		 	for item in items:
 
-		 		print(item.find(class_='align_rb'))
+		 	#Every other td is a data field
+		 	count = 0
+
+		 	for item in items:
 
 		 		txt = item.text
 		 		
-		 		if ':' in txt and info[txt.replace(':', '')] == True:
-		 			field = 
+		 		if txt != '\u00a0' and txt != '':
 
-		 		# if txt != '\u00a0' and txt != '':
-		 		# 	info[field] = txt
+		 			if count==0 and ':' in txt:
+		 				txt = txt.replace(':', '')
+		 				if info[txt] == True:
+		 					field = txt
+		 					count += 1
+		 				else:
+		 					continue
+
+		 			elif count==1:
+
+		 				if field == 'Email':
+		 					txt = get_addr(item)
+		 				elif field == 'Address':
+		 					txt = replace_breaks(item, ' ').text
+		 				elif field == 'Campus Tel':
+		 					temp = ''
+		 					for index in range(len(txt)):
+		 						if txt[index] == '\xa0':
+		 							break
+		 						temp += txt[index]
+
+		 					txt = temp
+
+
+
+		 				info[field] = txt
+		 				count -= 1
 
 
 		else:
 		 	info['Name'] = name.text
-
-
-
-
-
-
-
-
-	# #Get name
-	# info['Name'] = data[0].text
-
-
-	# #Get department and title
-	# information = data[1].find_all('div')
-	# for field in information:
-	# 	field = replace_breaks(field, ' ')
-	# 	text = field.text
-	# 	fields = text.split(':')
-	# 	info[fields[0]] = fields[1]
-
-
-	# #Get address
-	# if data[2].text != None:
-	# 	info['Address'] = replace_breaks(data[2], ' ').text
-	# else:
-	# 	info['Address'] = ''
-
-
-
-	# #Get email and phone number
-	# contact_info = replace_breaks(data[3], ':').text
-	# contact_info = contact_info.split(':')
-	
-	# #Has email and phone number
-	# if len(contact_info)==2:
-	# 	info['Email'] = contact_info[0]
-	# 	info['Phone'] = contact_info[1]
-	# else:
-	# 	info['Email'] = contact_info[0]
-
-
-	# for key, value in info.items():
-	# 	if value == '\u00a0':
-	# 		info[key] = ''
 
 	students.append(info)
 
@@ -162,7 +162,6 @@ def get_data(browser):
 		rows = browser.find(class_='table_results_indiv').find_all('tr')
 		# print(rows)
 		parse_information(rows)
-		break
 
 
 def writeFile():
@@ -200,6 +199,7 @@ if __name__=='__main__':
 	print('Getting data from ', initial_url)
 	#Get data for first letter
 	get_data(browser)
+
 	print(students)
 	# pages = browser.find(class_='name_form_az').find_all('a')
 
