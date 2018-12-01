@@ -11,7 +11,7 @@ def search(term, where):
     result = []
 
     # Very inefficient implementation
-    # in the interest of "time"
+    # in the interest of "time" lol ironic
 
     alld = where.query.all()
     for one in alld:

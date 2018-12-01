@@ -11,7 +11,6 @@ parser.add_argument("key")
 def remove_hidden_attr(d):
     return {key: value for key, value in d.items() if key[0] != '_'}
 
-
 class Courses(Resource):
     def get(self, cid, term):
         key = parser.parse_args()["key"]
