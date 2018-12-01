@@ -1,7 +1,5 @@
 from flask import Flask
 from flask_login import LoginManager
-
-
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
 from flask_bootstrap import Bootstrap
@@ -21,15 +19,13 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 # UNCOMMENT BELOW LINE FOR DEPLOY
 # storedir = '/storage'
 storedir = './'
-print("TESTING")
 
 
 def create_app(name=__name__):
-    print(config)
     app = Flask(name)
     database_uri = "sqlite:///" + os.path.join(storedir, 'data.sqlite')
     app.config.update(
-        DEBUG=True,
+        DEBUG=False,
         SQLALCHEMY_DATABASE_URI=database_uri,
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
         SQLALCHEMY_COMMIT_ON_TEARDOWN=True,
@@ -41,8 +37,7 @@ def create_app(name=__name__):
         SECRET_KEY=config["SECRET_KEY"],
         SECURITY_PASSWORD_SALT= config["SECURITY_PASSWORD_SALT"],
         MAILGUN_KEY=config["MAILGUN_KEY"],
-      ##  SERVER_NAME="data.adicu.com",
-
+        ERROR_404_HELP=False
     )
 
     db.init_app(app)

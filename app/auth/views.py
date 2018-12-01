@@ -48,9 +48,7 @@ def logout():
 
 @auth.route('/register', methods=["GET", "POST"])
 def register():
-    print("Inside register;")
     form = RegistrationForm()
-    print("Form was just made")
     if form.validate_on_submit():
         try:
             uni = form.uni.data
