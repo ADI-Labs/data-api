@@ -1,0 +1,17 @@
+/*       Columbia blue          */
+.cu-blue {
+  background-color: #0f5f7f;
+  border-width:0;
+}
+
+.navbar-nav>li>a, .navbar-nav>a {
+  color: #ffffff;
+}
+
+.navbar-nav>button>span {
+  background-color: #ffffff;
+}
+
+.navbar-nav>li>a:hover {
+  color: #000000;
+}
