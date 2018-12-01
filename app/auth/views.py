@@ -3,15 +3,16 @@ from flask import redirect, render_template, flash, url_for, request
 from .. import db
 from ..models import User
 from . import auth
-from .forms import LoginForm, RegistrationForm, ResetPasswordForm
-from .emails import send_email, send_message
+from .forms import LoginForm, RegistrationForm, ResetPasswordForm, ChangePasswordForm
+from .emails import send_message
 from sqlalchemy.exc import IntegrityError
-import os
+from ..decorators import check_confirmed
+from .token import generate_confirmation_token, confirm_token
 
 
 @auth.route("/")
 def home():
-    return redirect(url_for('index'))
+    return redirect(url_for('main.home'))
 
 
 @auth.route("/login", methods=['GET', 'POST'])
@@ -29,8 +30,11 @@ def login():
             if next is None or next.startswith('/'):
                 next = url_for('main.home')
             return redirect(next)
+        if user is not None and user.verify_password(password):
+            login_user(user, form.remember_me.data)
+            return redirect(url_for('auth.unconfirmed'))
+
         flash('Invalid username or password.')
-        print('flashed')
     return render_template('auth/login.html', form=form)
 
 
@@ -57,12 +61,7 @@ def register():
                         school=form.school.data)
             db.session.add(user)
             db.session.commit()
-            token = user.generate_confirmation_token()
-            print("Token:",token)
-            print("Email:",user.email)
-            # cmd_str = "python app/auth/test_email.py "+user.email
-            # os.system(cmd_str)
-            print("Right before send_message")
+            token = generate_confirmation_token(user.email)
             send_message(recipients=[user.email],
                      subject="DATA@CU Email Testing",
                      text="This is your user confirmation link",
@@ -70,17 +69,15 @@ def register():
                      token=token,
                      user=user
                          )
-            print("send message passed")
+            login_user(user)
             flash("A confirmation email has been sent to your email address.")
-            return redirect(url_for('auth.login'))
+            return redirect(url_for('auth.unconfirmed'))
         except IntegrityError:
             db.session.rollback()
             flash("Sorry. That UNI already exists.")
         except Exception as e:
-            ##db.session.delete(user)
             print(e)
-            flash("An error occured during registering.")
-        print("WHy are you here?")
+            flash("An error occurred during registering.")
         return redirect(url_for('auth.login'))
 
     return render_template('auth/register.html', form=form)
@@ -88,38 +85,93 @@ def register():
 
 @auth.route('/confirm/<token>')
 def confirm(token):
-    if current_user.confirm(token):
-        flash('You have confirmed your account. Thank you.')
+    try:
+        email = confirm_token(token)
+    except:
+        flash("The confirmation link is invalid or has expired.",'danger')
+    user = User.query.filter_by(email=email).first_or_404()
+    if user.confirmed:
+        flash("Account already confirmed. Please login. ", 'success')
 
     else:
-        flash("The confirmation link is invalid or has expired.")
-    return redirect(url_for('main.index'))
+        user.confirmed = True
+        db.session.add(user)
+        db.session.commit()
+        flash("You have confirmed your account.", 'success')
+
+    return redirect(url_for('main.home'))
 
 
 @auth.route('/token', methods=["GET"])
 @login_required
+@check_confirmed
 def token():
     token = current_user.generate_confirmation_token()
     return render_template('auth/token.html', api_key=token.decode('UTF-8'))
 
 
-@auth.route('/forgot_password', methods=["GET", 'POST'])
-def forgot_password():
+@auth.route('/reset_request', methods=["GET", 'POST'])
+def password_reset_request():
+    if not current_user.is_anonymous:
+        return redirect(url_for("main.index"))
     form = ResetPasswordForm()
     if form.validate_on_submit():
-        email = form.email.data
-        user = User.query.filter_by(email=email).first()
-        if user and user.confirmed:
+        user = User.query.filter_by(email=form.email.data).first_or_404()
+        token = generate_confirmation_token(user.email)
+        send_message(recipients=[user.email],
+                     subject="Reset Password Link",
+                     text="This is your user password reset link.",
+                     template='auth/forgot_password.html',
+                     token=token,
+                     user=user
+                     )
+        flash('A password reset link has been sent to your email address.')
+        return redirect(url_for('auth.login'))
+    return render_template('auth/reset_password.html', form=form)
 
-            flash('A password reset link has been sent to your email address.')
 
-            return render_template('auth/forgot_password.html')
-            # Just for trial
+@auth.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    if not current_user.is_anonymous:
+        return redirect(url_for('main.index'))
 
-        elif not user.confirmed:
-            flash("User account has been registered but not been confirmed yet.")
-            print(user)
-        elif not user:
-            flash("There is no account registered with this email address.")
-    return render_template('auth/forgot_password.html', form=form)
-    # Just for trial
+    try:
+        email = confirm_token(token)
+    except:
+        flash("The password reset link is invalid or has expired.","danger")
+        return redirect(url_for('auth.login'))
+
+    user = User.query.filter_by(email=email).first_or_404()
+
+    form = ChangePasswordForm()
+    if form.validate_on_submit():
+        new_password = form.password.data
+        user.password = new_password
+        db.session.add(user)
+        db.session.commit()
+        flash("Your password has been reset successfully.")
+        return redirect(url_for("auth.login"))
+    return render_template("auth/reset_password.html", form=form)
+
+
+@auth.route('/unconfirmed')
+def unconfirmed():
+    if current_user.confirmed:
+        return redirect('main.home')
+    flash("Please confirm your account!", "warning")
+    return render_template('auth/unconfirmed.html')
+
+
+@auth.route('/resend')
+@login_required
+def resend_confirmation():
+    token = generate_confirmation_token(current_user.email)
+    send_message(recipients=[current_user.email],
+                 subject="DATA@CU Email Testing",
+                 text="This is your user confirmation link",
+                 template='auth/email/confirm.html',
+                 token=token,
+                 user=current_user
+                 )
+    flash("A new confirmation email has been sent.", 'success')
+    return redirect(url_for('auth.unconfirmed'))

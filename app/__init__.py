@@ -6,6 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
 from flask_bootstrap import Bootstrap
 import os
+import json
 
 
 login_manager = LoginManager()
@@ -13,7 +14,7 @@ login_manager.login_view = "login"
 db = SQLAlchemy()
 mail = Mail()
 bootstrap = Bootstrap()
-
+config = json.load(open("config.json"))
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -24,11 +25,11 @@ print("TESTING")
 
 
 def create_app(name=__name__):
+    print(config)
     app = Flask(name)
     database_uri = "sqlite:///" + os.path.join(storedir, 'data.sqlite')
     app.config.update(
         DEBUG=True,
-        SECRET_KEY=os.environ.get('SECRET_KEY', 'secret_xxx'),
         SQLALCHEMY_DATABASE_URI=database_uri,
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
         SQLALCHEMY_COMMIT_ON_TEARDOWN=True,
@@ -36,7 +37,12 @@ def create_app(name=__name__):
         MAIL_PORT=587,
         MAIL_USERNAME=os.environ.get('MAILGUN_USERNAME'),
         MAIL_PASSWORD=os.environ.get('MAILGUN_PASSWORD'),
-        MAIL_DEFAULT_SENDER=os.environ.get('MAILGUN_USERNAME')
+        MAIL_DEFAULT_SENDER=os.environ.get('MAILGUN_USERNAME'),
+        SECRET_KEY=config["SECRET_KEY"],
+        SECURITY_PASSWORD_SALT= config["SECURITY_PASSWORD_SALT"],
+        MAILGUN_KEY=config["MAILGUN_KEY"],
+      ##  SERVER_NAME="data.adicu.com",
+
     )
 
     db.init_app(app)

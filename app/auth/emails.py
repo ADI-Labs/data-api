@@ -1,25 +1,10 @@
-import os
 import requests
 from requests.exceptions import RequestException
-from flask import Flask
 from flask_mail import Mail, Message
 from flask import render_template
+from app import create_app
 
-app = Flask(__name__)
-
-
-#
-# app.config['MAIL_SUBJECT_PREFIX'] = 'Confirmation Email'
-# app.config['MAIL_SENDER'] = 'ADICU: data@adicu.com'
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 465
-app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_USERNAME'] = os.environ.get("EMAIL_USERNAME")
-app.config['MAIL_PASSWORD'] = os.environ.get("EMAIL_PASSWORD")
-app.config["SERVER_NAME"] = "data.adicu.com"
-
-mail = Mail(app)
+app = create_app()
 
 
 def send_email(to, subject, template, **kwargs):
@@ -33,7 +18,7 @@ def send_email(to, subject, template, **kwargs):
 def send_message(recipients=None, subject=None,
                  text=None, template=None, **kwargs):
     try:
-        key = os.environ.get('MAILGUN_KEY')
+        key = app.config["MAILGUN_KEY"]
         print("In send message")
         print("The key is: ", key)
         request = requests.post(
