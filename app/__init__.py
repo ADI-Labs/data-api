@@ -12,7 +12,7 @@ login_manager.login_view = "login"
 db = SQLAlchemy()
 mail = Mail()
 bootstrap = Bootstrap()
-config = json.load(open("config.json"))
+config = json.load(open("config_keys.json"))
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -35,7 +35,7 @@ def create_app(name=__name__):
         MAIL_PASSWORD=os.environ.get('MAILGUN_PASSWORD'),
         MAIL_DEFAULT_SENDER=os.environ.get('MAILGUN_USERNAME'),
         SECRET_KEY=config["SECRET_KEY"],
-        SECURITY_PASSWORD_SALT= config["SECURITY_PASSWORD_SALT"],
+        SECURITY_PASSWORD_SALT=config["SECURITY_PASSWORD_SALT"],
         MAILGUN_KEY=config["MAILGUN_KEY"],
         ERROR_404_HELP=False
     )
@@ -47,7 +47,6 @@ def create_app(name=__name__):
 
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
-
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
 

@@ -20,6 +20,6 @@ def confirm_token(token, expiration=3600):
             max_age=expiration
         )
 
-    except:
+    except Exception:
         return False
     return email

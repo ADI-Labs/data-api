@@ -2,8 +2,6 @@ from app import create_app, db, mail
 from app.models import Course, Dining, Student, User
 from app.helpers import get_courses
 import os
-import atexit
-from apscheduler.schedulers.background import BackgroundScheduler
 import datetime
 
 app = create_app()
@@ -24,9 +22,11 @@ def make_shell_context():
                 Dining=Dining,
                 )
 
+
 def courses():
     with app.app_context():
         get_courses(str(datetime.date.today()))
+
 
 @app.cli.command()
 def test():
@@ -46,5 +46,3 @@ def clear():
 
 # # Shut down the scheduler when exiting the app
 # atexit.register(lambda: scheduler.shutdown())
-
-
