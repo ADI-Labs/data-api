@@ -6,7 +6,7 @@ import os
 app = create_app()
 
 with app.app_context():
-    get_courses()
+    get_courses(str(datetime.date.today()))
 
 
 @app.shell_context_processor

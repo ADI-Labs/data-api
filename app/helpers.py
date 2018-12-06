@@ -53,10 +53,9 @@ class CourseSpider(scrapy.Spider):
 def remove_hidden_attr(d):
     return {key: value for key, value in d.items() if key[0] != '_'}
 
+
 # if you want to test this function, create a test.json
 # pass in parse_and_store directly, without scraping
-
-
 def get_courses():
     sha = hashlib.sha1()
     sha.update(COURSES_URL.encode('utf-8'))
