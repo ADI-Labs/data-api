@@ -13,6 +13,7 @@ FILES_STORE = './data'
 COURSES_URL = "http://opendataservice.columbia.edu/api/9/json/download"
 config = json.load(open("./app/config.json"))
 
+
 class JSON(scrapy.Item):
     title = scrapy.Field()
     file_urls = scrapy.Field()
@@ -52,8 +53,10 @@ class CourseSpider(scrapy.Spider):
 def remove_hidden_attr(d):
     return {key: value for key, value in d.items() if key[0] != '_'}
 
-# if you want to test this function, create a test.json 
-# pass in parse_and_store directly, without scraping 
+# if you want to test this function, create a test.json
+# pass in parse_and_store directly, without scraping
+
+
 def get_courses():
     sha = hashlib.sha1()
     sha.update(COURSES_URL.encode('utf-8'))
@@ -62,7 +65,7 @@ def get_courses():
     # name = 'test.json'
 
     filepath = os.path.join(FILES_STORE, "full", name)
-    savepath = os.path.join(FILES_STORE, "full",f"{savename}.json")
+    savepath = os.path.join(FILES_STORE, "full", f"{savename}.json")
 
     if not os.path.isfile('app/data.sqlite'):
         db.create_all()
@@ -77,11 +80,10 @@ def get_courses():
 
     # rename to keep old files
     # comment this line if testing with test.json
-    os.rename(filepath,savepath)
-
+    os.rename(filepath, savepath)
 
     print("updating courses...")
-    parse_and_store(savepath)        
+    parse_and_store(savepath)
 
 
 def parse_and_store(path):
@@ -139,12 +141,17 @@ def check_differences(existing_course, new_course):
     existing_data = remove_hidden_attr(existing_course.__dict__)
     new_data = remove_hidden_attr(new_course.__dict__)
 
-    # for each parameter 
+    # for each parameter
     for key in existing_data.keys():
         # if there is a difference, set to new data
         if existing_data[key] != new_data[key]:
-            print('updating ',existing_course, key, existing_data[key], '->', new_data[key])
+            print(
+                'updating ',
+                existing_course,
+                key,
+                existing_data[key],
+                '->',
+                new_data[key])
             setattr(existing_course, key, new_data[key])
-
 
     db.session.flush()

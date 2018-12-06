@@ -2,7 +2,6 @@ from app import create_app, db, mail
 from app.models import Course, Dining, Student, User
 from app.helpers import get_courses
 import os
-import atexit
 
 app = create_app()
 
@@ -32,6 +31,3 @@ def test():
 
 def clear():
     os.system('clear')
-
-
-
