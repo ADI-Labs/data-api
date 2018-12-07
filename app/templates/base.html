@@ -17,13 +17,12 @@
             <div class="navbar-collapse collapse">
 
                 <ul class="nav navbar-nav"> 
-                    <li><a href="{{ url_for('main.dining') }}">Dining</a></li>
-                    <li><a href="{{ url_for('main.housing') }}">Housing</a></li>
                     <li><a href="{{ url_for('main.courses') }}">Courses</a></li>
+                    <li><a href="{{ url_for('main.student') }}">Students</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     {% if current_user.is_authenticated %}
-                    <li><a href="{{ url_for('auth.token') }}">Get Token</a></li>
+                    <li><a href="{{ url_for('auth.token') }}">Get Key</a></li>
                     <li><a href="{{ url_for('auth.logout') }}">Sign Out</a></li>
                     {% else %}
                     <li><a href="{{ url_for('auth.login') }}">Sign In</a></li>
