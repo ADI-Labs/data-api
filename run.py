@@ -3,7 +3,6 @@ from app.models import Course, Dining, Student, User
 from app.helpers import get_courses
 import os
 import atexit
-from apscheduler.schedulers.background import BackgroundScheduler
 import datetime 
 
 app = create_app()
