@@ -34,6 +34,8 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(120), unique=False, nullable=False)
     school = db.Column(db.String(120), unique=False, nullable=False)
+    confirmed = db.Column(db.Boolean, nullable=False, default=False)
+    confirmed_on = db.Column(db.DateTime, nullable=True)
 
     @property
     def password(self):
@@ -60,6 +62,18 @@ class User(UserMixin, db.Model):
             return None
         return User.query.get(data['id'])
 
+    def confirm(self, token):
+        s = Serializer('xxx')
+        try:
+            data = s.loads(token)
+        except Exception:
+            return False
+        if data.get('confirm') != self.id:
+            return False
+        self.confirmed = True
+        db.session.add(self)
+        return True
+
     def __repr__(self):
         return f'<User {self.uni} {self.email}>'
 
@@ -76,35 +90,41 @@ profs = db.Table('profs',
 # this can include a search function
 class Course(db.Model):
     __tablename__ = 'courses'
-    course_id = db.Column(db.String(64), primary_key=True, nullable=False)
     term = db.Column(db.String(64), primary_key=True)
-    call_number = db.Column(db.Integer)
-    course_name = db.Column(db.String(120))
-    bulletin_flags = db.Column(db.String(10))
-    division_code = db.Column(db.String())
-    credit_amount = db.Column(db.Integer)
+    course_id = db.Column(db.String(64), primary_key=True, nullable=False)
     prefix_name = db.Column(db.String(64))
     prefix_long_name = db.Column(db.String(64))
-    instructor_name = db.Column(db.String(64))
-    approval = db.Column(db.String(64))
-    school_code = db.Column(db.String(4))
-    school_name = db.Column(db.String(128))
+    division_code = db.Column(db.String(4))
+    division_name = db.Column(db.String(64))
     campus_code = db.Column(db.String(4))
     campus_name = db.Column(db.String(128))
-    type_code = db.Column(db.String(2))
+    school_code = db.Column(db.String(4))
+    school_name = db.Column(db.String(128))
+    department_code = db.Column(db.String(256))
+    department_name = db.Column(db.String(256))
+    subterm_code = db.Column(db.String(4))
+    subterm_name = db.Column(db.String(4))
+    call_number = db.Column(db.String(120))
+    num_enrolled = db.Column(db.String(120))
+    max_size = db.Column(db.String(4))
+    enrollment_status = db.Column(db.String(4))
+    num_fixed_units = db.Column(db.String(120))
+    min_units = db.Column(db.String(120))
+    max_units = db.Column(db.String(120))
+    course_name = db.Column(db.String(120))
+    type_code = db.Column(db.String(4))
     type_name = db.Column(db.String(64))
-    num_enrolled = db.Column(db.Integer)
-    max_size = db.Column(db.Integer)
-    min_units = db.Column(db.Integer)
-    num_fixed_units = db.Column(db.Integer)
+    approval = db.Column(db.String(64))
+    bulletin_flags = db.Column(db.String(10))
     class_notes = db.Column(db.String(256))
-    meeting_times = db.Column(db.String(64))
+    meeting_times = db.Column(db.String(256))
+    instructor_name = db.Column(db.String(64))
 
     profs = db.relationship('Teacher', secondary=profs,
                             backref=db.backref('courses'))
 
     def __repr__(self):
-        return f'<Course {self.course_id}>'
+        return f'<Course {self.course_id} {self.course_name} {self.term}>'
 
 
 class Dining(db.Model):

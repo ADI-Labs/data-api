@@ -115,6 +115,9 @@ data/full/
 app/config.json
 envirio/
 config.json
+config_keys.json
+app/config_keys.json
+
 
 #environment
 .vscode/
