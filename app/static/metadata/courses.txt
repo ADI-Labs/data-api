@@ -1,23 +1,29 @@
-course_id, String, primary_key=True
-term, String, primary_key=True
-call_number, Integer, I am a valid description
-course_name, String, I am a valid description
-bulletin_flags, String, I am a valid description
-division_code, String, I am a valid description
-credit_amount, Integer, I am a valid description
-prefix_name, String, I am a valid description
-prefix_long_name, String, I am a valid description
-instructor_name, String, I am a valid description
-approval, String, I am a valid description
-school_code, String, I am a valid description
-school_name, String, I am a valid description
-campus_code, String, I am a valid description
-campus_name, String, I am a valid description
-type_code, String, I am a valid description
-type_name, String, I am a valid description
-num_enrolled, Integer, I am a valid description
-max_size, Integer, I am a valid description
-min_units, Integer, I am a valid description
-num_fixed_units, Integer, I am a valid description
-class_notes, String, I am a valid description
-meeting_times, String, I am a valid description
+course_name, String, Course name
+term, String, Course term (1st four digits are the year and the last digit is the term. 1 = Spring term, 2 = Summer term, and 3 = Fall term)
+course_id, String, Course ID
+prefix_name, String, Course appreviated subject title
+prefix_long_name, String, Course subject title 
+division_code, String, Course abbreciated division title
+division_name, String, Course division title
+campus_code, String, Course campus code
+campus_name, String, Course campus full name 
+school_code, String, Course school code
+school_name, String, Course school full name 
+department_code, String, Course department code
+department_name, String, Course department full name
+subterm_code, String, Course subterm code
+subterm_name, String, Course substerm full name 
+call_number, String, Course call number (used in registration) 
+num_enrolled, String, Number of students currently enrolled in the course
+max_size, String, Course max size of students 
+enrollment_status, String, Course enrollment status
+num_fixed_units, String, Course number of fixed units
+min_units, String, Course fixed units
+max_units, String, Course max units
+type_code, String, Course type 
+type_name, String, Course type full name 
+approval, String, Course approval, 
+bulletin_flags, String, Course bulletin flags
+class_notes, String, Course class note
+meeting_times, String, Course meeting times
+instructor_name, String, Course instructor's name
