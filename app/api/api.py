@@ -102,7 +102,7 @@ class Courses(Resource):
                     # if select api, then use get method by passing in primary
                     # keys
                     result = Course.query.get(
-                        (args['course_id'], args['term']))
+                        (args['term'], args['course_id']))
                     if not result:
                         abort(
                             404,
