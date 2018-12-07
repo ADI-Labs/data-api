@@ -110,11 +110,13 @@ data_env/
 *.sqlite
 
 #data
-utils/data
 data/full/
 app/config.json
 envirio/
 config.json
+data/
+app/utils/current_page.txt
 
 #environment
 .vscode/
+
