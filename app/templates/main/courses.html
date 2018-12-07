@@ -258,67 +258,6 @@
     </div>
 
     <script>
-        // var codeBlock = 
-
-        // '<pre class="text-success prettyprint lang=js"> \
-        //     { \
-        //         &quot;status_code&quot;: 200, \
-        //         &quot;data&quot;: [ \
-        //             { \
-        //                 &quot;approval&quot;: &quot;&quot;, \
-        //                 &quot;bulletin_flags&quot;: &quot;CEFKGRUXI&quot;, \
-        //                 &quot;call_number&quot;: 68108, \
-        //                 &quot;campus_code&quot;: &quot;MORN&quot;, \
-        //                 &quot;campus_name&quot;: &quot;MORNINGSIDE&quot;, \
-        //                 &quot;class_notes&quot;: &quot;&quot;, \
-        //                 &quot;course_id&quot;: &quot;COMS3134S001&quot;, \
-        //                 &quot;course_name&quot;: &quot;DATA STRUCTURES IN JAVA&quot;, \
-        //                 &quot;credit_amount&quot;: &quot;null&quot;, \
-        //                 &quot;division_code&quot;: &quot;SS&quot;, \
-        //                 &quot;instructor_name&quot;: &quot;BLAER, PAUL &quot;, \
-        //                 &quot;max_size&quot;: 999, \
-        //                 &quot;meeting_times&quot;: &quot;null&quot;, \
-        //                 &quot;min_units&quot;: 0, \
-        //                 &quot;num_enrolled&quot;: 68, \
-        //                 &quot;num_fixed_units&quot;: 30, \
-        //                 &quot;prefix_long_name&quot;: &quot;COMPUTER SCIENCE&quot;, \
-        //                 &quot;prefix_name&quot;: &quot;COMPUT SCI&quot;, \
-        //                 &quot;school_code&quot;: &quot;SPEC&quot;, \
-        //                 &quot;school_name&quot;: &quot;SCHOOL OF PROFESSIONAL STUDIES&quot;, \
-        //                 &quot;term&quot;: &quot;20182&quot;, \
-        //                 &quot;type_code&quot;: &quot;LC&quot;, \
-        //                 &quot;type_name&quot;: &quot;LECTURE&quot; \
-        //             } \
-        //         ], \
-        //         &quot;status_txt&quot;: &quot;OK&quot; \
-        //     } \
-        // </pre>'
-        // document.getElementById("response").innerHTML = codeBlock;
-
-        
-
-        // function selectFunction() {
-
-        //     var apiCall = new XMLHttpRequest();
-        //     apiCall.onreadystatechange = function() {
-        //         document.getElementById("selectRequest").innerHTML = apiRequest;
-        //         if (apiCall.readyState == XMLHttpRequest.DONE && this.status == 200) {
-        //             document.getElementById("selectResponseBlock").innerHTML = apiCall.responseText;
-        //         } else {
-        //             var responseObj = JSON.parse(this.response);
-        //             document.getElementById("selectResponseBlock").innerHTML = "ERROR " + this.status + ": " + responseObj.message;
-        //             document.getElementById("selectResponseBlock").style.color = 'red';
-        //         }
-        //     }
-        //     apiRequest = "http://127.0.0.1:5000/api/courses/select?course_id="
-        //                             + document.getElementById("inputCourseID").value
-        //                             + "&term=" 
-        //                             + document.getElementById("inputTerm").value
-        //                             + "&key=" 
-        //                             + document.getElementById("inputKey1").value;
-        //     apiCall.open("GET", apiRequest);
-        //     apiCall.send();
-        // }
 
         function queryFunction(endpoint) {
 
