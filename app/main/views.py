@@ -4,6 +4,7 @@ from . import main
 import os
 from flask_cors import cross_origin
 
+
 def remove_hidden_attr(d):
     return {key: value for key, value in d.items() if key[0] != '_'}
 
@@ -59,7 +60,7 @@ def base():
 # having searching happen through the URL
 # soon
 @main.route('/courses', methods=['GET', 'POST'])
-@cross_origin(origin='*',headers=['Content-Type','Authorization'])
+@cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
 def courses():
     search_results = []
     if request.form:
