@@ -72,7 +72,8 @@
                     <div class="form-group">
                         <span class="col-sm-2 control-label"></span>
                         <div class="col-sm-10">
-                            <button type="button" class="btn" onclick="selectFunction()">GET</button>
+                            <button type="button" class="btn" onclick="queryFunction('select')">GET</button>
+
                         </div>
                     </div>            
                 </div>           
@@ -173,7 +174,7 @@
                     <div class="form-group">
                         <span class="col-sm-2 control-label"></span>
                         <div class="col-sm-10">
-                            <button type="button" class="btn" onclick="searchFunction()">GET</button>
+                            <button type="button" class="btn" onclick="queryFunction('search')">GET</button>
                         </div>
                     </div> 
                 </div>           
@@ -296,40 +297,62 @@
 
         
 
-        function selectFunction() {
+        // function selectFunction() {
+
+        //     var apiCall = new XMLHttpRequest();
+        //     apiCall.onreadystatechange = function() {
+        //         document.getElementById("selectRequest").innerHTML = apiRequest;
+        //         if (apiCall.readyState == XMLHttpRequest.DONE && this.status == 200) {
+        //             document.getElementById("selectResponseBlock").innerHTML = apiCall.responseText;
+        //         } else {
+        //             var responseObj = JSON.parse(this.response);
+        //             document.getElementById("selectResponseBlock").innerHTML = "ERROR " + this.status + ": " + responseObj.message;
+        //             document.getElementById("selectResponseBlock").style.color = 'red';
+        //         }
+        //     }
+        //     apiRequest = "http://127.0.0.1:5000/api/courses/select?course_id="
+        //                             + document.getElementById("inputCourseID").value
+        //                             + "&term=" 
+        //                             + document.getElementById("inputTerm").value
+        //                             + "&key=" 
+        //                             + document.getElementById("inputKey1").value;
+        //     apiCall.open("GET", apiRequest);
+        //     apiCall.send();
+        // }
+
+        function queryFunction(endpoint) {
+
+            var req = endpoint + "Request";
+            var resp = endpoint + "ResponseBlock";
 
             var apiCall = new XMLHttpRequest();
             apiCall.onreadystatechange = function() {
-                if (apiCall.readyState == XMLHttpRequest.DONE && this.status == 200) {
-                    document.getElementById("selectRequest").innerHTML = apiRequest;
-                    document.getElementById("selectResponseBlock").innerHTML = apiCall.responseText;
+                document.getElementById(req).innerHTML = apiRequest;
+                if (apiCall.readyState == XMLHttpRequest.DONE && this.status == 200) {  
+                    document.getElementById(resp).innerHTML = apiCall.responseText;
+                    document.getElementById(resp).style.color = "green";
+                } else {
+                    var responseObj = JSON.parse(this.response);
+                    document.getElementById(resp).innerHTML = "ERROR " + this.status + ": " + responseObj.message;
+                    document.getElementById(resp).style.color = "red";
                 }
             }
-            apiRequest = "http://127.0.0.1:5000/api/courses/select?course_id="
+            if (endpoint == "select") { 
+                apiRequest = "http://127.0.0.1:5000/api/courses/select?course_id="
                                     + document.getElementById("inputCourseID").value
                                     + "&term=" 
                                     + document.getElementById("inputTerm").value
                                     + "&key=" 
                                     + document.getElementById("inputKey1").value;
-            apiCall.open("GET", apiRequest);
-            apiCall.send();
-        }
-
-        function searchFunction() {
-
-            var apiCall = new XMLHttpRequest();
-            apiCall.onreadystatechange = function() {
-                if (apiCall.readyState == XMLHttpRequest.DONE && this.status == 200) {
-                    document.getElementById("searchRequest").innerHTML = apiRequest;
-                    document.getElementById("searchResponseBlock").innerHTML = apiCall.responseText;
-                }
             }
-            apiRequest = "http://127.0.0.1:5000/api/courses/search?"
+            else if (endpoint == "search") {
+                apiRequest = "http://127.0.0.1:5000/api/courses/search?"
                                     + document.getElementById("inputParameter").value
                                     + "=" 
                                     + document.getElementById("inputParameterValue").value
                                     + "&key=" 
                                     + document.getElementById("inputKey2").value;
+            }   
             apiCall.open("GET", apiRequest);
             apiCall.send();
         }
