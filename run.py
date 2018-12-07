@@ -22,7 +22,6 @@ def make_shell_context():
                 )
 
 
-
 @app.cli.command()
 def test():
     """Run unit tests from command line"""
