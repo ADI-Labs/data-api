@@ -112,9 +112,8 @@ data_env/
 #data
 utils/data
 data/full/
-app/config.json
+
 envirio/
-config.json
 
 
 
