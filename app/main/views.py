@@ -2,6 +2,7 @@ from flask import render_template, request
 from ..models import Course, Dining, Student
 from . import main
 import os
+from flask_cors import cross_origin
 
 
 def remove_hidden_attr(d):
@@ -59,6 +60,7 @@ def base():
 # having searching happen through the URL
 # soon
 @main.route('/courses', methods=['GET', 'POST'])
+@cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
 def courses():
     search_results = []
     if request.form:

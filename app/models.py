@@ -90,6 +90,7 @@ profs = db.Table('profs',
 # this can include a search function
 class Course(db.Model):
     __tablename__ = 'courses'
+    course_name = db.Column(db.String(120))
     term = db.Column(db.String(64), primary_key=True)
     course_id = db.Column(db.String(64), primary_key=True, nullable=False)
     prefix_name = db.Column(db.String(64))
@@ -111,7 +112,6 @@ class Course(db.Model):
     num_fixed_units = db.Column(db.String(120))
     min_units = db.Column(db.String(120))
     max_units = db.Column(db.String(120))
-    course_name = db.Column(db.String(120))
     type_code = db.Column(db.String(4))
     type_name = db.Column(db.String(64))
     approval = db.Column(db.String(64))
