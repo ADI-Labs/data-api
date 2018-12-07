@@ -1,0 +1,10 @@
+name, String, 
+uni, String, Student uni
+email, String, Student email
+deparment, String, Student deparment
+title, String, Student title 
+address, String, Student campus address
+home_address, String, Student home address
+campus_tel, String, Student campus telophone
+tel, String, Student telephone
+fax, String, Student fax number

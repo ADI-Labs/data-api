@@ -37,7 +37,8 @@ def create_app(name=__name__):
         SECRET_KEY=config["SECRET_KEY"],
         SECURITY_PASSWORD_SALT=config["SECURITY_PASSWORD_SALT"],
         MAILGUN_KEY=config["MAILGUN_KEY"],
-        ERROR_404_HELP=False
+        ERROR_404_HELP=False,
+        CORS_HEADERS='Content-Type'
     )
 
     db.init_app(app)
