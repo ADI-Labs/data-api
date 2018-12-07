@@ -4,7 +4,7 @@ course_id, String, Course ID
 prefix_name, String, Course appreviated subject title
 prefix_long_name, String, Course subject title 
 division_code, String, Course abbreciated division title
-division_name, String Course division title
+division_name, String, Course division title
 campus_code, String, Course campus code
 campus_name, String, Course campus full name 
 school_code, String, Course school code
