@@ -2,14 +2,11 @@ from app import create_app, db, mail
 from app.models import Course, Dining, Student, User
 from app.helpers import get_courses
 import os
-import atexit
-import datetime 
 
 app = create_app()
 
-print("checking courses...")
 with app.app_context():
-    get_courses(str(datetime.date.today()))
+    get_courses()
 
 
 @app.shell_context_processor
@@ -23,9 +20,6 @@ def make_shell_context():
                 Dining=Dining,
                 )
 
-def courses():
-    with app.app_context():
-        get_courses(str(datetime.date.today()))
 
 @app.cli.command()
 def test():
@@ -37,13 +31,3 @@ def test():
 
 def clear():
     os.system('clear')
-
-
-# scheduler = BackgroundScheduler()
-# scheduler.add_job(func=courses, trigger="interval", seconds=5)
-# scheduler.start()
-
-# # Shut down the scheduler when exiting the app
-# atexit.register(lambda: scheduler.shutdown())
-
-

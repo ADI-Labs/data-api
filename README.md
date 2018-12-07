@@ -15,6 +15,6 @@ Future home of Columbia's API for all data.
 - Kathy Lau
 - James Xu
 
-Deployment:
+### Deployment:
 git remote add dokku dokku@208.68.37.106:data-api
 git push dokku master
