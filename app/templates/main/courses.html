@@ -330,6 +330,7 @@
                 document.getElementById(req).innerHTML = apiRequest;
                 if (apiCall.readyState == XMLHttpRequest.DONE && this.status == 200) {  
                     document.getElementById(resp).innerHTML = apiCall.responseText;
+                    document.getElementById(resp).style.color = "green";
                 } else {
                     var responseObj = JSON.parse(this.response);
                     document.getElementById(resp).innerHTML = "ERROR " + this.status + ": " + responseObj.message;
