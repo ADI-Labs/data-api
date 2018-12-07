@@ -6,7 +6,6 @@ import datetime
 
 app = create_app()
 
-print("checking courses...")
 with app.app_context():
     get_courses(str(datetime.date.today()))
 
@@ -23,10 +22,6 @@ def make_shell_context():
                 )
 
 
-def courses():
-    with app.app_context():
-        get_courses(str(datetime.date.today()))
-
 
 @app.cli.command()
 def test():
@@ -38,11 +33,3 @@ def test():
 
 def clear():
     os.system('clear')
-
-
-# scheduler = BackgroundScheduler()
-# scheduler.add_job(func=courses, trigger="interval", seconds=5)
-# scheduler.start()
-
-# # Shut down the scheduler when exiting the app
-# atexit.register(lambda: scheduler.shutdown())

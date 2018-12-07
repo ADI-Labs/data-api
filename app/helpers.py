@@ -1,10 +1,11 @@
 import scrapy
 import os
 from scrapy.crawler import CrawlerProcess
-# import hashlib
 import json
 from . import db
 from .models import Course
+import hashlib
+import datetime
 # --------------------------------------------------------
 
 ITEM_PIPELINES = {'scrapy.pipelines.files.FilesPipeline': 1}
@@ -53,36 +54,35 @@ def remove_hidden_attr(d):
     return {key: value for key, value in d.items() if key[0] != '_'}
 
 
-def get_courses(date):
-    # for some reason flask shell chooses python 2.7 by default
-    # sha = hashlib.sha1()
-    # sha.update(COURSES_URL.encode('utf-8'))
-    # name = sha.hexdigest()
-    name = 'test.json'
+# if you want to test this function, create a test.json
+# pass in parse_and_store directly, without scraping
+def get_courses():
+    sha = hashlib.sha1()
+    sha.update(COURSES_URL.encode('utf-8'))
+    savename = str(datetime.date.today())
+    name = sha.hexdigest()
+    # name = 'test.json'
 
     filepath = os.path.join(FILES_STORE, "full", name)
+    savepath = os.path.join(FILES_STORE, "full", f"{savename}.json")
 
     if not os.path.isfile('app/data.sqlite'):
         db.create_all()
 
-    if os.path.isfile(filepath):
-        print("course data is downloaded")
-        print("updating...\n")
-    else:
-        print("scraping and storing course data...\n")
+    crwl = CrawlerProcess(
+        {'USER_AGENT': 'Mozilla/4.0'
+            ' (compatible; MSIE 7.0; Windows NT 5.1)'})
 
-        crwl = CrawlerProcess(
-            {'USER_AGENT': 'Mozilla/4.0'
-                ' (compatible; MSIE 7.0; Windows NT 5.1)'})
-        # Downloads data from courses
-        crwl.crawl(CourseSpider)
-        crwl.start()
-
-    parse_and_store(filepath)
+    # Downloads data from courses and downloads to filepath
+    crwl.crawl(CourseSpider)
+    crwl.start()
 
     # rename to keep old files
-    # os.rename(filepath,os.path.join(FILES_STORE,
-    # "full",f"courses-{date}.json"))
+    # comment this line if testing with test.json
+    os.rename(filepath, savepath)
+
+    print("updating courses...")
+    parse_and_store(savepath)
 
 
 def parse_and_store(path):
@@ -128,27 +128,29 @@ def parse_and_store(path):
         existing_course = Course.query.get(
             (new_course.term, new_course.course_id))
         if existing_course:
-            print('old course, checking for updates...')
             # check for differences objects and then update
             existing_course = check_differences(existing_course, new_course)
-            # db.session.delete(existing_course)
         else:
-            print('new course!')
             db.session.add(new_course)
         db.session.commit()
-
-        existing_course = Course.query.get((datum["Course"], datum["Term"]))
-    print("database created and up to date!")
+    print("database up to date")
 
 
 def check_differences(existing_course, new_course):
     existing_data = remove_hidden_attr(existing_course.__dict__)
     new_data = remove_hidden_attr(new_course.__dict__)
 
+    # for each parameter
     for key in existing_data.keys():
+        # if there is a difference, set to new data
         if existing_data[key] != new_data[key]:
-            print('There is a difference!')
-            print("old", getattr(existing_course, key))
+            print(
+                'updating ',
+                existing_course,
+                key,
+                existing_data[key],
+                '->',
+                new_data[key])
             setattr(existing_course, key, new_data[key])
-            print("new", getattr(existing_course, key))
+
     db.session.flush()
