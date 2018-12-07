@@ -23,15 +23,56 @@ body, html {
 }
 
 .btn {
+
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+    background-color: #77bad6;
     border-color: #77bad6;
-    color: black;
+    /* color: white; */
+}
+
+.btn:hover {
+    color: white;
+}
+
+.label {
+    background-color: #77bad6;
+    border-color: #77bad6;
+    height: 50px;
 }
 
 .panel-text {
     padding-left: 20px;
 }
 
-/* .method-btn {
-    color: white;
-    padding-right: 20pt; 
+.query-panelbody {
+    height: 0px;
+}
+
+.table-bordered {
+    padding-top: 10px;
+}
+
+.nobord {
+    display:table-cell;
+    margin:0;
+    padding:0;
+    border-width: 0; 
+    background: none;
+}
+
+.leftedge {
+    border-width: 1px 0 1px 1px; 
+}
+
+.rightedge {
+    border-width: 1px 1px 1px 0; 
+}
+
+.randomText {
+    vertical-align: middle;
+}
+
+/* 
+.selectionQuery {
+    font-weight: bold
 } */
