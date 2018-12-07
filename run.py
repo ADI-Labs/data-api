@@ -5,8 +5,8 @@ import os
 
 app = create_app()
 
-with app.app_context():
-    get_courses()
+# with app.app_context():
+    # get_courses()
 
 
 @app.shell_context_processor
