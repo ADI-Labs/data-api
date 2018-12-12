@@ -5,10 +5,10 @@ Future home of Columbia's API for all data.
 ### Current Contributors:
 - Yishak Tofik Mohammed (Product Manager)
 - Jonathan Zhang (TA)
-- Kevin Mao
-- Anavi Lohia
-- Bruk Zewdie
-- Marcus Blake 
+- Kevin Mao (Developer)
+- Anavi Lohia (Developer)
+- Bruk Zewdie (Developer)
+- Marcus Blake (Developer)
 
 ### Past Contributors: 
 - Amanda Zong
