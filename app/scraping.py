@@ -55,7 +55,8 @@ def get_students():
 
 	pages = browser.find(class_='name_form_az').find_all('a')
 
-	#This gets the links to each intial web page (i.e page 0) that contains a query for an alphabetical character
+	#This gets the links to each intial web page (i.e page 0) 
+	# that contains a query for an alphabetical character
 	web_pages = []
 	web_pages.append(login_url)
 	for page in pages:
