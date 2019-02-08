@@ -6,7 +6,6 @@ from . import db
 from .models import Course
 import hashlib
 import datetime
-# --------------------------------------------------------
 
 ITEM_PIPELINES = {'scrapy.pipelines.files.FilesPipeline': 1}
 FILES_STORE = './data'
