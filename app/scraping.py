@@ -101,10 +101,11 @@ def get_students():
 
 	getAndWriteData(browser)
 
-	if url == web_pages[len(web_pages)-1] and FILEPATH == '../data/temp.json' and os.path.isfile('../data/student_data.json'):
-		newName = '../data/student_data.json'
-		os.remove(newName)
-		os.rename(FILEPATH, newName)
+	if url == web_pages[len(web_pages)-1] and FILEPATH == '../data/temp.json' 
+		and os.path.isfile('../data/student_data.json'):
+			newName = '../data/student_data.json'
+			os.remove(newName)
+			os.rename(FILEPATH, newName)
 
 
 
