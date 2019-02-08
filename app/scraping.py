@@ -75,7 +75,8 @@ def get_students():
         db.create_all()
     getAndWriteData(browser)
 
-    if url == web_pages[len(web_pages)-1] and FILEPATH == '../data/temp.json' \
+    if url == web_pages[len(web_pages) - 1] \
+            and FILEPATH == '../data/temp.json' \
             and os.path.isfile('../data/student_data.json'):
         newName = '../data/student_data.json'
         os.remove(newName)
@@ -137,16 +138,16 @@ def replaceBreaks(item, delimiter):
 def parseInfo(rows, file):
 
     student = {
-                'Name': '',
-                'UNI': '',
-                'Email': '',
-                'Department': '',
-                'Title': '',
-                'Address': '',
-                'Home Addr': '',
-                'Campus Tel': '',
-                'Tel': '',
-                'FAX': ''
+        'Name': '',
+        'UNI': '',
+        'Email': '',
+        'Department': '',
+        'Title': '',
+        'Address': '',
+        'Home Addr': '',
+        'Campus Tel': '',
+        'Tel': '',
+        'FAX': ''
     }
 
     for row in rows:
@@ -207,16 +208,16 @@ def parseInfo(rows, file):
 def getAndWriteData(browser):
 
     pages = browser.find(class_='page_number_result').find_all('a')
-    last_page = pages[len(pages)-1]['href']
+    last_page = pages[len(pages) - 1]['href']
     last_page = last_page.split('=')
 
-    num_pages = int(last_page[len(last_page)-1])
+    num_pages = int(last_page[len(last_page) - 1])
     query_format = '?page='
 
     # open data json file
     file = open(FILEPATH, 'ab+')
 
-    for pageNumber in range(0, num_pages+1):
+    for pageNumber in range(0, num_pages + 1):
         url = browse_url + query_format + str(pageNumber)
         browser.open(url)
         table = browser.find(class_='table_results')
@@ -313,8 +314,8 @@ def check_differences(existing_student, new_student):
 def writeNextPage(query, web_pages):
     newPage = 0
     for index in range(0, len(web_pages)):
-        if web_pages[index] == query and index+1 < len(web_pages):
-            newPage = index+1
+        if web_pages[index] == query and index + 1 < len(web_pages):
+            newPage = index + 1
             break
 
     file = open('utils/current_page.txt', 'w')
