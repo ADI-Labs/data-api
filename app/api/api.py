@@ -1,6 +1,6 @@
 from flask import jsonify
 from flask_restful import Api, Resource, abort, reqparse
-from ..models import Course, User
+from ..models import Course, User, Student
 from . import api_bp
 
 api = Api(api_bp)
@@ -189,7 +189,7 @@ class Students(Resource):
         if User.verify(key):
             # will return processed arguments, if there is an incorrect
             # argument then it will return the first incorrect argument
-            args = Courses.process_args(args)
+            args = Students.process_args(args)
             if isinstance(args, str):
                 abort(
                     400,
@@ -200,7 +200,7 @@ class Students(Resource):
                 if typ == 'select':
                     # if select api, then use get method by passing in primary
                     # keys
-                    result = Course.query.get(args['uni'])
+                    result = Student.query.get(args['uni'])
                     if not result:
                         abort(
                             404,
@@ -213,7 +213,7 @@ class Students(Resource):
 
                 elif typ == 'search':
                     # for seach api, then use filter through db
-                    result = Course.query.filter_by(**args).all()
+                    result = Student.query.filter_by(**args).all()
                     if not result:
                         abort(404, status=404,
                               message=f'No students with {args}')
