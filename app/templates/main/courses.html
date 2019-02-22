@@ -2,185 +2,84 @@
 {% block content %}
 <div id="content" class="container">
 
-    <section id="courses" class="api-page">
-    <h1>Courses</h1>
-    <hr>
-
-    <h3>Try it!</h3>
-    <br>
-    <form method='post' >
-        <div>
-            <input class="form-control lead" name="searchTerm" placeholder="Search for courses with a specific name, term, call number here"/>
-        </div>
-        <div>
-            <input class="btn" name="submit" type="submit" value='Search' />
-        </div>
-    </form>
-    {% if results != [] %}
-    <table class="table-striped table-bordered center-block" padding width="90%">
-        {% for item in results %}
-            <tr width="100%">
-                <td >
-                    {{ item["name"] }}
-                </td>
-                <td >
-                    {{ item["course_id"] }}
-                </td>
-                <td >
-                    {{ item["term"] }}
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
-    {% endif %}
-
-    <br>
-    <h3>There are two courses endpoints: courses/select and courses/search.</h3>
-    <br>
-
-    <div class="panel panel-default endpoint-select" >
-        <div class="panel-heading" data-toggle="collapse" data-target="#select_panel"><h4>Select</h4></div>
-        <div class="panel-body">
-            <div class="container">
-                <div class="row">
-                    <span class="label label-primary col-1">GET</span>
-                    <span class="panel-text col-11" id="selectRequest">/api/courses/select?course_id=course_id&term=term&key=key</span>
-                </div>
+        <section id="courses" class="api-page">
+        <h1>Courses</h1>
+        <hr>
+     
+        <h3>Try it!</h3>
+        <br>
+        <form method='post' >
+            <div>
+                <input class="form-control lead" name="searchTerm" placeholder="Search for courses with a specific name, term, call number here"/>
             </div>
-            <div id="select_panel" class="collapse">
-                <h3>Request</h3>
-                <br>
-                <div class="form-horizontal">
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">Key:</label>
-                        <div class="col-sm-10">
-                            <input class="form-control" id="inputKey1" type="text">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">course_id:</label>
-                        <div class="col-sm-10">
-                            <input class="form-control" id="inputCourseID" type="text">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">term:</label>
-                        <div class="col-sm-10">
-                            <input class="form-control" id="inputTerm" type="text">
-                        </div>
-                    </div> 
-                    <div class="form-group">
-                        <span class="col-sm-2 control-label"></span>
-                        <div class="col-sm-10">
-                            <button type="button" class="btn" onclick="queryFunction('select')">GET</button>
-
-                        </div>
-                    </div>            
-                </div>           
-                <h3>Response</h3>
-                <div>
-                        <pre class="text-success prettyprint lang=js" id="selectResponseBlock"> 
-                            {
-                                &quot;status_code&quot;: 200,
-                                &quot;data&quot;: [
-                                    { \
-                                        &quot;approval&quot;: &quot;&quot;,
-                                        &quot;bulletin_flags&quot;: &quot;CEFKGRUXI&quot;,
-                                        &quot;call_number&quot;: 68108,
-                                        &quot;campus_code&quot;: &quot;MORN&quot;,
-                                        &quot;campus_name&quot;: &quot;MORNINGSIDE&quot;,
-                                        &quot;class_notes&quot;: &quot;&quot;,
-                                        &quot;course_id&quot;: &quot;COMS3134S001&quot;,
-                                        &quot;course_name&quot;: &quot;DATA STRUCTURES IN JAVA&quot;,
-                                        &quot;credit_amount&quot;: &quot;null&quot;,
-                                        &quot;division_code&quot;: &quot;SS&quot;,
-                                        &quot;instructor_name&quot;: &quot;BLAER, PAUL &quot;,
-                                        &quot;max_size&quot;: 999,
-                                        &quot;meeting_times&quot;: &quot;null&quot;,
-                                        &quot;min_units&quot;: 0,
-                                        &quot;num_enrolled&quot;: 68,
-                                        &quot;num_fixed_units&quot;: 30,
-                                        &quot;prefix_long_name&quot;: &quot;COMPUTER SCIENCE&quot;,
-                                        &quot;prefix_name&quot;: &quot;COMPUT SCI&quot;,
-                                        &quot;school_code&quot;: &quot;SPEC&quot;,
-                                        &quot;school_name&quot;: &quot;SCHOOL OF PROFESSIONAL STUDIES&quot;,
-                                        &quot;term&quot;: &quot;20182&quot;,
-                                        &quot;type_code&quot;: &quot;LC&quot;,
-                                        &quot;type_name&quot;: &quot;LECTURE&quot;
-                                    }
-                                ],
-                                &quot;status_txt&quot;: &quot;OK&quot;
-                            }
-                        </pre>
-                </div>
-            </div>    
-        </div>
-    </div>
-    
-
-    <div class="panel panel-default endpoint-search" >
-        <div class="panel-heading" data-toggle="collapse" data-target="#search_panel"><h4>Search</h4></div>
-        <div class="panel-body">
-            <div class="container">
-                <div class="row">
-                    <span class="label label-primary col-1">GET</span>
-                    <span class="panel-text col-11" id="searchRequest">/api/courses/search?course_name=course_name&key=key</span>
-                </div>
+            <div>
+                <input class="btn" name="submit" type="submit" value='Search' />
             </div>
-            
-            
-            <div id="search_panel" class="collapse">
-                <h3>Request</h3>
-                <br>
-                <div class="form-horizontal">
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">Key:</label>
-                        <div class="col-sm-10">
-                            <input class="form-control" id="inputKey2" type="text">
-                        </div>
+        </form>
+        {% if results != [] %}
+        <table class="table-striped table-bordered center-block" padding width="90%">
+            {% for item in results %}
+                <tr width="100%">
+                    <td >
+                        {{ item["name"] }}
+                    </td>
+                    <td >
+                        {{ item["course_id"] }}
+                    </td>
+                    <td >
+                        {{ item["term"] }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+     
+        <br>
+        <h3>There are two courses endpoints: courses/select and courses/search.</h3>
+        <br>
+     
+        <div class="panel panel-default endpoint-select" >
+            <div class="panel-heading" data-toggle="collapse" data-target="#select_panel"><h4>Select</h4></div>
+            <div class="panel-body">
+                <div class="container">
+                    <div class="row">
+                        <span class="label label-primary col-1">GET</span>
+                        <span class="panel-text col-11" id="selectRequest">/api/courses/select?course_id=course_id&term=term&key=key</span>
                     </div>
-                    <div class="form-group">
-                        <div class="col-sm-2">
-                            <select class="form-control selectionQuery" id="inputParameter" value="course_name">
-                                <option value="course_id">course_id</option>
-                                <option value="term">term</option>
-                                <option value="call_number">call_number</option>
-                                <option value="course_name" selected="selected">course_name</option>
-                                <option value="bulletin_flags">bulletin_flags</option>
-                                <option value="division_code">division_code</option>
-                                <option value="credit_amount">credit_amount</option>
-                                <option value="prefix_name">prefix_name</option>
-                                <option value="prefix_long_name">prefix_long_name</option>
-                                <option value="instructor_name">instructor_name</option>
-                                <option value="approval">approval</option>
-                                <option value="school_code">school_code</option>
-                                <option value="school_name">school_name</option>
-                                <option value="campus_code">campus_code</option>
-                                <option value="campus_name">campus_name</option>
-                                <option value="type_code">type_code</option>
-                                <option value="type_name">type_name</option>
-                                <option value="num_enrolled">num_enrolled</option>
-                                <option value="max_size">max_size</option>
-                                <option value="min_units">min_units</option>
-                                <option value="num_fixed_units">num_fixed_units</option>
-                                <option value="class_notes">class_notes</option>
-                                <option value="meeting_times">meeting_times</option>
-                            </select>
-                        </div>              
-                        <div class="col-sm-10">
-                            <input class="form-control" id="inputParameterValue" type="text" value="DATA%20STRUCTURES%20IN%20JAVA">
+                </div>
+                <div id="select_panel" class="collapse">
+                    <h3>Request</h3>
+                    <br>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Key:</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" id="inputKey1" type="text" placeholder="Insert key here">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <span class="col-sm-2 control-label"></span>
-                        <div class="col-sm-10">
-                            <button type="button" class="btn" onclick="queryFunction('search')">GET</button>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Course_id:</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" id="inputCourseID" type="text" value="COMS3134S001">
+                            </div>
                         </div>
-                    </div> 
-                </div>           
-                <h3>Response</h3>
-                <div>
-                        <pre class="text-success prettyprint lang=js" id="searchResponseBlock"> 
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Term:</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" id="inputTerm" type="text" value="20182">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <span class="col-sm-2 control-label"></span>
+                            <div class="col-sm-10">
+                                <button type="button" class="btn" onclick="queryFunction('select')">GET</button>
+     
+                            </div>
+                        </div>           
+                    </div>          
+                    <h3>Response</h3>
+                    <div>
+                            <pre class="text-success prettyprint lang=js" id="selectResponseBlock">
                                 {
                                     &quot;status_code&quot;: 200,
                                     &quot;data&quot;: [
@@ -213,97 +112,246 @@
                                     &quot;status_txt&quot;: &quot;OK&quot;
                                 }
                             </pre>
-                </div>
-            </div>    
-        </div>
-    </div>
-    
-    <br>
-    <h3>The query parameters for the two endpoints are the same.</h3>
-    <br>
-
-    <div class="panel panel-default" data-toggle="collapse" data-target="#query_panel">
-        <div class="panel-body">
-            <h5>Query Parameters</h5>
-            <div id="query_panel" class="collapse">
-
-                {% if parameters != [] %}
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Type</th>
-                            <th>Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for item in parameters %}
-                            <tr width="100%">
-                                <td >
-                                    {{ item["name"] }}
-                                </td>
-                                <td >
-                                    {{ item["type"] }}
-                                </td>
-                                <td >
-                                    {{ item["description"] }}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                {% endif %}
+                    </div>
+                </div>   
             </div>
         </div>
-    </div>
+       
+     
+        <div class="panel panel-default endpoint-search" >
+            <div class="panel-heading" data-toggle="collapse" data-target="#search_panel"><h4>Search</h4></div>
+            <div class="panel-body">
+                <div class="container">
+                    <div class="row">
+                        <span class="label label-primary col-1">GET</span>
+                        <span class="panel-text col-11" id="searchRequest">/api/courses/search?course_name=course_name&key=key</span>
+                    </div>
+                </div>
+               
+               
+                <div id="search_panel" class="collapse">
+                    <h3>Request</h3>
+                    <br>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Key:</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" id="inputKey2" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group" id="fieldToAdd">
+                            <div class="col-sm-2">
+                                <select class="form-control selectionQuery" id="inputParameter" value="course_name">
+                                    <option value="course_id">course_id</option>
+                                    <option value="term">term</option>
+                                    <option value="call_number">call_number</option>
+                                    <option value="course_name" selected="selected">course_name</option>
+                                    <option value="bulletin_flags">bulletin_flags</option>
+                                    <option value="division_code">division_code</option>
+                                    <option value="credit_amount">credit_amount</option>
+                                    <option value="prefix_name">prefix_name</option>
+                                    <option value="prefix_long_name">prefix_long_name</option>
+                                    <option value="instructor_name">instructor_name</option>
+                                    <option value="approval">approval</option>
+                                    <option value="school_code">school_code</option>
+                                    <option value="school_name">school_name</option>
+                                    <option value="campus_code">campus_code</option>
+                                    <option value="campus_name">campus_name</option>
+                                    <option value="type_code">type_code</option>
+                                    <option value="type_name">type_name</option>
+                                    <option value="num_enrolled">num_enrolled</option>
+                                    <option value="max_size">max_size</option>
+                                    <option value="min_units">min_units</option>
+                                    <option value="num_fixed_units">num_fixed_units</option>
+                                    <option value="class_notes">class_notes</option>
+                                    <option value="meeting_times">meeting_times</option>
+                                </select>
+                            </div>             
+                            <div class="col-sm-10">
+                                <input class="form-control" id="inputParameterValue" type="text" value="DATA%20STRUCTURES%20IN%20JAVA">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <span class="col-sm-2 control-label"></span>
+                            <div class="col-sm-10">
+                                <button type="button" class="btn" onclick="queryFunction('search')">GET</button>
+                                <button type="button" class="btn" onclick="addField()">ADD FIELD</button>
+                            </div>
+                        </div>
+                    </div>          
+                    <h3>Response</h3>
+                    <div>
+                            <pre class="text-success prettyprint lang=js" id="searchResponseBlock">
+                                    {
+                                        &quot;status_code&quot;: 200,
+                                        &quot;data&quot;: [
+                                            { \
+                                                &quot;approval&quot;: &quot;&quot;,
+                                                &quot;bulletin_flags&quot;: &quot;CEFKGRUXI&quot;,
+                                                &quot;call_number&quot;: 68108,
+                                                &quot;campus_code&quot;: &quot;MORN&quot;,
+                                                &quot;campus_name&quot;: &quot;MORNINGSIDE&quot;,
+                                                &quot;class_notes&quot;: &quot;&quot;,
+                                                &quot;course_id&quot;: &quot;COMS3134S001&quot;,
+                                                &quot;course_name&quot;: &quot;DATA STRUCTURES IN JAVA&quot;,
+                                                &quot;credit_amount&quot;: &quot;null&quot;,
+                                                &quot;division_code&quot;: &quot;SS&quot;,
+                                                &quot;instructor_name&quot;: &quot;BLAER, PAUL &quot;,
+                                                &quot;max_size&quot;: 999,
+                                                &quot;meeting_times&quot;: &quot;null&quot;,
+                                                &quot;min_units&quot;: 0,
+                                                &quot;num_enrolled&quot;: 68,
+                                                &quot;num_fixed_units&quot;: 30,
+                                                &quot;prefix_long_name&quot;: &quot;COMPUTER SCIENCE&quot;,
+                                                &quot;prefix_name&quot;: &quot;COMPUT SCI&quot;,
+                                                &quot;school_code&quot;: &quot;SPEC&quot;,
+                                                &quot;school_name&quot;: &quot;SCHOOL OF PROFESSIONAL STUDIES&quot;,
+                                                &quot;term&quot;: &quot;20182&quot;,
+                                                &quot;type_code&quot;: &quot;LC&quot;,
+                                                &quot;type_name&quot;: &quot;LECTURE&quot;
+                                            }
+                                        ],
+                                        &quot;status_txt&quot;: &quot;OK&quot;
+                                    }
+                                </pre>
+                    </div>
+                </div>   
+            </div>
+        </div>
+       
+        <br>
+        <h3>The query parameters for the two endpoints are the same.</h3>
+        <br>
+     
+        <div class="panel panel-default" data-toggle="collapse" data-target="#query_panel">
+            <div class="panel-body">
+                <h5>Query Parameters</h5>
+                <div id="query_panel" class="collapse">
+     
+                    {% if parameters != [] %}
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in parameters %}
+                                <tr width="100%">
+                                    <td >
+                                        {{ item["name"] }}
+                                    </td>
+                                    <td >
+                                        {{ item["type"] }}
+                                    </td>
+                                    <td >
+                                        {{ item["description"] }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+     
+        <script>
 
-    <script>
+            function addField(){
+                var currentDiv = document.getElementById("fieldToAdd")
+                var code = '<div><br><br>\
+                                <div class="col-sm-2">\
+                                    <select class="form-control selectionQuery" id="inputParameter" value="course_name">\
+                                        <option value="course_id">course_id</option>\
+                                        <option value="term">term</option>\
+                                        <option value="call_number">call_number</option>\
+                                        <option value="course_name" selected="selected">course_name</option>\
+                                        <option value="bulletin_flags">bulletin_flags</option>\
+                                        <option value="division_code">division_code</option>\
+                                        <option value="credit_amount">credit_amount</option>\
+                                        <option value="prefix_name">prefix_name</option>\
+                                        <option value="prefix_long_name">prefix_long_name</option>\
+                                        <option value="instructor_name">instructor_name</option>\
+                                        <option value="approval">approval</option>\
+                                        <option value="school_code">school_code</option>\
+                                        <option value="school_name">school_name</option>\
+                                        <option value="campus_code">campus_code</option>\
+                                        <option value="campus_name">campus_name</option>\
+                                        <option value="type_code">type_code</option>\
+                                        <option value="type_name">type_name</option>\
+                                        <option value="num_enrolled">num_enrolled</option>\
+                                        <option value="max_size">max_size</option>\
+                                        <option value="min_units">min_units</option>\
+                                        <option value="num_fixed_units">num_fixed_units</option>\
+                                        <option value="class_notes">class_notes</option>\
+                                        <option value="meeting_times">meeting_times</option>\
+                                    </select>\
+                                </div>' +            
+                                '<div class="col-sm-9">\
+                                    <input class="form-control" id="inputParameterValue" type="text" value="DATA%20STRUCTURES%20IN%20JAVA">\
+                                </div>' +
+                                '<div class="col-sm-1">\
+                                    <button type="button" class="btn btn-warning deletion" onclick="deleteField(this)">X</button>\
+                                </div>\
+                            </div>'
+                oldContent = currentDiv.innerHTML
+                newContent = oldContent + code
+                document.getElementById("fieldToAdd").innerHTML = newContent
+            }
 
-        function queryFunction(endpoint) {
+            function deleteField(button) {
+                $(button).parent().parent().remove();
+            }
 
-            var req = endpoint + "Request";
-            var resp = endpoint + "ResponseBlock";
-
-            var apiCall = new XMLHttpRequest();
-            apiCall.onreadystatechange = function() {
-                document.getElementById(req).innerHTML = apiRequest;
-                if (apiCall.readyState == XMLHttpRequest.DONE && this.status == 200) {  
-                    document.getElementById(resp).innerHTML = apiCall.responseText;
-                    document.getElementById(resp).style.color = "green";
-                } else {
-                    var responseObj = JSON.parse(this.response);
-                    document.getElementById(resp).innerHTML = "ERROR " + this.status + ": " + responseObj.message;
-                    document.getElementById(resp).style.color = "red";
+            function queryFunction(endpoint) {
+     
+                var req = endpoint + "Request";
+                var resp = endpoint + "ResponseBlock";
+     
+                var apiCall = new XMLHttpRequest();
+                apiCall.onreadystatechange = function() {
+                    document.getElementById(req).innerHTML = apiRequest;
+                    if (apiCall.readyState == XMLHttpRequest.DONE && this.status == 200) { 
+                        document.getElementById(resp).innerHTML = apiCall.responseText;
+                        document.getElementById(resp).style.color = "green";
+                    } else {
+                        var responseObj = JSON.parse(this.response);
+                        document.getElementById(resp).innerHTML = "ERROR " + this.status + ": " + responseObj.message;
+                        document.getElementById(resp).style.color = "red";
+                    }
                 }
+                if (endpoint == "select") {
+                    apiRequest = "http://127.0.0.1:5000/api/courses/select?course_id="
+                                        + document.getElementById("inputCourseID").value
+                                        + "&term="
+                                        + document.getElementById("inputTerm").value
+                                        + "&key="
+                                        + document.getElementById("inputKey1").value;
+                }
+                else if (endpoint == "search") {
+                    apiRequest = "http://127.0.0.1:5000/api/courses/search?"
+                                        + document.getElementById("inputParameter").value
+                                        + "="
+                                        + document.getElementById("inputParameterValue").value
+                                        + "&key="
+                                        + document.getElementById("inputKey2").value;
+                }  
+                apiCall.open("GET", apiRequest);
+                apiCall.send();
             }
-            if (endpoint == "select") { 
-                apiRequest = "http://127.0.0.1:5000/api/courses/select?course_id="
-                                    + document.getElementById("inputCourseID").value
-                                    + "&term=" 
-                                    + document.getElementById("inputTerm").value
-                                    + "&key=" 
-                                    + document.getElementById("inputKey1").value;
-            }
-            else if (endpoint == "search") {
-                apiRequest = "http://127.0.0.1:5000/api/courses/search?"
-                                    + document.getElementById("inputParameter").value
-                                    + "=" 
-                                    + document.getElementById("inputParameterValue").value
-                                    + "&key=" 
-                                    + document.getElementById("inputKey2").value;
-            }   
-            apiCall.open("GET", apiRequest);
-            apiCall.send();
-        }
-
-    </script>
-
-    </section>
-</div>
-
-{% endblock %}
-{% block styles %}
-{{super()}}
-<link rel="stylesheet"
-      href="{{url_for('static', filename='assets/api_page.css')}}">
-{% endblock %}
+     
+        </script>
+     
+        </section>
+     </div>
+     
+     {% endblock %}
+     {% block styles %}
+     {{super()}}
+     <link rel="stylesheet"
+          href="{{url_for('static', filename='assets/api_page.css')}}">
+     {% endblock %}
+     
