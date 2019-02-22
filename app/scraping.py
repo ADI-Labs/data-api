@@ -16,7 +16,7 @@ browse_url = url_base + '/people/browse/students'
 
 
 # get login information from config file in root directory
-file = open('../app/config.json')
+file = open('./app/config.json')
 config = json.load(file)
 file.close()
 
