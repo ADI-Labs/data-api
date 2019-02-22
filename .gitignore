@@ -117,6 +117,8 @@ config.json
 config_keys.json
 app/config_keys.json
 
+# robobrowser debug pages
+browser_pages/
 
 #environment
 .vscode/

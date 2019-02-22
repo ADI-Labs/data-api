@@ -140,7 +140,7 @@ class Student(db.Model):
     __tablename__ = 'students'
     name = db.Column(db.String(64), nullable=False)
     uni = db.Column(db.String(8), unique=True, primary_key=True)
-    email = db.Column(db.String(64), unique=True, nullable=False)
+    email = db.Column(db.String(64), nullable=True)
     department = db.Column(db.String(128), nullable=True)
     title = db.Column(db.String(128), nullable=True)
     address = db.Column(db.String(512), nullable=False)
