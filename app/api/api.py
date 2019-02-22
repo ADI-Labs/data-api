@@ -39,7 +39,7 @@ class Courses(Resource):
             parser.add_argument("key", required=True,
                                 help="key cannot be blank!")
 
-        # search api can accept any number and combination of prameters
+        # search api can accept any number and combination of parameters
         # requires api key
         elif typ == 'search':
             parser = reqparse.RequestParser()
