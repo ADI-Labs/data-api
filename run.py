@@ -1,12 +1,12 @@
 from app import create_app, db, mail
 from app.models import Course, Dining, Student, User
-# from app.helpers import get_courses
+from app.helpers import get_courses
 import os
 
 app = create_app()
 
-# with app.app_context():
-#    get_courses()
+with app.app_context():
+   get_courses()
 
 
 @app.shell_context_processor
