@@ -1,14 +1,14 @@
 from app import create_app, db, mail
 from app.models import Course, Dining, Student, User
-# from app.helpers import get_courses
-from app.scraping import upload_to_db_from_file  # get_students, 
+from app.helpers import get_courses
+from app.scraping import upload_to_db_from_file  # get_students
 import os
 
 app = create_app()
 
 with app.app_context():
     # get_students()
-    # get_courses()
+    get_courses()
     upload_to_db_from_file("./data/student_data.json")
 
 
