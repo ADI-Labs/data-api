@@ -14,9 +14,23 @@ login_url = 'https://cas.columbia.edu/cas/login?TARGET=' + \
 url_base = 'https://directory.columbia.edu'
 browse_url = url_base + '/people/browse/students'
 
+direct_url = "https://directory-dev.cc.columbia.edu/people/browse/students" + \
+    "?filter.lnameFname=1&filter.initialLetter=A"
+people_url = "https://directory.columbia.edu/people/"
+
+headers = {
+    "Connection": "keep-alive",
+    "Upgrade-Insecure-Requests": "1",
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) " +
+    "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.96 Safari/537.36",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/" +
+    "webp,image/apng,*/*;q=0.8",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Accept-Language": "en-US,en;q=0.9"
+}
 
 # get login information from config file in root directory
-file = open('../app/config.json')
+file = open('./app/config.json')
 config = json.load(file)
 file.close()
 
@@ -38,9 +52,14 @@ TWO_WEEKS = 60
 
 
 def get_students():
+    """
+    CURRENTLY BROKEN - to fix once CUIT fixes their internal server errors
+    """
     global FILEPATH
     browser = RoboBrowser()
 
+    browser.open(people_url, headers=headers)
+    printPage(browser, "Main directory")
     login(browser)
 
     pages = browser.find(class_='name_form_az').find_all('a')
@@ -95,13 +114,19 @@ def get_students():
 
 def login(browser):
     # open login page
-    browser.open(login_url)
+    browser.open(login_url, headers=headers)
+    printPage(browser, "Before Login")
+    submitLoginForm(browser)
+    printPage(browser, "after login")
+
+
+def submitLoginForm(browser):
     login = browser.get_form()
 
     # use credentials from file
     login['username'] = uni
     login['password'] = password
-    browser.submit_form(login)
+    browser.submit_form(login, headers=headers)
 
 
 '''
@@ -206,6 +231,9 @@ def parseInfo(rows, file):
 
 
 def getAndWriteData(browser):
+    if printPage(browser, "Before getting data") == "Login":
+        submitLoginForm(browser)
+        printPage(browser, "Extra login")
 
     pages = browser.find(class_='page_number_result').find_all('a')
     last_page = pages[len(pages) - 1]['href']
@@ -283,6 +311,31 @@ def upload_to_db(student):
     db.session.commit()
 
 
+def upload_to_db_from_file(filepath):
+    students = json.load(open(filepath))
+    for student in students:
+        new_student = Student(
+            name=student['Name'],
+            uni=student['UNI'],
+            email=student['Email'],
+            department=student['Department'],
+            title=student['Title'],
+            address=student['Address'],
+            home_addr=student['Home Addr'],
+            campus_tel=student['Campus Tel'],
+            tel=student['Tel'],
+            fax=student['FAX']
+        )
+        existing_student = Student.query.get(new_student.uni)
+        if existing_student:
+            # check for differences objects and then update
+            existing_student = check_differences(existing_student, new_student)
+        else:
+            db.session.add(new_student)
+
+    db.session.commit()
+
+
 def remove_hidden_attr(d):
     return {key: value for key, value in d.items() if key[0] != '_'}
 
@@ -318,9 +371,8 @@ def writeNextPage(query, web_pages):
             newPage = index + 1
             break
 
-    file = open('utils/current_page.txt', 'w')
-    file.write(web_pages[newPage])
-    file.close()
+    with open('utils/current_page.txt', 'w') as f:
+        f.write(web_pages[newPage])
 
 
 """
@@ -332,8 +384,43 @@ def getCurrPage(web_pages):
         return web_pages[0]
 
     else:
-        file = open('utils/current_page.txt', 'r')
-        url = file.read()
-        file.close()
+        with open('utils/current_page.txt', 'r') as f:
+            url = f.read()
 
     return url
+
+
+def printPage(browser, title):
+    print("")
+    print("Browser Page: " + title)
+    print(browser.url)
+    text = str(browser.parsed)
+    req_type = ""
+    if text.find("Central Authentication Service") > 0:
+        req_type = "Login"
+    elif text.find("The Directory Service is temporarily unavailable") > 0:
+        req_type = "Unavailable"
+    elif text.find("Internal Server Error") > 0:
+        req_type = "Server Error"
+    elif text.find("Find People and Departments") > 0:
+        req_type = "Directory Home"
+    else:
+        req_type = "Other"
+        writePage(browser, title+".txt")
+    print("Type: " + req_type)
+    print("\nRequest headers")
+    print(browser.response.request.headers)
+    for cookie in browser.response.request._cookies:
+        print(cookie.name, cookie.value)
+    print("\nResponse headers")
+    print(browser.response.headers)
+    print("\nCookies")
+    for cookie in browser.session.cookies:
+        print(cookie.name, cookie.value)
+    print("\n-----")
+    return req_type
+
+
+def writePage(browser, title):
+    with open("browser_pages/"+title, "w") as f:
+        f.write(str(browser.parsed))
