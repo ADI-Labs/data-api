@@ -12,7 +12,7 @@ login_manager.login_view = "login"
 db = SQLAlchemy()
 mail = Mail()
 bootstrap = Bootstrap()
-config = json.load(open("config_keys.json"))
+config = json.load(open("./config_keys.json"))
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
