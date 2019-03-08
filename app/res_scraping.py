@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import json
 import os
+import string
 from robobrowser import RoboBrowser
 from . import db
 from .models import Residence
@@ -131,11 +132,9 @@ def parse_residence_info(browser):
     piano_class = "field-name-field-residence-piano-fc"
     new_res["piano"] = parse_tag(browser, piano_class)
 
-    """
-        student_reviews_class = "field-name-field-residence-cleaning-fc"
-        new_res["student_reviews"] = parse_tag(browser, student_reviews_class)
+    student_reviews_class = "field-name-field-residence-student-comments"
+    new_res["student_reviews"] = parse_tag(browser, student_reviews_class)
 
-    """
     features_class = "field-name-field-residence-features"
     new_res["features"] = parse_tag(browser, features_class)
     return new_res
@@ -257,6 +256,9 @@ def get_residence_from_dict(res_dict):
     )
 
 
+printable = set(string.printable)
+
+
 def tag_text(tag):
     """
     Returns the text contained within a tag
@@ -265,9 +267,12 @@ def tag_text(tag):
         tag: beautifulsoup tag
     """
     text = tag.get_text()
-    text = text.replace("\u00a0", " ") \
-        .replace("\n", "") \
-        .replace("\u2019", "'")
+    text = text.replace("\n", "") \
+        .replace("\u00a0", " ") \
+        .replace("\u2019", "'") \
+        .replace(", ", "")
+    text = "".join(list(filter(lambda x: x in printable, text)))
+
     return text
 
 
@@ -275,7 +280,17 @@ def parse_field_item(item_list):
     field_details = []
     items = item_list.find_all(class_="field-item")
     for item in items:
-        field_details.append(tag_text(item))
+        ul = item.find("ul")
+        if ul:
+            lis = ul.find_all("li")
+            for li in lis:
+                text = tag_text(li)
+                if text:
+                    field_details.append(text)
+        else:
+            text = tag_text(item)
+            if text:
+                field_details.append(text)
     return field_details
 
 
@@ -298,5 +313,4 @@ def parse_tag(browser, class_):
     elif len(item_lists) == 1:
         field_details.extend(parse_field_item(item_lists[0]))
 
-    field_details = filter(None, field_details)  # removes empty strings
     return ", ".join(field_details)
