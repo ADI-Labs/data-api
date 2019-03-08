@@ -160,3 +160,35 @@ class Teacher(db.Model):
 
     def __repr__(self):
         return f'<Teacher {self.name}>'
+
+
+class Residence(db.Model):
+    __tablename__ = 'residences'
+    name = db.Column(db.String(64), nullable=True, primary_key=True)
+    street_address = db.Column(db.String(128), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    residential_area = db.Column(db.String(32), nullable=False)
+    building_type = db.Column(db.String(32), nullable=False)
+    room_type = db.Column(db.String(64), nullable=False)
+    class_make_up = db.Column(db.String(64), nullable=False)
+    rate = db.Column(db.String(64), nullable=False)
+    entrance_info = db.Column(db.String(256), nullable=False)
+    num_res_floors = db.Column(db.Integer, nullable=False)
+    singles_doubles = db.Column(db.String(32), nullable=False)
+    bathroom = db.Column(db.String(128), nullable=False)
+    laundry = db.Column(db.String(128), nullable=False)
+    flooring = db.Column(db.String(128), nullable=False)
+    kitchen = db.Column(db.String(128), nullable=False)
+    lounge = db.Column(db.String(128), nullable=False)
+    cleaning_schedule = db.Column(db.String(256), nullable=False)
+    features = db.Column(db.Text, nullable=False)
+    bike_storage = db.Column(db.String(128), nullable=True)
+    print_station = db.Column(db.String(128), nullable=True)
+    fitness_room = db.Column(db.String(128), nullable=True)
+    computer_lab = db.Column(db.String(128), nullable=True)
+    ac = db.Column(db.Boolean, nullable=True)
+    piano = db.Column(db.String(128), nullable=True)
+    student_reviews = db.Column(db.Text, nullable=True)
+
+    def __repr__(self):
+        return f'<Residence {self.name}>'
