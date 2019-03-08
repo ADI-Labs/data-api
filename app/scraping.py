@@ -6,6 +6,7 @@ import sys
 from robobrowser import RoboBrowser
 from . import db
 from .models import Student
+from .helpers import check_differences
 
 # URLs that are used to scrape.
 login_url = 'https://cas.columbia.edu/cas/login?TARGET=' + \
@@ -334,34 +335,6 @@ def upload_to_db_from_file(filepath):
             db.session.add(new_student)
 
     db.session.commit()
-
-
-def remove_hidden_attr(d):
-    return {key: value for key, value in d.items() if key[0] != '_'}
-
-
-def check_differences(existing_student, new_student):
-    existing_data = remove_hidden_attr(existing_student.__dict__)
-    new_data = remove_hidden_attr(new_student.__dict__)
-
-    # for each parameter
-    for key in existing_data.keys():
-        # if there is a difference, set to new data
-        if existing_data[key] != new_data[key]:
-            print(
-                'updating ',
-                existing_student,
-                key,
-                existing_data[key],
-                '->',
-                new_data[key])
-            setattr(existing_student, key, new_data[key])
-
-    db.session.flush()
-
-
-"""
-"""
 
 
 def writeNextPage(query, web_pages):
