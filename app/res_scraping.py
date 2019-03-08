@@ -135,10 +135,9 @@ def parse_residence_info(browser):
         student_reviews_class = "field-name-field-residence-cleaning-fc"
         new_res["student_reviews"] = parse_tag(browser, student_reviews_class)
 
-
-        features_class = "field-name-field-residence-features"
-        new_res["features"] = parse_tag(browser, features_class)
     """
+    features_class = "field-name-field-residence-features"
+    new_res["features"] = parse_tag(browser, features_class)
     return new_res
 
 
@@ -266,8 +265,18 @@ def tag_text(tag):
         tag: beautifulsoup tag
     """
     text = tag.get_text()
-    text = text.replace("\u00a0", " ").replace("\n", "")
+    text = text.replace("\u00a0", " ") \
+        .replace("\n", "") \
+        .replace("\u2019", "'")
     return text
+
+
+def parse_field_item(item_list):
+    field_details = []
+    items = item_list.find_all(class_="field-item")
+    for item in items:
+        field_details.append(tag_text(item))
+    return field_details
 
 
 def parse_tag(browser, class_):
@@ -277,25 +286,17 @@ def parse_tag(browser, class_):
     Parameters:
         class_: name of class to search for
     """
-    return_string = ""
     class_tag = browser.find(class_=class_)
     if not class_tag:
         return ""
+
+    field_details = []
     item_lists = class_tag.find_all(class_="field-items")
     if len(item_lists) > 1:
-        for idx_, item_list in enumerate(item_lists[1:]):
-            if idx_ != 0:
-                return_string += ", "
-            items = item_list.find_all(class_="field-item")
-            for idx, item in enumerate(items):
-                if idx != 0 and return_string[-1] != " ":
-                    return_string += " "
-                return_string += tag_text(item)
-    else:
-        items = item_lists[0].find_all(class_="field-item")
-        for idx, item in enumerate(items):
-            if idx != 0 and return_string[-1] != " ":
-                return_string += " "
-            return_string += tag_text(item)
+        for item_list in item_lists[1:]:
+            field_details.extend(parse_field_item(item_list))
+    elif len(item_lists) == 1:
+        field_details.extend(parse_field_item(item_lists[0]))
 
-    return return_string
+    field_details = filter(None, field_details)  # removes empty strings
+    return ", ".join(field_details)
