@@ -19,13 +19,16 @@ direct_url = "https://directory-dev.cc.columbia.edu/people/browse/students" + \
     "?filter.lnameFname=1&filter.initialLetter=A"
 people_url = "https://directory.columbia.edu/people/"
 
+user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) " + \
+    "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.96 Safari/537.36"
+accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/" + \
+    "webp,image/apng,*/*;q=0.8"
+
 headers = {
     "Connection": "keep-alive",
     "Upgrade-Insecure-Requests": "1",
-    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) " +
-    "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.96 Safari/537.36",
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/" +
-    "webp,image/apng,*/*;q=0.8",
+    "User-Agent": user_agent,
+    "Accept": accept,
     "Accept-Encoding": "gzip, deflate, br",
     "Accept-Language": "en-US,en;q=0.9"
 }
@@ -379,7 +382,7 @@ def printPage(browser, title):
         req_type = "Directory Home"
     else:
         req_type = "Other"
-        writePage(browser, title+".txt")
+        writePage(browser, title + ".txt")
     print("Type: " + req_type)
     print("\nRequest headers")
     print(browser.response.request.headers)
@@ -395,5 +398,5 @@ def printPage(browser, title):
 
 
 def writePage(browser, title):
-    with open("browser_pages/"+title, "w") as f:
+    with open("browser_pages/" + title, "w") as f:
         f.write(str(browser.parsed))
