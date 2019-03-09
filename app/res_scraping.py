@@ -1,7 +1,6 @@
 #!/usr/bin/env python
-import json
 import os
-import string
+from collections import defaultdict
 from robobrowser import RoboBrowser
 from . import db
 from .models import Residence
@@ -10,17 +9,15 @@ from .helpers import check_differences
 # URLs that are used to scrape.
 base_url = 'https://housing.columbia.edu'
 home_url = base_url + '/compare-residences'
-FILEPATH = './data/residence_data.json'
 
 
 def get_residences():
     """
-    Gets raw residence data from Columbia housing website, creates
-    a json file and uploads to the database
+    Gets raw residence data from Columbia housing website, standardizes
+    and cleans the data, and uploads to the database
     """
-    global FILEPATH
     browser = RoboBrowser()
-    residences_json_file = open(FILEPATH, 'wb+')
+    residences_list = []
 
     # makes list of links to each residence hall page
     browser.open(home_url)
@@ -31,12 +28,15 @@ def get_residences():
         browser.open(base_url + link)
         residence_json = parse_residence_info(browser)
         if residence_json:
-            append_to_json_file(residence_json, residences_json_file)
+            residences_list.append(residence_json)
 
     if not os.path.isfile('app/data.sqlite'):
+        print("Creating database")
         db.create_all()
-    # upload_residences_to_db_from_file(FILEPATH)
-    residences_json_file.close()
+
+    # collate_data(residences_list)  # here just for data analysis
+    print("Uploading residences to database")
+    upload_residences_to_db(residences_list)
 
 
 def parse_residence_info(browser):
@@ -50,128 +50,205 @@ def parse_residence_info(browser):
 
     new_res = get_new_residence()
     new_res["name"] = browser.find(id="page-title").get_text()
+    print("Scraping info for", new_res["name"])
 
-    print(new_res["name"])
     # skip non-standard housing pages
     if new_res["name"] in [
         "FSL Brownstones",
         "Residential Brownstones",
         "SIC Residences"
     ]:
+        print("Skipping", new_res["name"])
         return None
+
     new_res["street_address"] = tag_text(browser.find(class_="dotted-title"))
 
-    description_parent = browser.find(class_="field-type-text-with-summary")
-    if description_parent.div.div.p:
-        new_res["description"] = tag_text(description_parent.div.div.p)
+    class_for_fields = {
+        "description": "field-type-text-with-summary",
+        "residential_area": "field-name-field-residence-programs",
+        "building_type": "field-name-field-residence-building-type",
+        "room_type": "field-name-field-residence-room-type",
+        "class_make_up": "field-name-field-residence-class-make-up",
+        "rate": "field-name-field-residence-rate",
+        "entrance_info": "field-name-field-residence-entrance-info",
+        "num_res_floors": "field-name-field-residence-number-of-floors",
+        "singles_doubles": "field-name-field-residence-singles-doubles",
+        # "batrhoom-fc" spelling is correct, as also in html
+        "bathroom": "field-name-field-residence-batrhoom-fc",
+        "laundry": "field-name-field-residence-laundry-fc",
+        "flooring": "field-name-field-residence-flooring",
+        "kitchen": "field-name-field-residence-kitchen-fc",
+        "lounge": "field-name-field-residence-lounge-fc",
+        "cleaning_schedule": "field-name-field-residence-cleaning-fc",
+        "features": "field-name-field-residence-features",
+        "bike_storage": "field-name-field-residence-bike-fc",
+        "print_station": "field-name-field-residence-print-station-fc",
+        "fitness_room": "field-name-field-residence-fitness-fc",
+        "computer_lab": "field-name-field-residence-computer-fc",
+        "ac": "field-name-field-residence-ac",
+        "piano": "field-name-field-residence-piano-fc",
+        "student_reviews": "field-name-field-residence-student-comments"
+    }
+
+    for field in new_res:
+        if field in class_for_fields:
+            new_res[field] = parse_tag(browser, class_for_fields[field])
+
+    formatted_residence = standardize_residence(new_res)
+    return formatted_residence
+
+
+# fields that don't require any modification / cleaning
+# generally won't be searching by these (except name)
+unchanged_fields = [
+    "name",
+    "street_address",
+    "residential_area",
+    "description",
+    "class_make_up",
+    "rate",
+    "entrance_info",
+    "flooring",
+    "features",
+    "cleaning_schedule"
+]
+
+boolean_fields = [
+    "bike_storage",
+    "print_station",
+    "fitness_room",
+    "computer_lab",
+    "ac",
+    "piano"
+]
+
+
+def standardize_residence(raw_json):
+    db_entry = {}
+
+    # copy over unchanged fields
+    for field in unchanged_fields:
+        db_entry[field] = raw_json[field] if raw_json[field] else "Unspecified"
+
+    # set boolean fields
+    for field in boolean_fields:
+        if raw_json[field]:
+            negated = raw_json[field] == "No"
+            db_entry[field] = False if negated else True
+        else:
+            db_entry[field] = False
+
+    # building type, options are suite, apartement, or corridor style
+    if "suite" in raw_json["building_type"].lower():
+        db_entry["building_style"] = "Suite-style"
     else:
-        for line in description_parent.div.div.ul.children:
-            text = tag_text(line)
-            if text:
-                new_res["description"] += text + ". "
+        db_entry["building_style"] = raw_json["building_type"]
+    if "townhouse" in raw_json["building_type"].lower():
+        db_entry["building_style"] += ", Townhouses"
 
-    residential_area_class = "field-name-field-residence-programs"
-    new_res["residential_area"] = parse_tag(browser, residential_area_class)
+    # room type: singles/doubles, studio singles/doubles, suite
+    # singles/doubles, walkthrough doubles, one/two bedrooms
+    room_strs = raw_json["room_type"].split(", ")
+    parsed_strs = []
+    for s in room_strs:
+        st = s.lower().replace("large ", "")
+        if "walk-through" in st or "bedrooms" in st or "studio" in st:
+            parsed_strs.append(st)
+        elif "suite" in st:
+            if "double" in st:
+                parsed_strs.append("suite doubles")
+            if "single" in st:
+                parsed_strs.append("suite singles")
+        elif "double" in st:
+            parsed_strs.append("doubles")
+        elif "single" in st:
+            parsed_strs.append("singles")
+    db_entry["room_type"] = ", ".join(parsed_strs)
 
-    building_type_class = "field-name-field-residence-building-type"
-    new_res["building_type"] = parse_tag(browser, building_type_class)
-
-    room_type_class = "field-name-field-residence-room-type"
-    new_res["room_type"] = parse_tag(browser, room_type_class)
-
-    class_make_up_class = "field-name-field-residence-class-make-up"
-    new_res["class_make_up"] = parse_tag(browser, class_make_up_class)
-
-    rate_class = "field-name-field-residence-rate"
-    new_res["rate"] = parse_tag(browser, rate_class)
-
-    entrance_info_class = "field-name-field-residence-entrance-info"
-    new_res["entrance_info"] = parse_tag(browser, entrance_info_class)
-
-    num_res_floors_class = "field-name-field-residence-number-of-floors"
-    floors_str = parse_tag(browser, num_res_floors_class)
-    if floors_str:
-        new_res["num_res_floors"] = int(floors_str)
-
-    singles_doubles_class = "field-name-field-residence-singles-doubles"
-    new_res["singles_doubles"] = parse_tag(browser, singles_doubles_class)
-
-    bathroom_class = "field-name-field-residence-batrhoom-fc"
-    new_res["bathroom"] = parse_tag(browser, bathroom_class)
-
-    laundry_class = "field-name-field-residence-laundry-fc"
-    new_res["laundry"] = parse_tag(browser, laundry_class)
-
-    flooring_class = "field-name-field-residence-flooring"
-    new_res["flooring"] = parse_tag(browser, flooring_class)
-
-    kitchen_class = "field-name-field-residence-kitchen-fc"
-    new_res["kitchen"] = parse_tag(browser, kitchen_class)
-
-    lounge_class = "field-name-field-residence-lounge-fc"
-    new_res["lounge"] = parse_tag(browser, lounge_class)
-
-    cleaning_schedule_class = "field-name-field-residence-cleaning-fc"
-    new_res["cleaning_schedule"] = parse_tag(browser, cleaning_schedule_class)
-
-    bike_storage_class = "field-name-field-residence-bike-fc"
-    new_res["bike_storage"] = parse_tag(browser, bike_storage_class)
-
-    print_station_class = "field-name-field-residence-print-station-fc"
-    new_res["print_station"] = parse_tag(browser, print_station_class)
-
-    fitness_room_class = "field-name-field-residence-fitness-fc"
-    new_res["fitness_room"] = parse_tag(browser, fitness_room_class)
-
-    computer_lab_class = "field-name-field-residence-computer-fc"
-    new_res["computer_lab"] = parse_tag(browser, computer_lab_class)
-
-    ac_class = "field-name-field-residence-ac"
-    new_res["ac"] = parse_tag(browser, ac_class)
-
-    piano_class = "field-name-field-residence-piano-fc"
-    new_res["piano"] = parse_tag(browser, piano_class)
-
-    student_reviews_class = "field-name-field-residence-student-comments"
-    new_res["student_reviews"] = parse_tag(browser, student_reviews_class)
-
-    features_class = "field-name-field-residence-features"
-    new_res["features"] = parse_tag(browser, features_class)
-    return new_res
-
-
-def append_to_json_file(res_dict, json_file):
-    """
-    Appends a dict to a specific json file as a json object
-
-    Parameters:
-        dict: dictionary for JSON object
-        json_file: file object to append to
-    """
-
-    # Checks if file has contents, appends if so
-    json_file.seek(0, 2)
-    if json_file.tell() == 0:
-        json_file.write(json.dumps([res_dict], indent=4).encode())
-
+    # num_res_floors missing from Ruggles, hard code value
+    if raw_json["num_res_floors"]:
+        db_entry["num_res_floors"] = extract_int(raw_json["num_res_floors"])
     else:
-        json_file.seek(-1, 2)
-        json_file.truncate()
-        json_file.write(' , '.encode())
-        json_file.write(json.dumps(res_dict, indent=4).encode())
-        json_file.write(']'.encode())
+        db_entry["num_res_floors"] = 8  # Ruggles has 8 floors
+
+    # split singles/doubles into two entries
+    singles_doubles = raw_json["singles_doubles"].split("/")
+    db_entry["num_singles"] = extract_int(singles_doubles[0])
+    db_entry["num_doubles"] = extract_int(singles_doubles[1])
+
+    # bathrooms, ensure all entries start with private,
+    # semi-private, or shared
+    db_entry["bathroom"] = raw_json["bathroom"]
+    search_terms = [
+        "Shared",
+        "Private",
+        "Semi-Private"
+    ]
+    if db_entry["bathroom"].split(", ")[0] not in search_terms:
+        db_entry["bathroom"] = "Shared, " + db_entry["bathroom"]
+
+    # laundry, location and if free
+    # is_free = "free" in raw_json["laundry"]
+    # db_entry["laundry"] = "Free, " if is_free else "Not free, "
+    db_entry["laundry"] = raw_json["laundry"] \
+        .replace(";", ",") \
+        .replace(".", ",") \
+        .split(', ')[1]
+
+    # kitchen, hard code for John Jay
+    if raw_json["kitchen"]:
+        kitchen_details = raw_json["kitchen"].split(", ")
+        if kitchen_details[0] == "Available":
+            db_entry["kitchen"] = "Shared, per floor"
+        else:
+            db_entry["kitchen"] = kitchen_details[0]
+            if "per floor" in kitchen_details[1].lower():
+                db_entry["kitchen"] += ", per floor"
+            elif "per suite" in kitchen_details[1].lower():
+                db_entry["kitchen"] += ", per suite"
+            elif "per apartment" in kitchen_details[1].lower():
+                db_entry["kitchen"] += ", per apartment"
+            else:
+                db_entry["kitchen"] += kitchen_details[1]
+    else:  # hard code John Jay
+        db_entry["kitchen"] = "Not available"
+
+    return db_entry
 
 
-def upload_residences_to_db_from_file(filepath):
+def extract_int(string):
     """
-    Takes each residence from the json file
+    Extracts just the integer from a string
+    Assumes that there is exactly one integer included
+    """
+    return int("".join(list(filter(lambda x: x.isdigit(), string))))
+
+
+def collate_data(res_list):
+    """
+    Collates data by field and prints to console
+    """
+    data_entries = defaultdict(list)
+    for res in res_list:
+        for field in res:
+            data_entries[field].append(res[field])
+
+    for field in data_entries:
+        print("")
+        print(field, ":")
+        for entry in data_entries[field]:
+            print("    ", entry)
+
+
+def upload_residences_to_db(res_list):
+    """
+    Takes each residence from the list provided
     and either adds or updates its entry in the database
 
     Parameters:
-        filepath: path to json file of residences
+        res_list: list of residence objects
     """
-    residences = json.load(open(filepath))
-    for res in residences:
+    for res in res_list:
         new_res = get_residence_from_dict(res)
         existing_res = Residence.query.get(new_res.name)
         if existing_res:
@@ -182,40 +259,36 @@ def upload_residences_to_db_from_file(filepath):
     db.session.commit()
 
 
-def get_new_residence(res_dict={}):
+def get_new_residence():
     """
-    Returns an empty residence object
-
-    Parameters:
-        res_dict: optional dictionary to initialize already know parameters
+    Returns an empty residence dictionary
+    Fields correspond to raw fields from housing website
     """
     return {
-        "name": res_dict.get("name") or "",
-        "street_address": res_dict.get("street_address") or "",
-        "description": res_dict.get("description") or "",
-        "residential_area": res_dict.get("residential_area") or "",
-        "building_type": res_dict.get("building_type") or "",
-        "room_type": res_dict.get("room_type") or "",
-        "class_make_up": res_dict.get("class_make_up") or "",
-        "rate": res_dict.get("rate") or "",
-        "entrance_info": res_dict.get("entrance_info") or "",
-        "num_res_floors": res_dict.get("num_res_floors") or 0,
-        "singles_doubles": res_dict.get("singles_doubles") or "",
-        "bathroom": res_dict.get("bathroom") or "",
-        "laundry": res_dict.get("laundry") or "",
-        "flooring": res_dict.get("flooring") or "",
-        "kitchen": res_dict.get("kitchen") or "",
-        "lounge": res_dict.get("lounge") or "",
-        "cleaning_schedule": res_dict.get("cleaning_schedule") or "",
-        "features": res_dict.get("features") or "",
-        # nullable below this point
-        "bike_storage": res_dict.get("bike_storage") or "",
-        "print_station": res_dict.get("print_station") or "",
-        "fitness_room": res_dict.get("fitness_room") or "",
-        "computer_lab": res_dict.get("computer_lab") or "",
-        "ac": res_dict.get("ac") or False,
-        "piano": res_dict.get("piano") or "",
-        "student_reviews": res_dict.get("student_reviews") or ""
+        "name": "",
+        "street_address": "",
+        "description": "",
+        "residential_area": "",
+        "building_type": "",
+        "room_type": "",
+        "class_make_up": "",
+        "rate": "",
+        "entrance_info": "",
+        "num_res_floors": "",
+        "singles_doubles": "",
+        "bathroom": "",
+        "laundry": "",
+        "flooring": "",
+        "kitchen": "",
+        "lounge": "",
+        "cleaning_schedule": "",
+        "features": "",
+        "bike_storage": "",
+        "print_station": "",
+        "fitness_room": "",
+        "computer_lab": "",
+        "ac": "",
+        "piano": ""
     }
 
 
@@ -227,36 +300,32 @@ def get_residence_from_dict(res_dict):
         res_dict: dictionary with some or all of the required fields
     """
     return Residence(
-        name=res_dict.get("name") or "",
-        street_address=res_dict.get("street_address") or "",
-        description=res_dict.get("description") or "",
-        residential_area=res_dict.get("residential_area") or "",
-        building_type=res_dict.get("building_type") or "",
-        room_type=res_dict.get("room_type") or "",
-        class_make_up=res_dict.get("class_make_up") or "",
-        rate=res_dict.get("rate") or "",
-        entrance_info=res_dict.get("entrance_info") or "",
-        num_res_floors=res_dict.get("num_res_floors") or 0,
-        singles_doubles=res_dict.get("singles_doubles") or "",
-        bathroom=res_dict.get("bathroom") or "",
-        laundry=res_dict.get("laundry") or "",
-        flooring=res_dict.get("flooring") or "",
-        kitchen=res_dict.get("kitchen") or "",
-        lounge=res_dict.get("lounge") or "",
-        cleaning_schedule=res_dict.get("cleaning_schedule") or "",
-        features=res_dict.get("features") or "",
-        # nullable below this point
-        bike_storage=res_dict.get("bike_storage") or "",
-        print_station=res_dict.get("print_station") or "",
-        fitness_room=res_dict.get("fitness_room") or "",
-        computer_lab=res_dict.get("computer_lab") or "",
+        name=res_dict.get("name"),
+        street_address=res_dict.get("street_address"),
+        description=res_dict.get("description"),
+        residential_area=res_dict.get("residential_area"),
+        building_type=res_dict.get("building_type"),
+        room_type=res_dict.get("room_type"),
+        class_make_up=res_dict.get("class_make_up"),
+        rate=res_dict.get("rate"),
+        entrance_info=res_dict.get("entrance_info"),
+        num_res_floors=res_dict.get("num_res_floors"),
+        num_singles=res_dict.get("num_singles"),
+        num_doubles=res_dict.get("num_doubles"),
+        bathroom=res_dict.get("bathroom"),
+        laundry=res_dict.get("laundry"),
+        flooring=res_dict.get("flooring"),
+        kitchen=res_dict.get("kitchen"),
+        lounge=res_dict.get("lounge"),
+        cleaning_schedule=res_dict.get("cleaning_schedule"),
+        features=res_dict.get("features"),
+        bike_storage=res_dict.get("bike_storage"),
+        print_station=res_dict.get("print_station"),
+        fitness_room=res_dict.get("fitness_room"),
+        computer_lab=res_dict.get("computer_lab"),
         ac=res_dict.get("ac") or False,
-        piano=res_dict.get("piano") or "",
-        student_reviews=res_dict.get("student_reviews") or ""
+        piano=res_dict.get("piano"),
     )
-
-
-printable = set(string.printable)
 
 
 def tag_text(tag):
@@ -270,13 +339,22 @@ def tag_text(tag):
     text = text.replace("\n", "") \
         .replace("\u00a0", " ") \
         .replace("\u2019", "'") \
-        .replace(", ", "")
-    text = "".join(list(filter(lambda x: x in printable, text)))
+        .replace("\u201c", "\"") \
+        .replace("\u201d", "\"") \
+        .replace("\u2014", "-") \
+        .replace("\u2013", "-") \
+        .replace("\u2026", "...") \
+        .replace("\"\"", "\", \"")
+    if text[-2:] == ", ":
+        text = text[:-2]
 
     return text
 
 
 def parse_field_item(item_list):
+    """
+    Returns a list of strings from a field item
+    """
     field_details = []
     items = item_list.find_all(class_="field-item")
     for item in items:
