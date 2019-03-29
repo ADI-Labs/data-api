@@ -1,5 +1,5 @@
 from app import create_app, db, mail
-from app.models import Course, Dining, Student, User
+from app.models import Course, Dining, Student, User, Residence
 # from app.helpers import get_courses
 # from app.scraping import upload_to_db_from_file, get_students, 
 from app.res_scraping import get_residences
@@ -22,6 +22,7 @@ def make_shell_context():
                 mail=mail,
                 Student=Student,
                 Course=Course,
+                Residence=Residence,
                 Dining=Dining,
                 )
 
