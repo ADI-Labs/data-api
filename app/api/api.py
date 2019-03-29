@@ -236,8 +236,13 @@ class Residences(Resource):
 
         for k in args.keys():
             if args[k] is not None:
-                final_args[k] = args[k]
-
+                if args[k].lower() == "false":
+                    final_args[k] = False
+                elif args[k].lower() == "true":
+                    final_args[k] = True
+                else:
+                    final_args[k] = args[k]
+                print(final_args[k])
         return final_args
 
     def get(self, typ):
@@ -301,6 +306,7 @@ class Residences(Resource):
             # will return processed arguments, if there is an incorrect
             # argument then it will return the first incorrect argument
             args = Residences.process_args(args)
+            print(args)
             if isinstance(args, str):
                 abort(
                     400,
@@ -324,7 +330,15 @@ class Residences(Resource):
 
                 elif typ == 'search':
                     # for search api, use filter through db
-                    result = Residence.query.filter_by(**args).all()
+                    result = Residence.query
+                    for key, val in args.items():
+                        col = getattr(Residence, key)
+                        if type(val) == str:
+                            s = "%" + val + "%"
+                            result = result.filter(col.like(s))
+                        else:
+                            result = result.filter(col == val)
+                    result = result.all()
                     if not result:
                         abort(404, status=404,
                               message=f'No residence with {args}')
