@@ -109,7 +109,8 @@ unchanged_fields = [
     "entrance_info",
     "flooring",
     "features",
-    "cleaning_schedule"
+    "cleaning_schedule",
+    "lounge"
 ]
 
 boolean_fields = [
