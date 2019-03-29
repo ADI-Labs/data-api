@@ -105,7 +105,6 @@ unchanged_fields = [
     "street_address",
     "residential_area",
     "description",
-    "class_make_up",
     "rate",
     "entrance_info",
     "flooring",
@@ -137,6 +136,10 @@ def standardize_residence(raw_json):
             db_entry[field] = False if negated else True
         else:
             db_entry[field] = False
+
+    # class make up, set "First-Year" to "Freshmen"
+    class_str = raw_json["class_make_up"].replace("First-Year", "Freshmen")
+    db_entry["class_make_up"] = class_str
 
     # building type, options are suite, apartement, or corridor style
     if "suite" in raw_json["building_type"].lower():
@@ -209,7 +212,7 @@ def standardize_residence(raw_json):
             elif "per apartment" in kitchen_details[1].lower():
                 db_entry["kitchen"] += ", per apartment"
             else:
-                db_entry["kitchen"] += kitchen_details[1]
+                db_entry["kitchen"] += ", " + kitchen_details[1]
     else:  # hard code John Jay
         db_entry["kitchen"] = "Not available"
 
