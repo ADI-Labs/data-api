@@ -9,6 +9,7 @@ api = Api(api_bp)
 def remove_hidden_attr(d):
     return {key: value for key, value in d.items() if key[0] != '_'}
 
+
 class Courses(Resource):
     def process_args(args):
         final_args = {}
