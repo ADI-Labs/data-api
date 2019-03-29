@@ -34,7 +34,7 @@ def get_residences():
         print("Creating database")
         db.create_all()
 
-    # collate_data(residences_list)  # here just for data analysis
+    collate_data(residences_list)  # here just for data analysis
     print("Uploading residences to database")
     upload_residences_to_db(residences_list)
 
