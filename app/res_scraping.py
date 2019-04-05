@@ -53,13 +53,12 @@ def parse_residence_info(browser):
     print("Scraping info for", new_res["name"])
 
     # skip non-standard housing pages
-    if new_res["name"] in [
+    if new_res["name"] in {
         "FSL Brownstones",
         "Residential Brownstones",
         "SIC Residences"
-    ]:
-        print("Skipping", new_res["name"])
-        return None
+    }:
+        return parse_nonstandard_residence_info(browser)
 
     new_res["street_address"] = tag_text(browser.find(class_="dotted-title"))
 
@@ -94,8 +93,23 @@ def parse_residence_info(browser):
         if field in class_for_fields:
             new_res[field] = parse_tag(browser, class_for_fields[field])
 
+    # add _expand_category tag for standard residences
+    new_res["_expand_category"] = "expand group"
+
     formatted_residence = standardize_residence(new_res)
     return formatted_residence
+
+
+def parse_nonstandard_residence_info(browser):
+    """
+    Parses a residence object from the data on the current browser page
+    Handles FSL and Residential Brownstones, SIC housing
+    Returns a dictionary of the residence json
+
+    Parameters:
+        browser: Robobrowser currently on residence page
+    """
+    return None
 
 
 # fields that don't require any modification / cleaning
@@ -110,7 +124,8 @@ unchanged_fields = [
     "flooring",
     "features",
     "cleaning_schedule",
-    "lounge"
+    "lounge",
+    "_expand_category"
 ]
 
 boolean_fields = [
@@ -233,7 +248,12 @@ def collate_data(res_list):
     Collates data by field and prints to console
     """
     data_entries = defaultdict(list)
-    for res in res_list:
+    filtered = [i for i in res_list if i in [
+        "FSL Brownstones",
+        "Residential Brownstones",
+        "SIC Residences"
+    ]]
+    for res in filtered:
         for field in res:
             data_entries[field].append(res[field])
 
@@ -257,7 +277,11 @@ def upload_residences_to_db(res_list):
         existing_res = Residence.query.get(new_res.name)
         if existing_res:
             # check for differences objects and then update
-            existing_res = check_differences(existing_res, new_res)
+            existing_res = check_differences(
+                existing_res,
+                new_res,
+                persisted_hidden_attributes=["_expand_category"]
+            )
         else:
             db.session.add(new_res)
     db.session.commit()
@@ -269,6 +293,7 @@ def get_new_residence():
     Fields correspond to raw fields from housing website
     """
     return {
+        "_expand_category": "",
         "name": "",
         "street_address": "",
         "description": "",
@@ -304,6 +329,7 @@ def get_residence_from_dict(res_dict):
         res_dict: dictionary with some or all of the required fields
     """
     return Residence(
+        _expand_category=res_dict.get("_expand_category"),
         name=res_dict.get("name"),
         street_address=res_dict.get("street_address"),
         description=res_dict.get("description"),
