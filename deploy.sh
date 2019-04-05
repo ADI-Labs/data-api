@@ -3,6 +3,6 @@ set +ex
 
 docker build --tag data-api .
 docker run --detach \
-    --net=host -api \
+    --net=host \
     --restart=always \
     --name data-api data-api
