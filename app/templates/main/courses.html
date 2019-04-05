@@ -66,7 +66,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Term:</label>
                             <div class="col-sm-10">
-                                <input class="form-control" id="inputTerm" type="text" value="20182">
+                                <input class="form-control" id="inputTerm" type="text" value="20192">
                             </div>
                         </div>
                         <div class="form-group">
@@ -78,28 +78,27 @@
                         </div>           
                     </div>          
                     <h3>Response</h3>
-                    <div>
-                            <pre class="text-success prettyprint lang=js" id="selectResponseBlock">
+                    <div id = "selectResponseBlock">
+                            <pre class="text-success" prettyprint lang=js>
                                 {
                                     &quot;status_code&quot;: 200,
                                     &quot;data&quot;: [
-                                        { \
+                                        {
                                             &quot;approval&quot;: &quot;&quot;,
                                             &quot;bulletin_flags&quot;: &quot;CEFKGRUXI&quot;,
-                                            &quot;call_number&quot;: 68108,
+                                            &quot;call_number&quot;: 11307,
                                             &quot;campus_code&quot;: &quot;MORN&quot;,
                                             &quot;campus_name&quot;: &quot;MORNINGSIDE&quot;,
                                             &quot;class_notes&quot;: &quot;&quot;,
                                             &quot;course_id&quot;: &quot;COMS3134S001&quot;,
                                             &quot;course_name&quot;: &quot;DATA STRUCTURES IN JAVA&quot;,
-                                            &quot;credit_amount&quot;: &quot;null&quot;,
                                             &quot;division_code&quot;: &quot;SS&quot;,
-                                            &quot;instructor_name&quot;: &quot;BLAER, PAUL &quot;,
+                                            &quot;instructor_name&quot;: &quot;BLAER, PAUL S&quot;,
                                             &quot;max_size&quot;: 999,
-                                            &quot;meeting_times&quot;: &quot;null&quot;,
-                                            &quot;min_units&quot;: 0,
-                                            &quot;num_enrolled&quot;: 68,
-                                            &quot;num_fixed_units&quot;: 30,
+                                            &quot;meeting_times&quot;: &quot;MW     05:30P-08:40PBTBA            RTBA&quot;,
+                                            &quot;min_units&quot;: 000,
+                                            &quot;num_enrolled&quot;: ,
+                                            &quot;num_fixed_units&quot;: 030,
                                             &quot;prefix_long_name&quot;: &quot;COMPUTER SCIENCE&quot;,
                                             &quot;prefix_name&quot;: &quot;COMPUT SCI&quot;,
                                             &quot;school_code&quot;: &quot;SPEC&quot;,
@@ -139,7 +138,7 @@
                                 <input class="form-control" id="inputKey2" type="text">
                             </div>
                         </div>
-                        <div class="form-group" id="fieldToAdd">
+                        <div class="form-group" id = "fieldToAdd">
                             <div class="col-sm-2">
                                 <select class="form-control selectionQuery" id="inputParameter" value="course_name">
                                     <option value="course_id">course_id</option>
@@ -148,7 +147,6 @@
                                     <option value="course_name" selected="selected">course_name</option>
                                     <option value="bulletin_flags">bulletin_flags</option>
                                     <option value="division_code">division_code</option>
-                                    <option value="credit_amount">credit_amount</option>
                                     <option value="prefix_name">prefix_name</option>
                                     <option value="prefix_long_name">prefix_long_name</option>
                                     <option value="instructor_name">instructor_name</option>
@@ -185,23 +183,22 @@
                                     {
                                         &quot;status_code&quot;: 200,
                                         &quot;data&quot;: [
-                                            { \
+                                            {
                                                 &quot;approval&quot;: &quot;&quot;,
                                                 &quot;bulletin_flags&quot;: &quot;CEFKGRUXI&quot;,
-                                                &quot;call_number&quot;: 68108,
+                                                &quot;call_number&quot;: 11307,
                                                 &quot;campus_code&quot;: &quot;MORN&quot;,
                                                 &quot;campus_name&quot;: &quot;MORNINGSIDE&quot;,
                                                 &quot;class_notes&quot;: &quot;&quot;,
                                                 &quot;course_id&quot;: &quot;COMS3134S001&quot;,
                                                 &quot;course_name&quot;: &quot;DATA STRUCTURES IN JAVA&quot;,
-                                                &quot;credit_amount&quot;: &quot;null&quot;,
                                                 &quot;division_code&quot;: &quot;SS&quot;,
-                                                &quot;instructor_name&quot;: &quot;BLAER, PAUL &quot;,
+                                                &quot;instructor_name&quot;: &quot;BLAER, PAUL S&quot;,
                                                 &quot;max_size&quot;: 999,
-                                                &quot;meeting_times&quot;: &quot;null&quot;,
-                                                &quot;min_units&quot;: 0,
-                                                &quot;num_enrolled&quot;: 68,
-                                                &quot;num_fixed_units&quot;: 30,
+                                                &quot;meeting_times&quot;: &quot;MW     05:30P-08:40PBTBA            RTBA&quot;,
+                                                &quot;min_units&quot;: 000,
+                                                &quot;num_enrolled&quot;: ,
+                                                &quot;num_fixed_units&quot;: 030,
                                                 &quot;prefix_long_name&quot;: &quot;COMPUTER SCIENCE&quot;,
                                                 &quot;prefix_name&quot;: &quot;COMPUT SCI&quot;,
                                                 &quot;school_code&quot;: &quot;SPEC&quot;,
@@ -259,26 +256,22 @@
         </div>
      
         <script>
-
+            var count = 0
             function addField(){
-                var currentDiv = document.getElementById("fieldToAdd")
                 var code = '<div><br><br>\
                                 <div class="col-sm-2">\
                                     <select class="form-control selectionQuery" id="inputParameter" value="course_name">\
                                         <option value="course_id">course_id</option>\
                                         <option value="term">term</option>\
-                                        <option value="call_number">call_number</option>\
-                                        <option value="course_name" selected="selected">course_name</option>\
+                                        <option value="call_number">call_number</option>\                                        <option value="course_name" selected="selected">course_name</option>\
                                         <option value="bulletin_flags">bulletin_flags</option>\
                                         <option value="division_code">division_code</option>\
-                                        <option value="credit_amount">credit_amount</option>\
                                         <option value="prefix_name">prefix_name</option>\
                                         <option value="prefix_long_name">prefix_long_name</option>\
                                         <option value="instructor_name">instructor_name</option>\
                                         <option value="approval">approval</option>\
                                         <option value="school_code">school_code</option>\
-                                        <option value="school_name">school_name</option>\
-                                        <option value="campus_code">campus_code</option>\
+                                        <option value="school_name">school_name</option>\                                        <option value="campus_code">campus_code</option>\
                                         <option value="campus_name">campus_name</option>\
                                         <option value="type_code">type_code</option>\
                                         <option value="type_name">type_name</option>\
@@ -297,9 +290,7 @@
                                     <button type="button" class="btn btn-warning deletion" onclick="deleteField(this)">X</button>\
                                 </div>\
                             </div>'
-                oldContent = currentDiv.innerHTML
-                newContent = oldContent + code
-                document.getElementById("fieldToAdd").innerHTML = newContent
+                document.getElementById("fieldToAdd").innerHTML += code
             }
 
             function deleteField(button) {
@@ -307,15 +298,48 @@
             }
 
             function queryFunction(endpoint) {
-     
                 var req = endpoint + "Request";
                 var resp = endpoint + "ResponseBlock";
-     
+                var count = 1
                 var apiCall = new XMLHttpRequest();
                 apiCall.onreadystatechange = function() {
                     document.getElementById(req).innerHTML = apiRequest;
-                    if (apiCall.readyState == XMLHttpRequest.DONE && this.status == 200) { 
-                        document.getElementById(resp).innerHTML = apiCall.responseText;
+                    if (apiCall.readyState == XMLHttpRequest.DONE && this.status == 200) {
+                        var obj = JSON.parse(apiCall.responseText)
+                        var data = obj.data
+                        var temp_text = "<pre class='text-success' prettyprint lang=js>\n\
+                                {\n\
+                                    &quot;status_code&quot;: " + obj.status + ",\n\
+                                    &quot;data&quot;: [\n\
+                                        { \n\
+                                            &quot;approval&quot;: &quot;" +data.approval+ "&quot;,\n\
+                                            &quot;bulletin_flags&quot;: &quot;" + data.bulletin_flags + "&quot;,\n\
+                                            &quot;call_number&quot;: " +data.call_number+ ",\n\
+                                            &quot;campus_code&quot;: &quot;" +data.campus_code+ "&quot;,\n\
+                                            &quot;campus_name&quot;: &quot;" +data.campus_name+ "&quot;,\n\
+                                            &quot;class_notes&quot;: &quot;" +data.class_notes+ "&quot;,\n\
+                                            &quot;course_id&quot;: &quot;" +data.course_id+ "&quot;,\n\
+                                            &quot;course_name&quot;: &quot;" +data.course_name+ "&quot;,\n\
+                                            &quot;division_code&quot;: &quot;" +data.division_code+ "&quot;,\n\
+                                            &quot;instructor_name&quot;: &quot;" +data.instructor_name+ "&quot;,\n\
+                                            &quot;max_size&quot;: " +data.max_size+ ",\n\
+                                            &quot;meeting_times&quot;: &quot;" +data.meeting_times+ "&quot;,\n\
+                                            &quot;min_units&quot;: " +data.min_units+ ",\n\
+                                            &quot;num_enrolled&quot;: " +data.num_enrolled+ ",\n\
+                                            &quot;num_fixed_units&quot;: " +data.num_fixed_units+ ",\n\
+                                            &quot;prefix_long_name&quot;: &quot;" +data.prefix_long_name+ "&quot;,\n\
+                                            &quot;prefix_name&quot;: &quot;" +data.prefix_name+ "&quot;,\n\
+                                            &quot;school_code&quot;: &quot;" +data.school_code+ "&quot;,\n\
+                                            &quot;school_name&quot;: &quot;" +data.school_name+ "&quot;,\n\
+                                            &quot;term&quot;: &quot;" +data.term+ "&quot;,\n\
+                                            &quot;type_code&quot;: &quot;" +data.type_code+ "&quot;,\n\
+                                            &quot;type_name&quot;: &quot;" +data.type_name+ "&quot;\n\
+                                        }\n\
+                                    ],\n\
+                                    &quot;status_txt&quot;: &quot;OK&quot;\n\
+                                }\n\
+                            </pre>"
+                        document.getElementById(resp).innerHTML = temp_text;
                         document.getElementById(resp).style.color = "green";
                     } else {
                         var responseObj = JSON.parse(this.response);
