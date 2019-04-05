@@ -159,7 +159,7 @@ def parse_nonstandard_residence_info(browser):
     residences.append(formatted_residence)
 
     # get address and name tuples for specific buildings under group
-    expanded_residences = []
+    expanded_residences = parse_non_standard_addresses(browser)
 
     # create expanded residence json for each specific building
     for res_name, res_add in expanded_residences:
@@ -486,3 +486,32 @@ def parse_tag(browser, class_):
         field_details.extend(parse_field_item(item_lists[0]))
 
     return ", ".join(field_details)
+
+
+def parse_non_standard_addresses(browser):
+    """
+    Parses a list of name, address tuples from the current page
+    """
+    container = browser.find(class_="field-name-field-residence-address")
+    rows = container.find_all("tr")
+
+    residences_name_add = []
+    for row in rows:
+        segments = row.find_all("td")
+        address = tag_text(segments[0])
+        if address == "Address":
+            continue
+        names = segments[1].find_all("div")
+        if len(names) > 0:
+            for name_tag in names:
+                name = tag_text(name_tag)
+                if name == "West Campus":
+                    name = address
+                residences_name_add.append((name, address))
+        else:
+            name = tag_text(segments[1])
+            if name == "West Campus":
+                name = address
+            residences_name_add.append((name, address))
+
+    return residences_name_add
