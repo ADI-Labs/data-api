@@ -233,7 +233,7 @@ class Residences(Resource):
     def process_args(args):
         final_args = {}
         del args['key']
-        if args.get('expand_special', "false").lower() == "true":
+        if args.get('expand_special', "false") in ["true", "True"]:
             final_args["_expand_category"] = "expand"
         else:
             final_args["_expand_category"] = "group"
