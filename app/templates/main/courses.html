@@ -41,7 +41,7 @@
        <div class="panel panel-default endpoint-select" >
            <div class="panel-heading" data-toggle="collapse" data-target="#select_panel"><h4>Select</h4></div>
            <div class="panel-body">
-               <div class="container">
+               <div class="container-fluid">
                    <div class="row">
                        <span class="label label-primary col-1">GET</span>
                        <span class="panel-text col-11" id="selectRequest">/api/courses/select?course_id=course_id&term=term&key=key</span>
@@ -120,7 +120,7 @@
        <div class="panel panel-default endpoint-search" >
            <div class="panel-heading" data-toggle="collapse" data-target="#search_panel"><h4>Search</h4></div>
            <div class="panel-body">
-               <div class="container">
+               <div class="container-fluid">
                    <div class="row">
                        <span class="label label-primary col-1">GET</span>
                        <span class="panel-text col-11" id="searchRequest">/api/courses/search?course_name=course_name&key=key</span>
@@ -256,14 +256,15 @@
        </div>
    
        <script>
-           var count = 0
+           var count = 1
            function addField(){
                var code = '<div><br><br>\
                                <div class="col-sm-2">\
-                                   <select class="form-control selectionQuery" id="inputParameter" value="course_name">\
+                                   <select class="form-control selectionQuery" id="field' + count.toString()+ '"value="course_name">\
                                        <option value="course_id">course_id</option>\
                                        <option value="term">term</option>\
-                                       <option value="call_number">call_number</option>\                                       <option value="course_name" selected="selected">course_name</option>\
+                                       <option value="call_number">call_number</option>\
+                                       <option value="course_name" selected="selected">course_name</option>\
                                        <option value="bulletin_flags">bulletin_flags</option>\
                                        <option value="division_code">division_code</option>\
                                        <option value="prefix_name">prefix_name</option>\
@@ -271,7 +272,8 @@
                                        <option value="instructor_name">instructor_name</option>\
                                        <option value="approval">approval</option>\
                                        <option value="school_code">school_code</option>\
-                                       <option value="school_name">school_name</option>\                                       <option value="campus_code">campus_code</option>\
+                                       <option value="school_name">school_name</option>\
+                                       <option value="campus_code">campus_code</option>\
                                        <option value="campus_name">campus_name</option>\
                                        <option value="type_code">type_code</option>\
                                        <option value="type_name">type_name</option>\
@@ -284,13 +286,14 @@
                                    </select>\
                                </div>' +           
                                '<div class="col-sm-9">\
-                                   <input class="form-control" id="inputParameterValue" type="text" value="DATA%20STRUCTURES%20IN%20JAVA">\
+                                   <input class="form-control" id="value'+count.toString()+'" type="text" value="DATA%20STRUCTURES%20IN%20JAVA">\
                                </div>' +
                                '<div class="col-sm-1">\
                                    <button type="button" class="btn btn-warning deletion" onclick="deleteField(this)">X</button>\
                                </div>\
                            </div>'
                document.getElementById("fieldToAdd").innerHTML += code
+               count++
            }
 
            function deleteField(button) {
@@ -300,13 +303,12 @@
            function queryFunction(endpoint) {
                var req = endpoint + "Request";
                var resp = endpoint + "ResponseBlock";
-               var count = 1;
+               
                var apiCall = new XMLHttpRequest();
                apiCall.onreadystatechange = function() {
                    document.getElementById(req).innerHTML = apiRequest;
                    if (apiCall.readyState == XMLHttpRequest.DONE && this.status == 200) {
                        var obj = JSON.parse(apiCall.responseText);
-                       console.log(obj)
 
                        // if we have endpoint = select, the data is returned as a dict
                        // if we have endpoint = search, the data is returned as array of dicts
@@ -318,7 +320,6 @@
                        if (endpoint == "search"){
                            totalData=obj.data
                        }
-                       console.log(totalData)
 
                        var result = ""
                        for (i=0; i<totalData.length;i++){
@@ -366,7 +367,7 @@
                    }
                }
                if (endpoint == "select") {
-                   apiRequest = "http://127.0.0.1:5000/api/courses/select?course_id="
+                    apiRequest = "http://127.0.0.1:5000/api/courses/select?course_id="
                                        + document.getElementById("inputCourseID").value
                                        + "&term="
                                        + document.getElementById("inputTerm").value
@@ -374,12 +375,18 @@
                                        + document.getElementById("inputKey1").value;
                }
                else if (endpoint == "search") {
-                   apiRequest = "http://127.0.0.1:5000/api/courses/search?"
+                    apiRequest = "http://127.0.0.1:5000/api/courses/search?"
                                        + document.getElementById("inputParameter").value
                                        + "="
-                                       + document.getElementById("inputParameterValue").value
-                                       + "&key="
-                                       + document.getElementById("inputKey2").value;
+                                       + document.getElementById("inputParameterValue").value;
+                    for (i = 1; i < count; i++){
+                        option_id = "field" + i.toString()
+                        val_id = "value" + i.toString()
+                        element = document.getElementById(option_id).value
+                        value = document.getElementById(val_id).value
+                        apiRequest = apiRequest+"&"+element+"="+value;
+                    }
+                    apiRequest=apiRequest+"&key="+document.getElementById("inputKey2").value
                } 
                apiCall.open("GET", apiRequest);
                apiCall.send();
