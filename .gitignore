@@ -123,3 +123,5 @@ browser_pages/
 
 #environment
 .vscode/
+
+config_keys.json

@@ -164,6 +164,7 @@ class Teacher(db.Model):
 
 class Residence(db.Model):
     __tablename__ = 'residences'
+    _expand_category = db.Column(db.String(16), nullable=True)
     name = db.Column(db.String(64), nullable=True, primary_key=True)
     street_address = db.Column(db.String(128), nullable=True)
     residential_area = db.Column(db.String(32), nullable=True)

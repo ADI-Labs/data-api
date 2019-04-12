@@ -233,6 +233,12 @@ class Residences(Resource):
     def process_args(args):
         final_args = {}
         del args['key']
+        if args.get('expand_special', "false") in ["true", "True"]:
+            final_args["_expand_category"] = "expand"
+        else:
+            final_args["_expand_category"] = "group"
+        if args.get('expand_special'):
+            del args['expand_special']
 
         for k in args.keys():
             if args[k] is not None:
@@ -242,7 +248,6 @@ class Residences(Resource):
                     final_args[k] = True
                 else:
                     final_args[k] = args[k]
-                print(final_args[k])
         return final_args
 
     def get(self, typ):
@@ -275,6 +280,7 @@ class Residences(Resource):
             parser.add_argument("computer_lab")
             parser.add_argument("ac")
             parser.add_argument("piano")
+            parser.add_argument("expand_special")
             parser.add_argument("key", required=True,
                                 help="key cannot be blank")
 
@@ -294,7 +300,6 @@ class Residences(Resource):
             # will return processed arguments, if there is an incorrect
             # argument then it will return the first incorrect argument
             args = Residences.process_args(args)
-            print(args)
             if isinstance(args, str):
                 abort(
                     400,
@@ -332,6 +337,7 @@ class Residences(Resource):
                               message=f'No residence with {args}')
 
                     else:
+                        print(result)
                         datum['data'] = [
                             remove_hidden_attr(
                                 i.__dict__) for i in result]
