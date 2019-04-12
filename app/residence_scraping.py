@@ -156,9 +156,12 @@ def parse_nonstandard_residence_info(browser):
     formatted_residence["street_address"] = "Varies"
     formatted_residence["building_type"] = "Special, " + \
         formatted_residence["building_type"]
+
+    print(formatted_residence)
+    print("")
     residences.append(formatted_residence)
 
-    # get address and name tuples for specific buildings under group
+    #  get address and name tuples for specific buildings under group
     expanded_residences = parse_non_standard_addresses(browser)
 
     # create expanded residence json for each specific building
@@ -167,6 +170,8 @@ def parse_nonstandard_residence_info(browser):
         res["name"] = res_name
         res["street_address"] = res_add
         res["_expand_category"] = "expand"
+        print(res)
+        print("")
         residences.append(res)
 
     return residences
@@ -392,34 +397,7 @@ def get_residence_from_dict(res_dict):
     Parameters:
         res_dict: dictionary with some or all of the required fields
     """
-    return Residence(
-        _expand_category=res_dict.get("_expand_category"),
-        name=res_dict.get("name"),
-        street_address=res_dict.get("street_address"),
-        description=res_dict.get("description"),
-        residential_area=res_dict.get("residential_area"),
-        building_type=res_dict.get("building_type"),
-        room_type=res_dict.get("room_type"),
-        class_make_up=res_dict.get("class_make_up"),
-        rate=res_dict.get("rate"),
-        entrance_info=res_dict.get("entrance_info"),
-        num_res_floors=res_dict.get("num_res_floors"),
-        num_singles=res_dict.get("num_singles"),
-        num_doubles=res_dict.get("num_doubles"),
-        bathroom=res_dict.get("bathroom"),
-        laundry=res_dict.get("laundry"),
-        flooring=res_dict.get("flooring"),
-        kitchen=res_dict.get("kitchen"),
-        lounge=res_dict.get("lounge"),
-        cleaning_schedule=res_dict.get("cleaning_schedule"),
-        features=res_dict.get("features"),
-        bike_storage=res_dict.get("bike_storage"),
-        print_station=res_dict.get("print_station"),
-        fitness_room=res_dict.get("fitness_room"),
-        computer_lab=res_dict.get("computer_lab"),
-        ac=res_dict.get("ac") or False,
-        piano=res_dict.get("piano"),
-    )
+    return Residence(**res_dict)
 
 
 def tag_text(tag):
@@ -442,7 +420,7 @@ def tag_text(tag):
     if text[-2:] == ", ":
         text = text[:-2]
 
-    return text
+    return text.strip()
 
 
 def parse_field_item(item_list):
@@ -499,7 +477,7 @@ def parse_non_standard_addresses(browser):
     for row in rows:
         segments = row.find_all("td")
         address = tag_text(segments[0])
-        if address == "Address":
+        if "Address" in address or not address:
             continue
         names = segments[1].find_all("div")
         if len(names) > 0:
@@ -507,11 +485,18 @@ def parse_non_standard_addresses(browser):
                 name = tag_text(name_tag)
                 if name == "West Campus":
                     name = address
-                residences_name_add.append((name, address))
+                if name:
+                    residences_name_add.append((name, address))
         else:
-            name = tag_text(segments[1])
-            if name == "West Campus":
-                name = address
-            residences_name_add.append((name, address))
+            lis = segments[1].find_all("li")
+            if len(lis) > 0:
+                for li in lis:
+                    name = tag_text(li)
+                    residences_name_add.append((name, address))
+            else:
+                name = tag_text(segments[1])
+                if name == "West Campus":
+                    name = address
+                residences_name_add.append((name, address))
 
     return residences_name_add

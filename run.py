@@ -1,8 +1,8 @@
 from app import create_app, db, mail
 from app.models import Course, Dining, Student, User, Residence
-# from app.helpers import get_courses
-# from app.scraping import upload_to_db_from_file, get_students, 
-from app.res_scraping import get_residences
+# from app.courses_scraping import get_courses
+# from app.student_scraping import upload_to_db_from_file, get_students, 
+from app.residence_scraping import get_residences
 import os
 
 app = create_app()

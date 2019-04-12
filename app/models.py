@@ -127,15 +127,6 @@ class Course(db.Model):
         return f'<Course {self.course_id} {self.course_name} {self.term}>'
 
 
-class Dining(db.Model):
-    __tablename__ = 'dining'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64))
-
-    def __repr__(self):
-        return f'<Dining {self.name}>'
-
-
 class Student(db.Model):
     __tablename__ = 'students'
     name = db.Column(db.String(64), nullable=False)
@@ -151,15 +142,6 @@ class Student(db.Model):
 
     def __repr__(self):
         return f'<Student {self.uni}>'
-
-
-class Teacher(db.Model):
-    __tablename__ = 'teachers'
-    name = db.Column(db.String(100))
-    uni = db.Column(db.String(7), primary_key=True)
-
-    def __repr__(self):
-        return f'<Teacher {self.name}>'
 
 
 class Residence(db.Model):
@@ -193,3 +175,26 @@ class Residence(db.Model):
 
     def __repr__(self):
         return f'<Residence {self.name}>'
+
+
+"""
+    Currently unused models
+"""
+
+
+class Teacher(db.Model):
+    __tablename__ = 'teachers'
+    name = db.Column(db.String(100))
+    uni = db.Column(db.String(7), primary_key=True)
+
+    def __repr__(self):
+        return f'<Teacher {self.name}>'
+
+
+class Dining(db.Model):
+    __tablename__ = 'dining'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64))
+
+    def __repr__(self):
+        return f'<Dining {self.name}>'
