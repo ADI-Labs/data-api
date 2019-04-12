@@ -42,6 +42,7 @@ body, html {
 
 .panel-text {
     padding-left: 20px;
+    overflow-wrap: break-word;
 }
 
 .query-panelbody {

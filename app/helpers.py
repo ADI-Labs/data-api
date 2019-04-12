@@ -135,9 +135,15 @@ def parse_and_store(path):
     print("database up to date")
 
 
-def check_differences(existing_course, new_course):
-    existing_data = remove_hidden_attr(existing_course.__dict__)
-    new_data = remove_hidden_attr(new_course.__dict__)
+def check_differences(existing_item, new_item, persisted_hidden_attributes=[]):
+    existing_data = remove_hidden_attr(existing_item.__dict__)
+    new_data = remove_hidden_attr(new_item.__dict__)
+
+    # allow for user set hidden attributes
+    if len(persisted_hidden_attributes) > 0:
+        for att in persisted_hidden_attributes:
+            existing_data[att] = existing_item.__dict__[att]
+            new_data[att] = new_item.__dict__[att]
 
     # for each parameter
     for key in existing_data.keys():
@@ -145,11 +151,11 @@ def check_differences(existing_course, new_course):
         if existing_data[key] != new_data[key]:
             print(
                 'updating ',
-                existing_course,
+                existing_item,
                 key,
                 existing_data[key],
                 '->',
                 new_data[key])
-            setattr(existing_course, key, new_data[key])
+            setattr(existing_item, key, new_data[key])
 
     db.session.flush()
