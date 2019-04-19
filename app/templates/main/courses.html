@@ -16,6 +16,7 @@
                <input class="btn" name="submit" type="submit" value='Search' />
            </div>
        </form>
+       <!-- results of search displayed, authentication still needs to be implemented -->
        {% if results != [] %}
        <table class="table-striped table-bordered center-block" padding width="90%">
            {% for item in results %}
@@ -140,6 +141,7 @@
                        </div>
                        <div class="form-group" id = "fieldToAdd">
                            <div class="col-sm-2">
+                               <!-- scroll bar to select type of search -->
                                <select class="form-control selectionQuery" id="inputParameter" value="course_name">
                                    <option value="course_id">course_id</option>
                                    <option value="term">term</option>
@@ -257,6 +259,7 @@
    
        <script>
            var count = 1
+           // function to add new field when "ADD FIELD" is pressed   
            function addField(){
                var code = '<div><br><br>\
                                <div class="col-sm-2">\
@@ -296,10 +299,12 @@
                count++
            }
 
+           // deletes field when "X" is pressed
            function deleteField(button) {
                $(button).parent().parent().remove();
            }
 
+           // returns queried data in JSON format for both "SELECT" and "SEARCH"
            function queryFunction(endpoint) {
                var req = endpoint + "Request";
                var resp = endpoint + "ResponseBlock";
@@ -310,9 +315,9 @@
                    if (apiCall.readyState == XMLHttpRequest.DONE && this.status == 200) {
                        var obj = JSON.parse(apiCall.responseText);
 
-                       // if we have endpoint = select, the data is returned as a dict
-                       // if we have endpoint = search, the data is returned as array of dicts
-                       // to uniformize the data, I am putting both cases in an array of dicts
+                       // if we have endpoint = "select", the data is returned as a dict
+                       // if we have endpoint = "search", the data is returned as array of dicts
+                       // to uniformize the data, I store results in array of dicts, no matter which endpoint
                        totalData =[]
                        if (endpoint == "select"){
                            totalData[0]=obj.data
@@ -322,8 +327,12 @@
                        }
 
                        var result = ""
+                       // each possible result in array of dicts is printed in JSON form
+                       // for endpoint = select, only one JSON block is printed (array has length 1)
+                       // for endpoint = search, 
                        for (i=0; i<totalData.length;i++){
                            data = totalData[i]
+                           // text to be inserted into HTML block
                            var temp_text = "<pre class='text-success' prettyprint lang=js>\n\
                                {\n\
                                    &quot;status_code&quot;: 200,\n\
@@ -366,6 +375,8 @@
                        document.getElementById(resp).style.color = "red";
                    }
                }
+
+               // returns single JSON block for "SELECT"
                if (endpoint == "select") {
                     apiRequest = "http://127.0.0.1:5000/api/courses/select?course_id="
                                        + document.getElementById("inputCourseID").value
@@ -374,6 +385,8 @@
                                        + "&key="
                                        + document.getElementById("inputKey1").value;
                }
+
+               // returns at least one JSON block (if exists multiple results) for "SEARCH"
                else if (endpoint == "search") {
                     apiRequest = "http://127.0.0.1:5000/api/courses/search?"
                                        + document.getElementById("inputParameter").value
