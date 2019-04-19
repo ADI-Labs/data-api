@@ -16,22 +16,28 @@
                <input class="btn" name="submit" type="submit" value='Search' />
            </div>
        </form>
-       {% if results != [] %}
-       <table class="table-striped table-bordered center-block" padding width="90%">
-           {% for item in results %}
-               <tr width="100%">
-                   <td >
-                       {{ item["name"] }}
-                   </td>
-                   <td >
-                       {{ item["course_id"] }}
-                   </td>
-                   <td >
-                       {{ item["term"] }}
-                   </td>
-               </tr>
-           {% endfor %}
-       </table>
+       <!-- results of search displayed if user is authenticated, otherwise error message -->
+       {% if current_user.is_authenticated %}
+            {% if results != [] %}
+            <table class="table-striped table-bordered center-block" padding width="90%">
+                {% for item in results %}
+                    <tr width="100%">
+                        <td >
+                            {{ item["name"] }}
+                        </td>
+                        <td >
+                            {{ item["course_id"] }}
+                        </td>
+                        <td >
+                            {{ item["term"] }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+            {% endif %}
+       {% endif %}
+       {% if not current_user.is_authenticated %}
+            <br><p style="color: red">*Must sign in to use search function</p>
        {% endif %}
    
        <br>
@@ -116,7 +122,6 @@
            </div>
        </div>
      
-   
        <div class="panel panel-default endpoint-search" >
            <div class="panel-heading" data-toggle="collapse" data-target="#search_panel"><h4>Search</h4></div>
            <div class="panel-body">
@@ -140,6 +145,7 @@
                        </div>
                        <div class="form-group" id = "fieldToAdd">
                            <div class="col-sm-2">
+                               <!-- scroll bar to select type of search -->
                                <select class="form-control selectionQuery" id="inputParameter" value="course_name">
                                    <option value="course_id">course_id</option>
                                    <option value="term">term</option>
@@ -178,7 +184,7 @@
                        </div>
                    </div>         
                    <h3>Response</h3>
-                   <div id="searchResponseBlock">
+                   <div id="searchResponseBlock" class = "searchResponseBlock">
                        <pre class="text-success prettyprint lang=js">
                                {
                                    &quot;status_code&quot;: 200,
@@ -257,6 +263,7 @@
    
        <script>
            var count = 1
+           // function to add new field when "ADD FIELD" is pressed   
            function addField(){
                var code = '<div><br><br>\
                                <div class="col-sm-2">\
@@ -296,10 +303,12 @@
                count++
            }
 
+           // deletes field when "X" is pressed
            function deleteField(button) {
                $(button).parent().parent().remove();
            }
 
+           // returns queried data in JSON format for both "SELECT" and "SEARCH"
            function queryFunction(endpoint) {
                var req = endpoint + "Request";
                var resp = endpoint + "ResponseBlock";
@@ -310,9 +319,9 @@
                    if (apiCall.readyState == XMLHttpRequest.DONE && this.status == 200) {
                        var obj = JSON.parse(apiCall.responseText);
 
-                       // if we have endpoint = select, the data is returned as a dict
-                       // if we have endpoint = search, the data is returned as array of dicts
-                       // to uniformize the data, I am putting both cases in an array of dicts
+                       // if we have endpoint = "select", the data is returned as a dict
+                       // if we have endpoint = "search", the data is returned as array of dicts
+                       // to uniformize the data, I store results in array of dicts, no matter which endpoint
                        totalData =[]
                        if (endpoint == "select"){
                            totalData[0]=obj.data
@@ -322,8 +331,12 @@
                        }
 
                        var result = ""
+                       // each possible result in array of dicts is printed in JSON form
+                       // for endpoint = select, only one JSON block is printed (array has length 1)
+                       // for endpoint = search, 
                        for (i=0; i<totalData.length;i++){
                            data = totalData[i]
+                           // text to be inserted into HTML block
                            var temp_text = "<pre class='text-success' prettyprint lang=js>\n\
                                {\n\
                                    &quot;status_code&quot;: 200,\n\
@@ -358,14 +371,25 @@
                            </pre>"
                            result+=temp_text
                        }
-                       document.getElementById(resp).innerHTML = result;
-                       document.getElementById(resp).style.color = "green";
+                       // sets height at 600px and makes response scrollable
+                       var respElement = document.getElementById(resp)
+                       respElement.classList.add("searchResponseBlock")
+                       respElement.innerHTML = result;
+                       respElement.style.color = "green";
+
+                   // if key is incorrect
                    } else {
+                       // sets height at 100%, preventing large+empty response block
                        var responseObj = JSON.parse(this.response);
-                       document.getElementById(resp).innerHTML = "ERROR " + this.status + ": " + responseObj.message;
-                       document.getElementById(resp).style.color = "red";
+                       var respElement = document.getElementById(resp)
+                       respElement.classList.remove("searchResponseBlock")
+                       respElement.innerHTML = "ERROR " + this.status + ": " + responseObj.message;
+                       respElement.style.color = "red";
+                       respElement.classList.add("nopadding")
                    }
                }
+
+               // returns single JSON block for "SELECT"
                if (endpoint == "select") {
                     apiRequest = "http://127.0.0.1:5000/api/courses/select?course_id="
                                        + document.getElementById("inputCourseID").value
@@ -374,6 +398,8 @@
                                        + "&key="
                                        + document.getElementById("inputKey1").value;
                }
+
+               // returns at least one JSON block (if exists multiple results) for "SEARCH"
                else if (endpoint == "search") {
                     apiRequest = "http://127.0.0.1:5000/api/courses/search?"
                                        + document.getElementById("inputParameter").value
