@@ -1,25 +1,25 @@
-name, String, nullable=True, primary_key=True)
-street_address, String, nullable=True)
-residential_area, String, nullable=True)
-building_type, String, nullable=True)
-room_type, .String, nullable=True)
-class_make_up, String, nullable=True)
-rate, String, nullable=True)
-entrance_info, String, nullable=True)
-num_res_floors, Integer, nullable=True)
-num_singles, Integer, nullable=True)
-num_doubles, Integer, nullable=True)
-bathroom, String, nullable=True)
-laundry, String, nullable=True)
-flooring, String, nullable=True)
-kitchen, String, nullable=True)
-lounge, String, nullable=True)
-cleaning_schedule, String, nullable=True)
-bike_storage, Boolean, nullable=True)
-print_station, Boolean, nullable=True)
-fitness_room, Boolean, nullable=True)
-computer_lab, Boolean, nullable=True)
-ac, Boolean, nullable=True)
-piano, Boolean, nullable=True)
-description, Text, nullable=True)
-features, Text, nullable=True)
+name, String, Name of the residence hall - primary_key
+street_address, String, Street address of the residence hall
+residential_area, String, Residential area
+building_type, String, building type
+room_type, .String, room type
+class_make_up, String, class make up
+rate, String, rate paid
+entrance_info, String, entrance information
+num_res_floors, Integer, number of floors
+num_singles, Integer, number os singles
+num_doubles, Integer, number of doubles
+bathroom, String, private or shared bathroom with location
+laundry, String, location of laundry room
+flooring, String, carpet or no carpet
+kitchen, String, private or shared with location
+lounge, String, type and location of lounge
+cleaning_schedule, String, cleaning schedule
+bike_storage, Boolean, bike storage
+print_station, Boolean, print station
+fitness_room, Boolean, fitness room
+computer_lab, Boolean, computer lab
+ac, Boolean, ac
+piano, Boolean, piano
+description, Text, description
+features, Text, features

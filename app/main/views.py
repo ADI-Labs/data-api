@@ -83,7 +83,10 @@ def housing():
         term = request.form["searchTerm"]
         search_results = search(term, "Housing")
 
-    return render_template('main/housing.html', results=search_results)
+    return render_template(
+        'main/housing.html',
+        results=search_results,
+        parameters=get_parameters('housing.txt'))
 
 
 @main.route('/dining', methods=['GET', 'POST'])
@@ -105,7 +108,10 @@ def student():
         term = request.form["searchTerm"]
         search_results = search(term, Student)
 
-    return render_template('main/students.html', results=search_results)
+    return render_template(
+        'main/students.html',
+        results=search_results,
+        parameters=get_parameters('students.txt'))
 
 
 @main.route('/auth')
