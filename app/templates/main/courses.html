@@ -122,7 +122,6 @@
            </div>
        </div>
      
-       <!-- *FIX* when key not added, response block is large and empty -->
        <div class="panel panel-default endpoint-search" >
            <div class="panel-heading" data-toggle="collapse" data-target="#search_panel"><h4>Search</h4></div>
            <div class="panel-body">
@@ -185,7 +184,7 @@
                        </div>
                    </div>         
                    <h3>Response</h3>
-                   <div id="searchResponseBlock">
+                   <div id="searchResponseBlock" class = "searchResponseBlock">
                        <pre class="text-success prettyprint lang=js">
                                {
                                    &quot;status_code&quot;: 200,
@@ -372,12 +371,16 @@
                            </pre>"
                            result+=temp_text
                        }
+                       document.getElementById(resp).classList.add("searchResponseBlock")
                        document.getElementById(resp).innerHTML = result;
                        document.getElementById(resp).style.color = "green";
+
                    } else {
                        var responseObj = JSON.parse(this.response);
+                       document.getElementById(resp).classList.remove("searchResponseBlock")
                        document.getElementById(resp).innerHTML = "ERROR " + this.status + ": " + responseObj.message;
                        document.getElementById(resp).style.color = "red";
+                       document.getElementById(resp).classList.add("nopadding")
                    }
                }
 

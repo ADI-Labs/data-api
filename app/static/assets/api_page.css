@@ -73,7 +73,11 @@ body, html {
     vertical-align: middle;
 }
 
-#searchResponseBlock {
+.nopadding{
+    height: 100%;
+}
+
+.searchResponseBlock {
     height: 600px;
     overflow-y: scroll;
     overflow-x:hidden;
