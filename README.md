@@ -8,16 +8,16 @@ In addition to providing an API for available data, DATA@CU aims to perform data
 
 Data@CU’s stack is currently as follows:
 
-- Python 3
-    Python dependencies are managed via Pipenv. Students will be encouraged to use the more modern aspects of the language,       and will be expected to write clean, efficient code.
-- Flask
-    Flask is powerful micro web-framework that makes it easy to get a server-based Python app up and running quickly.
-- SQLite/pysqlite/SQLAlchemy
-    Data is saved and retreived using a SQL(SQLite dialect) database. To interact with the database, we will use SQLAlchemy, a     Python library that makes it easy for programmers to interact with SQL databases.
-- HTML/CSS/JavaScript
-    Data@CU’s information is presented via a website - [data2.adicu.com](data2.adicu.com)
-- TravisCI
-    Project continuous integration managed in collaboration with Github and Slack.
+1. Python 3
+        - Python dependencies are managed via Pipenv. Students will be encouraged to use the more modern aspects of the                 language, and will be expected to write clean, efficient code.
+2. Flask
+        - Flask is powerful micro web-framework that makes it easy to get a server-based Python app up and running quickly.
+3. SQLite/pysqlite/SQLAlchemy
+        - Data is saved and retreived using a SQL(SQLite dialect) database. To interact with the database, we will use                      SQLAlchemy, a     Python library that makes it easy for programmers to interact with SQL databases.
+4. HTML/CSS/JavaScript
+        - Data@CU’s information is presented via a website - [data2.adicu.com](data2.adicu.com)
+5. TravisCI
+        - Project continuous integration managed in collaboration with Github and Slack.
   
 ## Deployment:
 git remote add dokku dokku@208.68.37.106:data-api
