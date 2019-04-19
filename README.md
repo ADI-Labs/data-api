@@ -24,7 +24,7 @@ Data@CU’s stack is currently as follows:
 Deployment to data2.adicu.com is an automatic process that occurs on every successful merge into the repository
 The website is deployed as an extension to the ADI CU website.
 
-## API endpoins:
+## API endpoints:
 
 All the APIs have two endpoints - Select and Search
 
