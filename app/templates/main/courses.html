@@ -371,16 +371,21 @@
                            </pre>"
                            result+=temp_text
                        }
-                       document.getElementById(resp).classList.add("searchResponseBlock")
-                       document.getElementById(resp).innerHTML = result;
-                       document.getElementById(resp).style.color = "green";
+                       // sets height at 600px and makes response scrollable
+                       var respElement = document.getElementById(resp)
+                       respElement.classList.add("searchResponseBlock")
+                       respElement.innerHTML = result;
+                       respElement.style.color = "green";
 
+                   // if key is incorrect
                    } else {
+                       // sets height at 100%, preventing large+empty response block
                        var responseObj = JSON.parse(this.response);
-                       document.getElementById(resp).classList.remove("searchResponseBlock")
-                       document.getElementById(resp).innerHTML = "ERROR " + this.status + ": " + responseObj.message;
-                       document.getElementById(resp).style.color = "red";
-                       document.getElementById(resp).classList.add("nopadding")
+                       var respElement = document.getElementById(resp)
+                       respElement.classList.remove("searchResponseBlock")
+                       respElement.innerHTML = "ERROR " + this.status + ": " + responseObj.message;
+                       respElement.style.color = "red";
+                       respElement.classList.add("nopadding")
                    }
                }
 
