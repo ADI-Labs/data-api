@@ -16,23 +16,28 @@
                <input class="btn" name="submit" type="submit" value='Search' />
            </div>
        </form>
-       <!-- results of search displayed, authentication still needs to be implemented -->
-       {% if results != [] %}
-       <table class="table-striped table-bordered center-block" padding width="90%">
-           {% for item in results %}
-               <tr width="100%">
-                   <td >
-                       {{ item["name"] }}
-                   </td>
-                   <td >
-                       {{ item["course_id"] }}
-                   </td>
-                   <td >
-                       {{ item["term"] }}
-                   </td>
-               </tr>
-           {% endfor %}
-       </table>
+       <!-- results of search displayed if user is authenticated, otherwise error message -->
+       {% if current_user.is_authenticated %}
+            {% if results != [] %}
+            <table class="table-striped table-bordered center-block" padding width="90%">
+                {% for item in results %}
+                    <tr width="100%">
+                        <td >
+                            {{ item["name"] }}
+                        </td>
+                        <td >
+                            {{ item["course_id"] }}
+                        </td>
+                        <td >
+                            {{ item["term"] }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+            {% endif %}
+       {% endif %}
+       {% if not current_user.is_authenticated %}
+            <br><p style="color: red">*Must sign in to use search function</p>
        {% endif %}
    
        <br>
@@ -117,7 +122,6 @@
            </div>
        </div>
      
-   
        <div class="panel panel-default endpoint-search" >
            <div class="panel-heading" data-toggle="collapse" data-target="#search_panel"><h4>Search</h4></div>
            <div class="panel-body">
@@ -180,7 +184,7 @@
                        </div>
                    </div>         
                    <h3>Response</h3>
-                   <div id="searchResponseBlock">
+                   <div id="searchResponseBlock" class = "searchResponseBlock">
                        <pre class="text-success prettyprint lang=js">
                                {
                                    &quot;status_code&quot;: 200,
@@ -367,12 +371,21 @@
                            </pre>"
                            result+=temp_text
                        }
-                       document.getElementById(resp).innerHTML = result;
-                       document.getElementById(resp).style.color = "green";
+                       // sets height at 600px and makes response scrollable
+                       var respElement = document.getElementById(resp)
+                       respElement.classList.add("searchResponseBlock")
+                       respElement.innerHTML = result;
+                       respElement.style.color = "green";
+
+                   // if key is incorrect
                    } else {
+                       // sets height at 100%, preventing large+empty response block
                        var responseObj = JSON.parse(this.response);
-                       document.getElementById(resp).innerHTML = "ERROR " + this.status + ": " + responseObj.message;
-                       document.getElementById(resp).style.color = "red";
+                       var respElement = document.getElementById(resp)
+                       respElement.classList.remove("searchResponseBlock")
+                       respElement.innerHTML = "ERROR " + this.status + ": " + responseObj.message;
+                       respElement.style.color = "red";
+                       respElement.classList.add("nopadding")
                    }
                }
 
