@@ -16,23 +16,28 @@
                <input class="btn" name="submit" type="submit" value='Search' />
            </div>
        </form>
-       <!-- results of search displayed, authentication still needs to be implemented -->
-       {% if results != [] %}
-       <table class="table-striped table-bordered center-block" padding width="90%">
-           {% for item in results %}
-               <tr width="100%">
-                   <td >
-                       {{ item["name"] }}
-                   </td>
-                   <td >
-                       {{ item["course_id"] }}
-                   </td>
-                   <td >
-                       {{ item["term"] }}
-                   </td>
-               </tr>
-           {% endfor %}
-       </table>
+       <!-- results of search displayed if user is authenticated, otherwise error message -->
+       {% if current_user.is_authenticated %}
+            {% if results != [] %}
+            <table class="table-striped table-bordered center-block" padding width="90%">
+                {% for item in results %}
+                    <tr width="100%">
+                        <td >
+                            {{ item["name"] }}
+                        </td>
+                        <td >
+                            {{ item["course_id"] }}
+                        </td>
+                        <td >
+                            {{ item["term"] }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+            {% endif %}
+       {% endif %}
+       {% if not current_user.is_authenticated %}
+            <br><p style="color: red">*Must sign in to use search function</p>
        {% endif %}
    
        <br>
@@ -117,7 +122,7 @@
            </div>
        </div>
      
-   
+       <!-- *FIX* when key not added, response block is large and empty -->
        <div class="panel panel-default endpoint-search" >
            <div class="panel-heading" data-toggle="collapse" data-target="#search_panel"><h4>Search</h4></div>
            <div class="panel-body">
