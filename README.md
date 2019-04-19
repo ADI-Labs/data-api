@@ -1,10 +1,10 @@
-# data-api
+# Data@CU
 
 About DATA@CU: Data@CU is a project that aims to provide an API for all Columbia-related data and become the go-to source of data exclusively for student developers at Columbia through a RESTful API. It has been in development since Spring of 2018.
 
 In addition to providing an API for available data, DATA@CU aims to perform data analytics where fit and provide that as part of the API as well.
 
-# Technology:
+## Technology:
 
 Data@CU’s stack is currently as follows:
 
@@ -18,6 +18,10 @@ HTML/CSS/JavaScript
   - Data@CU’s information is presented via a website - data2.adicu.com
 TravisCI
   - Project continuous integration managed in collaboration with Github and Slack.
+  
+## Deployment:
+git remote add dokku dokku@208.68.37.106:data-api
+git push dokku master
 
 ### Current Contributors:
 - Anavi Lohia (Product Manager)
@@ -34,7 +38,3 @@ TravisCI
 - Anavi Lohia (Developer)
 - Bruk Zewdie (Developer)
 - Marcus Blake (Developer)
-
-### Deployment:
-git remote add dokku dokku@208.68.37.106:data-api
-git push dokku master
