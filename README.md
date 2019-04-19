@@ -1,6 +1,8 @@
 # data-api
 
-Future home of Columbia's API for all data.
+# DATA@CU 
+
+About DATA@CU: Data@CU is a project that aims to provide an API for all Columbia-related data and become the go-to source of data exclusively for student developers at Columbia. In addition to providing an API for available data, DATA@CU aims to perform data analytics where fit and provide that as part of the API as well.
 
 ### Current Contributors:
 - Anavi Lohia (Product Manager)
