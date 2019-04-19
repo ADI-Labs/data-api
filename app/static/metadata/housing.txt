@@ -1,0 +1,25 @@
+name, String, Name of the residence hall - primary_key
+street_address, String, Street address of the residence hall
+residential_area, String, Residential area
+building_type, String, building type
+room_type, .String, room type
+class_make_up, String, class make up
+rate, String, rate paid
+entrance_info, String, entrance information
+num_res_floors, Integer, number of floors
+num_singles, Integer, number os singles
+num_doubles, Integer, number of doubles
+bathroom, String, private or shared bathroom with location
+laundry, String, location of laundry room
+flooring, String, carpet or no carpet
+kitchen, String, private or shared with location
+lounge, String, type and location of lounge
+cleaning_schedule, String, cleaning schedule
+bike_storage, Boolean, bike storage
+print_station, Boolean, print station
+fitness_room, Boolean, fitness room
+computer_lab, Boolean, computer lab
+ac, Boolean, ac
+piano, Boolean, piano
+description, Text, description
+features, Text, features
