@@ -20,8 +20,46 @@ Data@CU’s stack is currently as follows:
         - Project continuous integration managed in collaboration with Github and Slack.
   
 ## Deployment:
-git remote add dokku dokku@208.68.37.106:data-api
-git push dokku master
+
+Deployment to data2.adicu.com is an automatic process that occurs on every successful merge into the repository
+The website is deployed as an extension to the ADI CU website.
+
+## API endpoins:
+
+All the APIs have two endpoints - Select and Search
+
+Select returns one specific result
+Search returns a list of relevant results
+
+### Courses
+
+SELECT
+
+Requires course id, term, and key - returns a single result
+/api/courses/select?course_id=<course_id>&term=<term>&key=<key> 
+
+SEARCH
+
+Accepts any combination of one or more parameters, requires key - returns a list
+/api/courses/search?course_name=<course_name>&key=<key> 
+
+### Housing
+
+SELECT
+
+SEARCH
+
+### Students
+
+SELECT
+
+SEARCH
+
+### Notes
+
+When querying, must replace each space with “%20”
+
+## Contributors
 
 ### Current Contributors:
 - Anavi Lohia (Product Manager)
