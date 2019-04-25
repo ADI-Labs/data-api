@@ -18,31 +18,31 @@ NON_STANDARD_RESIDENCES = {
 }
 
 CLASS_FOR_FIELD = {
-        "description": "field-type-text-with-summary",
-        "residential_area": "field-name-field-residence-programs",
-        "building_type": "field-name-field-residence-building-type",
-        "room_type": "field-name-field-residence-room-type",
-        "class_make_up": "field-name-field-residence-class-make-up",
-        "rate": "field-name-field-residence-rate",
-        "entrance_info": "field-name-field-residence-entrance-info",
-        "num_res_floors": "field-name-field-residence-number-of-floors",
-        "singles_doubles": "field-name-field-residence-singles-doubles",
-        # "batrhoom-fc" spelling is correct, as also in html
-        "bathroom": "field-name-field-residence-batrhoom-fc",
-        "laundry": "field-name-field-residence-laundry-fc",
-        "flooring": "field-name-field-residence-flooring",
-        "kitchen": "field-name-field-residence-kitchen-fc",
-        "lounge": "field-name-field-residence-lounge-fc",
-        "cleaning_schedule": "field-name-field-residence-cleaning-fc",
-        "features": "field-name-field-residence-features",
-        "bike_storage": "field-name-field-residence-bike-fc",
-        "print_station": "field-name-field-residence-print-station-fc",
-        "fitness_room": "field-name-field-residence-fitness-fc",
-        "computer_lab": "field-name-field-residence-computer-fc",
-        "ac": "field-name-field-residence-ac",
-        "piano": "field-name-field-residence-piano-fc",
-        "student_reviews": "field-name-field-residence-student-comments"
-    }
+    "description": "field-type-text-with-summary",
+    "residential_area": "field-name-field-residence-programs",
+    "building_type": "field-name-field-residence-building-type",
+    "room_type": "field-name-field-residence-room-type",
+    "class_make_up": "field-name-field-residence-class-make-up",
+    "rate": "field-name-field-residence-rate",
+    "entrance_info": "field-name-field-residence-entrance-info",
+    "num_res_floors": "field-name-field-residence-number-of-floors",
+    "singles_doubles": "field-name-field-residence-singles-doubles",
+    # "batrhoom-fc" spelling is correct, as also in html
+    "bathroom": "field-name-field-residence-batrhoom-fc",
+    "laundry": "field-name-field-residence-laundry-fc",
+    "flooring": "field-name-field-residence-flooring",
+    "kitchen": "field-name-field-residence-kitchen-fc",
+    "lounge": "field-name-field-residence-lounge-fc",
+    "cleaning_schedule": "field-name-field-residence-cleaning-fc",
+    "features": "field-name-field-residence-features",
+    "bike_storage": "field-name-field-residence-bike-fc",
+    "print_station": "field-name-field-residence-print-station-fc",
+    "fitness_room": "field-name-field-residence-fitness-fc",
+    "computer_lab": "field-name-field-residence-computer-fc",
+    "ac": "field-name-field-residence-ac",
+    "piano": "field-name-field-residence-piano-fc",
+    "student_reviews": "field-name-field-residence-student-comments"
+}
 
 NON_STANDARDIZED_FIELDS = [
     "name",
