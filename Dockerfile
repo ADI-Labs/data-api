@@ -9,4 +9,4 @@ RUN pip install -r requirements.txt
 # add the rest of the application
 COPY ./ ./
 
-CMD /bin/bash -c "FLASK_APP=run.py flask run --port 6003"
+CMD /bin/bash -c "FLASK_APP=run.py flask run --host 0.0.0.0 --port 6003"
