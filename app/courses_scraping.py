@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 import scrapy
 import os
+import re
 from scrapy.crawler import CrawlerProcess
 import json
-from . import db
 from .models import Course
 import hashlib
 import datetime
-from .helpers import check_differences
+from .helpers import upload_object_to_db
 
 ITEM_PIPELINES = {'scrapy.pipelines.files.FilesPipeline': 1}
 FILES_STORE = './data'
@@ -63,9 +63,6 @@ def get_courses():
     filepath = os.path.join(FILES_STORE, "full", name)
     savepath = os.path.join(FILES_STORE, "full", f"{savename}.json")
 
-    if not os.path.isfile('app/data.sqlite'):
-        db.create_all()
-
     crwl = CrawlerProcess(
         {'USER_AGENT': 'Mozilla/4.0'
             ' (compatible; MSIE 7.0; Windows NT 5.1)'})
@@ -79,55 +76,38 @@ def get_courses():
     os.rename(filepath, savepath)
 
     print("updating courses...")
-    parse_and_store(savepath)
+    upload_to_db_from_file(savepath)
 
 
-def parse_and_store(path):
-    '''
-    Needs to run within an app_context!
+def upload_to_db_from_file(filepath):
+    """
+    Uploads all json course objects at filepath to the database
+    """
+    courses = json.load(open(filepath))
+    for course in courses:
+        # map dictionary keys to column names
+        course = {snake_case(k): v for k, v in course.items()}
+        change_key(course, "course", "course_id")
+        change_key(course, "prefix_longname", "prefix_long_name")
+        change_key(course, "course_title", "course_name")
+        change_key(course, "meets1", "meeting_times")
+        change_key(course, "instructor1_name", "instructor_name")
 
-    :param path:
-    :return:
-    '''
-    data = json.load(open(path))
-    for datum in data:
-        new_course = Course(term=datum['Term'],
-                            course_id=datum['Course'],
-                            prefix_name=datum["PrefixName"],
-                            prefix_long_name=datum["PrefixLongname"],
-                            division_code=datum["DivisionCode"],
-                            division_name=datum['DivisionName'],
-                            campus_code=datum["CampusCode"],
-                            campus_name=datum["CampusName"],
-                            school_code=datum["SchoolCode"],
-                            school_name=datum["SchoolName"],
-                            department_code=datum['DepartmentCode'],
-                            department_name=datum['DepartmentName'],
-                            subterm_code=datum['SubtermCode'],
-                            subterm_name=datum['SubtermName'],
-                            call_number=datum["CallNumber"],
-                            num_enrolled=datum["NumEnrolled"],
-                            max_size=datum["MaxSize"],
-                            enrollment_status=datum['EnrollmentStatus'],
-                            num_fixed_units=datum['NumFixedUnits'],
-                            min_units=datum['MinUnits'],
-                            max_units=datum['MaxUnits'],
-                            course_name=datum["CourseTitle"],
-                            type_code=datum['TypeCode'],
-                            type_name=datum['TypeName'],
-                            approval=datum["Approval"],
-                            bulletin_flags=datum["BulletinFlags"],
-                            class_notes=datum["ClassNotes"],
-                            meeting_times=datum['Meets1'],
-                            instructor_name=datum["Instructor1Name"]
-                            )
-
-        existing_course = Course.query.get(
-            (new_course.term, new_course.course_id))
-        if existing_course:
-            # check for differences objects and then update
-            existing_course = check_differences(existing_course, new_course)
-        else:
-            db.session.add(new_course)
-        db.session.commit()
+        upload_object_to_db(Course, course)
     print("database up to date")
+
+
+def change_key(dic, old_key, new_key):
+    """
+    Moves the value of the old key to the new key in a dictionary
+    """
+    dic[new_key] = dic[old_key]
+    del dic[old_key]
+
+
+def snake_case(string):
+    """
+    Converts CamelCase string to snake_case string
+    """
+    s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', string)
+    return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()

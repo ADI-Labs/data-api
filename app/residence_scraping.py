@@ -5,68 +5,19 @@ from copy import copy
 from robobrowser import RoboBrowser
 from . import db
 from .models import Residence
-from .helpers import check_differences
+from .helpers import get_empty_json, upload_object_to_db
 
 # URLs that are used to scrape.
-base_url = 'https://housing.columbia.edu'
-home_url = base_url + '/compare-residences'
+BASE_URL = 'https://housing.columbia.edu'
+HOME_URL = BASE_URL + '/compare-residences'
 
+NON_STANDARD_RESIDENCES = {
+    "FSL Brownstones",
+    "Residential Brownstones",
+    "SIC Residences"
+}
 
-def get_residences():
-    """
-    Gets raw residence data from Columbia housing website, standardizes
-    and cleans the data, and uploads to the database
-    """
-    browser = RoboBrowser()
-    residences_list = []
-
-    # makes list of links to each residence hall page
-    browser.open(home_url)
-    table_headers = browser.find_all(class_='views-field-title')[1:]
-    residence_links = list(map(lambda x: x.find('a')['href'], table_headers))
-
-    for link in residence_links:
-        browser.open(base_url + link)
-        residence_json = parse_residence_info(browser)
-        if residence_json:
-            if type(residence_json) == list:
-                residences_list.extend(residence_json)
-            else:
-                residences_list.append(residence_json)
-
-    if not os.path.isfile('app/data.sqlite'):
-        print("Creating database")
-        db.create_all()
-
-    collate_data(residences_list)  # here just for data analysis
-    print("Uploading residences to database")
-    upload_residences_to_db(residences_list)
-
-
-def parse_residence_info(browser):
-    """
-    Parses a residence object from the data on the current browser page
-    Returns a dictionary of the residence json
-
-    Parameters:
-        browser: Robobrowser currently on residence page
-    """
-
-    new_res = get_new_residence()
-    new_res["name"] = tag_text(browser.find(id="page-title"))
-    print("Scraping info for", new_res["name"])
-
-    # skip non-standard housing pages
-    if new_res["name"] in {
-        "FSL Brownstones",
-        "Residential Brownstones",
-        "SIC Residences"
-    }:
-        return parse_nonstandard_residence_info(browser)
-
-    new_res["street_address"] = tag_text(browser.find(class_="dotted-title"))
-
-    class_for_fields = {
+CLASS_FOR_FIELD = {
         "description": "field-type-text-with-summary",
         "residential_area": "field-name-field-residence-programs",
         "building_type": "field-name-field-residence-building-type",
@@ -93,93 +44,7 @@ def parse_residence_info(browser):
         "student_reviews": "field-name-field-residence-student-comments"
     }
 
-    for field in new_res:
-        if field in class_for_fields:
-            new_res[field] = parse_tag(browser, class_for_fields[field])
-
-    # add _expand_category tag for standard residences
-    new_res["_expand_category"] = "expand group"
-
-    formatted_residence = standardize_residence(new_res)
-    return formatted_residence
-
-
-def parse_nonstandard_residence_info(browser):
-    """
-    Parses a residence object from the data on the current browser page
-    Handles FSL and Residential Brownstones, SIC housing
-    Returns a dictionary of the residence json
-
-    Parameters:
-        browser: Robobrowser currently on residence page
-    """
-    new_res = get_new_residence()
-    new_res["name"] = tag_text(browser.find(id="page-title"))
-    print("Scraping non-standard info for", new_res["name"])
-
-    class_for_fields = {
-        "description": "field-type-text-with-summary",
-        "residential_area": "field-name-field-residence-programs",
-        "building_type": "field-name-field-residence-building-type",
-        "room_type": "field-name-field-residence-room-type",
-        "class_make_up": "field-name-field-residence-class-make-up",
-        "rate": "field-name-field-residence-rate",
-        "entrance_info": "field-name-field-residence-entrance-info",
-        "num_res_floors": "field-name-field-residence-number-of-floors",
-        "singles_doubles": "field-name-field-residence-singles-doubles",
-        # "batrhoom-fc" spelling is correct, as also in html
-        "bathroom": "field-name-field-residence-batrhoom-fc",
-        "laundry": "field-name-field-residence-laundry-fc",
-        "flooring": "field-name-field-residence-flooring",
-        "kitchen": "field-name-field-residence-kitchen-fc",
-        "lounge": "field-name-field-residence-lounge-fc",
-        "cleaning_schedule": "field-name-field-residence-cleaning-fc",
-        "features": "field-name-field-residence-features",
-        "bike_storage": "field-name-field-residence-bike-fc",
-        "print_station": "field-name-field-residence-print-station-fc",
-        "fitness_room": "field-name-field-residence-fitness-fc",
-        "computer_lab": "field-name-field-residence-computer-fc",
-        "ac": "field-name-field-residence-ac",
-        "piano": "field-name-field-residence-piano-fc",
-        "student_reviews": "field-name-field-residence-student-comments"
-    }
-
-    for field in new_res:
-        if field in class_for_fields:
-            new_res[field] = parse_tag(browser, class_for_fields[field])
-
-    residences = []
-
-    # create residence json for grouped entry
-    formatted_residence = standardize_residence(new_res)
-    formatted_residence["_expand_category"] = "group"
-    formatted_residence["street_address"] = "Varies"
-    formatted_residence["building_type"] = "Special, " + \
-        formatted_residence["building_type"]
-
-    print(formatted_residence)
-    print("")
-    residences.append(formatted_residence)
-
-    #  get address and name tuples for specific buildings under group
-    expanded_residences = parse_non_standard_addresses(browser)
-
-    # create expanded residence json for each specific building
-    for res_name, res_add in expanded_residences:
-        res = copy(formatted_residence)
-        res["name"] = res_name
-        res["street_address"] = res_add
-        res["_expand_category"] = "expand"
-        print(res)
-        print("")
-        residences.append(res)
-
-    return residences
-
-
-# fields that don't require any modification / cleaning
-# generally won't be searching by these (except name)
-unchanged_fields = [
+NON_STANDARDIZED_FIELDS = [
     "name",
     "street_address",
     "residential_area",
@@ -193,7 +58,7 @@ unchanged_fields = [
     "_expand_category"
 ]
 
-boolean_fields = [
+BOOLEAN_FIELDS = [
     "bike_storage",
     "print_station",
     "fitness_room",
@@ -203,15 +68,113 @@ boolean_fields = [
 ]
 
 
+def get_residences():
+    """
+    Gets raw residence data from Columbia housing website, standardizes
+    and cleans the data, and uploads to the database
+    """
+    browser = RoboBrowser()
+    residences_list = []
+
+    # makes list of links to each residence hall page
+    browser.open(HOME_URL)
+    table_headers = browser.find_all(class_='views-field-title')[1:]
+    residence_links = list(map(lambda x: x.find('a')['href'], table_headers))
+
+    for link in residence_links:
+        browser.open(BASE_URL + link)
+        residence_json = parse_residence_info(browser)
+        residences_list.extend(residence_json)
+
+    if not os.path.isfile('app/data.sqlite'):
+        print("Creating database")
+        db.create_all()
+
+    # uncomment to see collected data
+    # collate_data(residences_list)
+
+    print("Uploading residences to database")
+    for res in residences_list:
+        upload_object_to_db(Residence, res)
+
+
+# Parsing methods
+
+
+def parse_residence_info(browser):
+    """
+    Parses residence objects from the data on the current browser page
+    Returns a list of dictionaries of residence json for the current page
+
+    params:
+        browser: Robobrowser currently on residence page
+    """
+
+    new_res = get_empty_json(Residence)
+    new_res["singles_doubles"] = ""
+    del new_res["num_singles"]
+    del new_res["num_doubles"]
+    new_res["name"] = tag_text(browser.find(id="page-title"))
+    print("Scraping info for", new_res["name"])
+
+    for field in new_res:
+        if field in CLASS_FOR_FIELD:
+            new_res[field] = parse_tag(browser, CLASS_FOR_FIELD[field])
+
+    # Parse residencee differently for special residence types
+    if new_res["name"] in NON_STANDARD_RESIDENCES:
+        residences = []
+
+        # create residence json for grouped entry
+        formatted_residence = standardize_residence(new_res)
+        formatted_residence["_expand_category"] = "group"
+        formatted_residence["street_address"] = "Varies"
+        formatted_residence["building_type"] = "Special, " + \
+            formatted_residence["building_type"]
+        residences.append(formatted_residence)
+
+        #  get address and name tuples for specific buildings under group
+        expanded_residences = parse_non_standard_addresses(browser)
+
+        # create expanded residence json for each specific building
+        for res_name, res_add in expanded_residences:
+            res = copy(formatted_residence)
+            res["name"] = res_name
+            res["street_address"] = res_add
+            res["_expand_category"] = "expand"
+            residences.append(res)
+
+        return residences
+
+    # Handle normal residences
+    else:
+        new_res["street_address"] = \
+            tag_text(browser.find(class_="dotted-title"))
+
+        for field in new_res:
+            if field in CLASS_FOR_FIELD:
+                new_res[field] = parse_tag(browser, CLASS_FOR_FIELD[field])
+
+        # add _expand_category tag for standard residences
+        new_res["_expand_category"] = "expand group"
+
+        formatted_residence = standardize_residence(new_res)
+        return [formatted_residence]
+
+
 def standardize_residence(raw_json):
+    """
+    Standardizes the fields of a residence object
+    Returns the standardized json object
+    """
     db_entry = {}
 
     # copy over unchanged fields
-    for field in unchanged_fields:
+    for field in NON_STANDARDIZED_FIELDS:
         db_entry[field] = raw_json[field] if raw_json[field] else "Unspecified"
 
     # set boolean fields
-    for field in boolean_fields:
+    for field in BOOLEAN_FIELDS:
         if raw_json[field]:
             negated = raw_json[field] == "No"
             db_entry[field] = False if negated else True
@@ -275,9 +238,7 @@ def standardize_residence(raw_json):
     if db_entry["bathroom"].split(", ")[0] not in search_terms:
         db_entry["bathroom"] = "Shared, " + db_entry["bathroom"]
 
-    # laundry, location and if free
-    # is_free = "free" in raw_json["laundry"]
-    # db_entry["laundry"] = "Free, " if is_free else "Not free, "
+    # laundry, location
     db_entry["laundry"] = raw_json["laundry"] \
         .replace(";", ",") \
         .replace(".", ",") \
@@ -304,125 +265,6 @@ def standardize_residence(raw_json):
     return db_entry
 
 
-def extract_int(string):
-    """
-    Extracts just the integer from a string
-    Assumes that there is exactly one integer included
-    """
-    return int("".join(list(filter(lambda x: x.isdigit(), string))))
-
-
-def collate_data(res_list):
-    """
-    Collates data by field and prints to console
-    """
-    data_entries = defaultdict(list)
-    filtered = [i for i in res_list if i in [
-        "FSL Brownstones",
-        "Residential Brownstones",
-        "SIC Residences"
-    ]]
-    for res in filtered:
-        for field in res:
-            data_entries[field].append(res[field])
-
-    for field in data_entries:
-        print("")
-        print(field, ":")
-        for entry in data_entries[field]:
-            print("    ", entry)
-
-
-def upload_residences_to_db(res_list):
-    """
-    Takes each residence from the list provided
-    and either adds or updates its entry in the database
-
-    Parameters:
-        res_list: list of residence objects
-    """
-    for res in res_list:
-        new_res = get_residence_from_dict(res)
-        existing_res = Residence.query.get(new_res.name)
-        if existing_res:
-            # check for differences objects and then update
-            existing_res = check_differences(
-                existing_res,
-                new_res,
-                persisted_hidden_attributes=["_expand_category"]
-            )
-        else:
-            db.session.add(new_res)
-    db.session.commit()
-
-
-def get_new_residence():
-    """
-    Returns an empty residence dictionary
-    Fields correspond to raw fields from housing website
-    """
-    return {
-        "_expand_category": "",
-        "name": "",
-        "street_address": "",
-        "description": "",
-        "residential_area": "",
-        "building_type": "",
-        "room_type": "",
-        "class_make_up": "",
-        "rate": "",
-        "entrance_info": "",
-        "num_res_floors": "",
-        "singles_doubles": "",
-        "bathroom": "",
-        "laundry": "",
-        "flooring": "",
-        "kitchen": "",
-        "lounge": "",
-        "cleaning_schedule": "",
-        "features": "",
-        "bike_storage": "",
-        "print_station": "",
-        "fitness_room": "",
-        "computer_lab": "",
-        "ac": "",
-        "piano": ""
-    }
-
-
-def get_residence_from_dict(res_dict):
-    """
-    Creates and returns a residence object
-
-    Parameters:
-        res_dict: dictionary with some or all of the required fields
-    """
-    return Residence(**res_dict)
-
-
-def tag_text(tag):
-    """
-    Returns the text contained within a tag
-
-    Parameters:
-        tag: beautifulsoup tag
-    """
-    text = tag.get_text()
-    text = text.replace("\n", "") \
-        .replace("\u00a0", " ") \
-        .replace("\u2019", "'") \
-        .replace("\u201c", "\"") \
-        .replace("\u201d", "\"") \
-        .replace("\u2014", "-") \
-        .replace("\u2013", "-") \
-        .replace("\u2026", "...") \
-        .replace("\"\"", "\", \"")
-    if text[-2:] == ", ":
-        text = text[:-2]
-
-    return text.strip()
-
-
 def parse_field_item(item_list):
     """
     Returns a list of strings from a field item
@@ -447,9 +289,7 @@ def parse_field_item(item_list):
 def parse_tag(browser, class_):
     """
     Parses and returns a database field from the provided tag
-
-    Parameters:
-        class_: name of class to search for
+    class_: name of css class for field
     """
     class_tag = browser.find(class_=class_)
     if not class_tag:
@@ -500,3 +340,51 @@ def parse_non_standard_addresses(browser):
                 residences_name_add.append((name, address))
 
     return residences_name_add
+
+
+# Helper methods
+
+
+def extract_int(string):
+    """
+    Extracts just the integer from a string
+    Assumes that there is exactly one integer included
+    """
+    return int("".join(list(filter(lambda x: x.isdigit(), string))))
+
+
+def collate_data(res_list):
+    """
+    Collates data by field and prints to console
+    """
+    data_entries = defaultdict(list)
+    for res in res_list:
+        for field in res:
+            data_entries[field].append(res[field])
+
+    for field in data_entries:
+        print("")
+        print(field, ":")
+        for entry in data_entries[field]:
+            print("    ", entry)
+
+
+def tag_text(tag):
+    """
+    Returns the text contained within a tag
+    """
+    text = tag.get_text()
+    text = text \
+        .replace("\n", "") \
+        .replace("\u00a0", " ") \
+        .replace("\u2019", "'") \
+        .replace("\u201c", "\"") \
+        .replace("\u201d", "\"") \
+        .replace("\u2014", "-") \
+        .replace("\u2013", "-") \
+        .replace("\u2026", "...") \
+        .replace("\"\"", "\", \"")
+    if text[-2:] == ", ":
+        text = text[:-2]
+
+    return text.strip()

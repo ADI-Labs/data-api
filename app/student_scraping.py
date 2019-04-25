@@ -4,9 +4,26 @@ import time
 import os
 import sys
 from robobrowser import RoboBrowser
-from . import db
 from .models import Student
-from .helpers import check_differences
+from .helpers import get_empty_json, upload_object_to_db
+
+
+"""
+    NOTICE:
+    Student scraping is currently broken because of Columbia's directory
+    Any attempt to access is met with an internal server error
+    Until fixed, use the method below to use previously collected student data
+"""
+
+
+def upload_to_db_from_file(filepath):
+    """
+    Uploads all json student objects at filepath to the database
+    """
+    students = json.load(open(filepath))
+    for student in students:
+        upload_object_to_db(Student, student)
+
 
 # URLs that are used to scrape.
 login_url = 'https://cas.columbia.edu/cas/login?TARGET=' + \
@@ -59,8 +76,8 @@ def get_students():
     """
     CURRENTLY BROKEN - to fix once CUIT fixes their internal server errors
     """
-    global FILEPATH
     browser = RoboBrowser()
+    global FILEPATH
 
     browser.open(people_url, headers=headers)
     printPage(browser, "Main directory")
@@ -94,8 +111,6 @@ def get_students():
     browser.open(url)
     print('Getting data from ', url)
 
-    if not os.path.isfile('app/data.sqlite'):
-        db.create_all()
     getAndWriteData(browser)
 
     if url == web_pages[len(web_pages) - 1] \
@@ -165,24 +180,12 @@ def replaceBreaks(item, delimiter):
 
 
 def parseInfo(rows, file):
-
-    student = {
-        'Name': '',
-        'UNI': '',
-        'Email': '',
-        'Department': '',
-        'Title': '',
-        'Address': '',
-        'Home Addr': '',
-        'Campus Tel': '',
-        'Tel': '',
-        'FAX': ''
-    }
+    student = get_empty_json(Student)
 
     for row in rows:
-        if student['Name'] == '' or student['Name'] is None:
+        if student['name'] == '' or student['name'] is None:
             name = row.find('th')
-            student['Name'] = name.text
+            student['name'] = name.text
 
         else:
 
@@ -207,12 +210,12 @@ def parseInfo(rows, file):
 
                     elif count == 1:
 
-                        if field == 'Email':
+                        if field == 'email':
                             addr = item.find_all('a')[0]
                             txt = addr.text
-                        elif field == 'Address':
+                        elif field == 'address':
                             txt = replaceBreaks(item, ' ').text
-                        elif field == 'Campus Tel':
+                        elif field == 'campus_tel':
                             temp = ''
                             for index in range(len(txt)):
                                 if txt[index] == '\xa0':
@@ -227,7 +230,7 @@ def parseInfo(rows, file):
                         count -= 1
 
     append_to_json(student, file)
-    upload_to_db(student)
+    upload_object_to_db(Student, student)
 
 
 """
@@ -290,54 +293,6 @@ def append_to_json(dict, file):
 
 """
 """
-
-
-def upload_to_db(student):
-    new_student = Student(
-        name=student['Name'],
-        uni=student['UNI'],
-        email=student['Email'],
-        department=student['Department'],
-        title=student['Title'],
-        address=student['Address'],
-        home_addr=student['Home Addr'],
-        campus_tel=student['Campus Tel'],
-        tel=student['Tel'],
-        fax=student['FAX']
-    )
-    existing_student = Student.query.get(new_student.uni)
-    if existing_student:
-        # check for differences objects and then update
-        existing_student = check_differences(existing_student, new_student)
-    else:
-        db.session.add(new_student)
-
-    db.session.commit()
-
-
-def upload_to_db_from_file(filepath):
-    students = json.load(open(filepath))
-    for student in students:
-        new_student = Student(
-            name=student['Name'],
-            uni=student['UNI'],
-            email=student['Email'],
-            department=student['Department'],
-            title=student['Title'],
-            address=student['Address'],
-            home_addr=student['Home Addr'],
-            campus_tel=student['Campus Tel'],
-            tel=student['Tel'],
-            fax=student['FAX']
-        )
-        existing_student = Student.query.get(new_student.uni)
-        if existing_student:
-            # check for differences objects and then update
-            existing_student = check_differences(existing_student, new_student)
-        else:
-            db.session.add(new_student)
-
-    db.session.commit()
 
 
 def writeNextPage(query, web_pages):

@@ -198,3 +198,21 @@ class Dining(db.Model):
 
     def __repr__(self):
         return f'<Dining {self.name}>'
+
+
+# Methods
+
+def get_column_names(model):
+    """
+    Returns a list of the column names for the specified model
+    """
+    return [i.name for i in list(model.__table__.columns)]
+
+
+def get_primary_keys(model, obj):
+    """
+    Returns an ordered list of the primary keys for the given object
+    """
+    key_names = [pk.name for pk in model.__table__.primary_key]
+    keys = list(map(lambda key: getattr(obj, key), key_names))
+    return keys
