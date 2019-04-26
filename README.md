@@ -8,7 +8,7 @@ In addition to providing an API for available data, DATA@CU aims to perform data
 
 Data@CU’s stack is currently as follows:
 
-1. Python 3
+1. Python 3 (current version - 3.6.5)
         - Python dependencies are managed via Pipenv. Students will be encouraged to use the more modern aspects of the                 language, and will be expected to write clean, efficient code.
 2. Flask
         - Flask is powerful micro web-framework that makes it easy to get a server-based Python app up and running quickly.
@@ -122,6 +122,14 @@ fax
 ### Notes
 
 When querying, must replace each space with “%20”
+
+## Environment Setup:
+
+In addition to the github project, you will require the config.json and config_keys.json files to run the project locally.
+
+You will have to install and set up a virtual environment to run the flask app.
+
+Download and install all dependencies.
 
 ## Contributors
 
