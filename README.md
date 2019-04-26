@@ -28,8 +28,8 @@ The website is deployed as an extension to the ADI CU website.
 
 All the APIs have two endpoints - Select and Search
 
-Select returns one specific result
-Search returns a list of relevant results
+Select returns one specific result - requires primary key parameters and key
+Search returns a list of relevant results - accepts any combination of paramters, requires key
 
 ### Courses
 
@@ -58,45 +58,66 @@ Requires name, and key - returns a single result
 ##### SEARCH
 
 Accepts any combination of one or more parameters, requires key - returns a list
-/api/courses/search?name=<name>&key=<key> 
+/api/courses/search?kitchen=<kitchen>&key=<key> 
         
-        Special residences: 
-	        For each type (FSL and residential brownstones, SIC housing), a grouped entry and split entries both exist.                   Specify a “expand_special” option in the search api: if false, only returns grouped, if true, returns all                     relevant entries as usual
+Special residences: 
+
+For each type (FSL and residential brownstones, SIC housing), a grouped entry and split entries both exist. 
+Specify a “expand_special” option in the search api: if false, only returns grouped, if true, returns all relevant entries as usual
 
 ##### PARAMETERS
 * - searchable
 
-*name
-street_address
-*residential_area
-*building_type
-*room_type
-*class_make_up
-rate
-entrance_info
-num_res_floors
-num_singles
-num_doubles
-*bathroom
-laundry
-flooring
-*kitchen
-lounge
-cleaning_schedule
-*bike_storage
-*print_station
-*fitness_room
-*computer_lab
-*ac
-*piano
-description
+*name, 
+street_address, 
+*residential_area, 
+*building_type, 
+*room_type, 
+*class_make_up, 
+rate, 
+entrance_info, 
+num_res_floors, 
+num_singles, 
+num_doubles, 
+*bathroom, 
+laundry, 
+flooring, 
+*kitchen, 
+lounge, 
+cleaning_schedule, 
+*bike_storage, 
+*print_station, 
+*fitness_room, 
+*computer_lab, 
+*ac, 
+*piano, 
+description, 
 features
 
 ### Students
 
-SELECT
+##### SELECT
 
-SEARCH
+Requires uni, and key - returns a single result
+/api/courses/select?uni=<uni>&key=<key> 
+	
+##### SEARCH
+
+Accepts any combination of one or more parameters, requires key - returns a list
+/api/courses/search?name=<name>&key=<key> 
+	
+##### PARAMETERS
+
+name, 
+uni, 
+email, 
+department, 
+title, 
+address, 
+home_addr, 
+campus_tel, 
+tel, 
+fax 
 
 ### Notes
 
