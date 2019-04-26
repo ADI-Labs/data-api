@@ -66,7 +66,7 @@ For each type (FSL and residential brownstones, SIC housing), a grouped entry an
 Specify a “expand_special” option in the search api: if false, only returns grouped, if true, returns all relevant entries as usual
 
 ##### PARAMETERS
-* - searchable
+*searchable
 
 *name, 
 street_address, 
