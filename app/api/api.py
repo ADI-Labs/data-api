@@ -1,9 +1,11 @@
 from flask import jsonify
 from flask_restful import Api, Resource, abort, reqparse
 from ..models import Course, User, Student, Residence
+from ..models import get_column_names, get_primary_keys
 from . import api_bp
 
 api = Api(api_bp)
+API_KEY_TERM = ["key"]
 
 
 def remove_hidden_attr(d):
@@ -11,69 +13,22 @@ def remove_hidden_attr(d):
 
 
 class Courses(Resource):
-    def process_args(args):
-        final_args = {}
-        del args['key']
-
-        for k in args.keys():
-            if args[k] is not None:
-                final_args[k] = args[k]
-
-        return final_args
-
     def get(self, typ):
-        # print(dir(Resource))
-        # adding parameters to api
-
         # select api requires the primary keys: course id and term, and api key
         if typ == 'select':
             parser = reqparse.RequestParser()
             # note that an error in passing in arguments here will not result
             # in 400 error
-            parser.add_argument(
-                'course_id',
-                required=True,
-                help="course_id cannot be blank for select api")
-            parser.add_argument("term", required=True,
-                                help="term cannot be blank for select api !")
-            parser.add_argument("key", required=True,
-                                help="key cannot be blank!")
+            required_terms = get_primary_keys(Course).append("key")
+            add_required_to_parser(parser, required_terms)
 
         # search api can accept any number and combination of parameters
         # requires api key
         elif typ == 'search':
             parser = reqparse.RequestParser()
-            parser.add_argument('term')
-            parser.add_argument("course_id")
-            parser.add_argument("prefix_name")
-            parser.add_argument("prefix_long_name")
-            parser.add_argument("division_code",)
-            parser.add_argument('division_name')
-            parser.add_argument("campus_code")
-            parser.add_argument("campus_name",)
-            parser.add_argument('school_code')
-            parser.add_argument('school_name')
-            parser.add_argument('department_code')
-            parser.add_argument('department_name')
-            parser.add_argument('subterm_code')
-            parser.add_argument('subterm_name')
-            parser.add_argument('call_number')
-            parser.add_argument('num_enrolled')
-            parser.add_argument('max_size')
-            parser.add_argument('enrollment_status')
-            parser.add_argument('num_fixed_units')
-            parser.add_argument('min_units')
-            parser.add_argument('max_units')
-            parser.add_argument('course_name')
-            parser.add_argument('type_code')
-            parser.add_argument('type_name')
-            parser.add_argument('approval')
-            parser.add_argument('bulletin_flags')
-            parser.add_argument('class_notes')
-            parser.add_argument('meeting_times')
-            parser.add_argument('instructor_name')
-            parser.add_argument("key", required=True,
-                                help="key cannot be blank!")
+            search_terms = get_column_names(Course)
+            add_all_to_parser(parser, search_terms)
+            add_required_to_parser(parser, API_KEY_TERM)
 
         else:
             abort(
@@ -84,13 +39,13 @@ class Courses(Resource):
 
         args = parser.parse_args(strict=True)
         key = args["key"]
-        datum = {}
+        response = {}
 
         # verify the API key
         if User.verify(key):
             # will return processed arguments, if there is an incorrect
             # argument then it will return the first incorrect argument
-            args = Courses.process_args(args)
+            args = process_args(args)
             if isinstance(args, str):
                 abort(
                     400,
@@ -111,8 +66,8 @@ class Courses(Resource):
                             f"{args['course_id']} and term = "
                             f"{args['term']} does not exist")
                     else:
-                        datum['status'] = 200
-                        datum['data'] = remove_hidden_attr(result.__dict__)
+                        response['status'] = 200
+                        response['data'] = remove_hidden_attr(result.__dict__)
 
                 elif typ == 'search':
                     # for seach api, then use filter through db
@@ -123,10 +78,10 @@ class Courses(Resource):
                               message=f'No courses with {args}')
 
                     else:
-                        datum['data'] = [
+                        response['data'] = [
                             remove_hidden_attr(
                                 i.__dict__) for i in result]
-                return jsonify(datum)
+                return jsonify(response)
             # if API key was not verified
         else:
             abort(403, status=403,
@@ -134,62 +89,39 @@ class Courses(Resource):
 
 
 class Students(Resource):
-    def process_args(args):
-        final_args = {}
-        del args['key']
-
-        for k in args.keys():
-            if args[k] is not None:
-                final_args[k] = args[k]
-
-        return final_args
-
     def get(self, typ):
         # select api requires the primary key: uni
         if typ == 'select':
             parser = reqparse.RequestParser()
             # note that an error in passing in arguments here will not result
             # in 400 error
-            parser.add_argument(
-                'uni',
-                required=True,
-                help="uni cannot be blank for select api")
-            parser.add_argument("key", required=True,
-                                help="key cannot be blank!")
+            required_terms = get_primary_keys(Course).append("key")
+            add_required_to_parser(parser, required_terms)
 
         # search api can accept any number and combination of prameters
         # requires api key
         elif typ == 'search':
             parser = reqparse.RequestParser()
-            parser.add_argument('name')
-            parser.add_argument('uni')
-            parser.add_argument('email')
-            parser.add_argument('department')
-            parser.add_argument('title')
-            parser.add_argument('address')
-            parser.add_argument('home_address')
-            parser.add_argument('campus_tel')
-            parser.add_argument('tel')
-            parser.add_argument('fax')
-            parser.add_argument("key", required=True,
-                                help="key cannot be blank!")
+            search_terms = get_column_names(Student)
+            add_all_to_parser(parser, search_terms)
+            add_required_to_parser(parser, API_KEY_TERM)
 
         else:
             abort(
                 400,
                 status=400,
-                message=f"Bad Request. GET api/courses/select?"
-                f"or api/courses/search?")
+                message=f"Bad Request. GET api/students/select?"
+                f"or api/students/search?")
 
         args = parser.parse_args(strict=True)
         key = args["key"]
-        datum = {}
+        response = {}
 
         # verify the API key
         if User.verify(key):
             # will return processed arguments, if there is an incorrect
             # argument then it will return the first incorrect argument
-            args = Students.process_args(args)
+            args = process_args(args)
             if isinstance(args, str):
                 abort(
                     400,
@@ -208,8 +140,8 @@ class Students(Resource):
                             message=f"Student with uni = "
                             f"{args['uni']} does not exist")
                     else:
-                        datum['status'] = 200
-                        datum['data'] = remove_hidden_attr(result.__dict__)
+                        response['status'] = 200
+                        response['data'] = remove_hidden_attr(result.__dict__)
 
                 elif typ == 'search':
                     # for seach api, then use filter through db
@@ -219,36 +151,42 @@ class Students(Resource):
                               message=f'No students with {args}')
 
                     else:
-                        datum['data'] = [
+                        response['data'] = [
                             remove_hidden_attr(
                                 i.__dict__) for i in result]
-                return jsonify(datum)
+                return jsonify(response)
         # if API key was not verified
         else:
             abort(403, status=403,
                   message="User couldn't be verified")
 
 
+SEARCHABLE_ATTRIBUTES = [
+    'name',
+    "residential_area",
+    "building_type",
+    "room_type",
+    "class_make_up",
+    "bathroom",
+    "kitchen",
+    "bike_storage",
+    "print_station",
+    "fitness_room",
+    "computer_lab",
+    "ac",
+    "piano",
+    "expand_special"
+]
+
+
 class Residences(Resource):
-    def process_args(args):
-        final_args = {}
-        del args['key']
-        if args.get('expand_special', "false") in ["true", "True"]:
-            final_args["_expand_category"] = "expand"
+    def set_expand_group(self, args):
+        if args.get('expand_special', False):
+            args["_expand_category"] = "expand"
         else:
-            final_args["_expand_category"] = "group"
+            args["_expand_category"] = "group"
         if args.get('expand_special'):
             del args['expand_special']
-
-        for k in args.keys():
-            if args[k] is not None:
-                if args[k].lower() == "false":
-                    final_args[k] = False
-                elif args[k].lower() == "true":
-                    final_args[k] = True
-                else:
-                    final_args[k] = args[k]
-        return final_args
 
     def get(self, typ):
         # select api requires the primary key: name
@@ -256,50 +194,34 @@ class Residences(Resource):
             parser = reqparse.RequestParser()
             # note that an error in passing in arguments here will not result
             # in 400 error
-            parser.add_argument(
-                'name',
-                required=True,
-                help="namee cannot be blank for select api")
-            parser.add_argument("key", required=True,
-                                help="key cannot be blank")
+            required_terms = get_primary_keys(Residence).append("key")
+            add_required_to_parser(parser, required_terms)
 
         # search api can accept any number and combination of prameters
         # requires api key
         elif typ == 'search':
             parser = reqparse.RequestParser()
-            parser.add_argument('name')
-            parser.add_argument("residential_area")
-            parser.add_argument("building_type")
-            parser.add_argument("room_type")
-            parser.add_argument("class_make_up")
-            parser.add_argument("bathroom")
-            parser.add_argument("kitchen")
-            parser.add_argument("bike_storage")
-            parser.add_argument("print_station")
-            parser.add_argument("fitness_room")
-            parser.add_argument("computer_lab")
-            parser.add_argument("ac")
-            parser.add_argument("piano")
-            parser.add_argument("expand_special")
-            parser.add_argument("key", required=True,
-                                help="key cannot be blank")
+            add_all_to_parser(parser, SEARCHABLE_ATTRIBUTES)
+            add_required_to_parser(parser, API_KEY_TERM)
 
         else:
             abort(
                 400,
                 status=400,
-                message=f"Bad Request. GET api/courses/select?"
-                f"or api/courses/search?")
+                message=f"Bad Request. GET api/residences/select?"
+                f"or api/residences/search?")
 
         args = parser.parse_args(strict=True)
         key = args["key"]
-        datum = {}
+        response = {}
 
         # verify the API key
         if User.verify(key):
             # will return processed arguments, if there is an incorrect
             # argument then it will return the first incorrect argument
-            args = Residences.process_args(args)
+            args = process_args(args)
+            self.set_expand_group(args)
+
             if isinstance(args, str):
                 abort(
                     400,
@@ -318,8 +240,8 @@ class Residences(Resource):
                             message=f"Residence with name \""
                             f"{args['name']}\" does not exist")
                     else:
-                        datum['status'] = 200
-                        datum['data'] = remove_hidden_attr(result.__dict__)
+                        response['status'] = 200
+                        response['data'] = remove_hidden_attr(result.__dict__)
 
                 elif typ == 'search':
                     # for search api, use filter through db
@@ -338,10 +260,10 @@ class Residences(Resource):
 
                     else:
                         print(result)
-                        datum['data'] = [
+                        response['data'] = [
                             remove_hidden_attr(
                                 i.__dict__) for i in result]
-                return jsonify(datum)
+                return jsonify(response)
         # if API key was not verified
         else:
             abort(403, status=403,
@@ -353,3 +275,38 @@ class Residences(Resource):
 api.add_resource(Courses, '/courses/<typ>')
 api.add_resource(Students, '/students/<typ>')
 api.add_resource(Residences, '/residences/<typ>')
+
+
+def add_all_to_parser(parser, terms):
+    """
+    Adds all search or select terms in terms to the parser
+    """
+    for term in terms:
+        parser.add_argument(term)
+
+
+def add_required_to_parser(parser, terms):
+    """
+    Adds a list of required terms to the parser
+    """
+    for term in terms:
+        help_text = term + " can't be blank"
+        parser.add_argument(term, required=True, help=help_text)
+
+
+def process_args(args):
+    """
+    Cleans raw arguments from the request
+    """
+    final_args = {}
+    del args['key']
+
+    for k in args.keys():
+        if args[k] is not None:
+            if args[k].lower() == "false":
+                final_args[k] = False
+            elif args[k].lower() == "true":
+                final_args[k] = True
+            else:
+                final_args[k] = args[k]
+    return final_args

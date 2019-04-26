@@ -1,5 +1,5 @@
 from app import create_app
-from app.helpers import get_courses
+from app.courses_scraping import get_courses
 
 app = create_app()
 
