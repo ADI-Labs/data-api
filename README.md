@@ -36,7 +36,7 @@ Search returns a list of relevant results - accepts any combination of paramters
 ##### SELECT
 
 Requires course id, term, and key - returns a single result
-/api/courses/select?course_id=<course_id>&term=<term>&key=<key> 
+/api/courses/select?course_id=<course_id>&term=<term_>&key=<key> 
 
 ##### SEARCH
 
