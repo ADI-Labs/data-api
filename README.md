@@ -42,6 +42,11 @@ SEARCH
 
 Accepts any combination of one or more parameters, requires key - returns a list
 /api/courses/search?course_name=<course_name>&key=<key> 
+        
+PARAMETERS
+
+['course_id', 'term', 'course_name', 'call_number', 'bulletin_flags', 'division_code', 'credit_amount', 'prefix_name', 'prefix_long_name', 'instructor_name', 'approval', 'school_code', 'school_name', 'campus_code', 'campus_name', 'type_code', 'type_name', 'num_enrolled', 'max_size', 'min_units', 'num_fixed_units', 'class_notes', 'meeting_times']
+
 
 ### Housing
 
