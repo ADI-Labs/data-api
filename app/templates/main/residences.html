@@ -3,14 +3,14 @@
 <div id="content" class="container">
 
        <section id="students" class="api-page">
-       <h1>Students</h1>
+       <h1>Residences</h1>
        <hr>
    
        <h3>Try it!</h3>
        <br>
        <form method='post' >
            <div>
-               <input class="form-control lead" name="searchTerm" placeholder="Search for students with a specific name, ID here"/>
+               <input class="form-control lead" name="searchTerm" placeholder="Search for residences with a specific name here"/>
            </div>
            <div>
                <input class="btn" name="submit" type="submit" value='Search' />
@@ -23,10 +23,7 @@
                 {% for item in results %}
                     <tr width="100%">
                         <td >
-                            {{ item["Name"] }}
-                        </td>
-                        <td >
-                            {{ item["UNI"] }}
+                            {{ item["name"] }}
                         </td>
                     </tr>
                 {% endfor %}
@@ -38,8 +35,9 @@
        {% endif %}
    
        <br>
-       <h3>There are two students endpoints: students/select and students/search.</h3>
+       <h3>There are two residence endpoints: residences/select and residences/search.</h3>
        <br>
+
 <!--    
        <div class="panel panel-default endpoint-select" >
            <div class="panel-heading" data-toggle="collapse" data-target="#select_panel"><h4>Select</h4></div>
@@ -259,171 +257,171 @@
        </div> -->
    
        <script>
-           var count = 1
-           // function to add new field when "ADD FIELD" is pressed   
-           function addField(){
-               var code = '<div><br><br>\
-                               <div class="col-sm-2">\
-                                   <select class="form-control selectionQuery" id="field' + count.toString()+ '"value="course_name">\
-                                       <option value="course_id">course_id</option>\
-                                       <option value="term">term</option>\
-                                       <option value="call_number">call_number</option>\
-                                       <option value="course_name" selected="selected">course_name</option>\
-                                       <option value="bulletin_flags">bulletin_flags</option>\
-                                       <option value="division_code">division_code</option>\
-                                       <option value="prefix_name">prefix_name</option>\
-                                       <option value="prefix_long_name">prefix_long_name</option>\
-                                       <option value="instructor_name">instructor_name</option>\
-                                       <option value="approval">approval</option>\
-                                       <option value="school_code">school_code</option>\
-                                       <option value="school_name">school_name</option>\
-                                       <option value="campus_code">campus_code</option>\
-                                       <option value="campus_name">campus_name</option>\
-                                       <option value="type_code">type_code</option>\
-                                       <option value="type_name">type_name</option>\
-                                       <option value="num_enrolled">num_enrolled</option>\
-                                       <option value="max_size">max_size</option>\
-                                       <option value="min_units">min_units</option>\
-                                       <option value="num_fixed_units">num_fixed_units</option>\
-                                       <option value="class_notes">class_notes</option>\
-                                       <option value="meeting_times">meeting_times</option>\
-                                   </select>\
-                               </div>' +           
-                               '<div class="col-sm-9">\
-                                   <input class="form-control" id="value'+count.toString()+'" type="text" value="DATA%20STRUCTURES%20IN%20JAVA">\
-                               </div>' +
-                               '<div class="col-sm-1">\
-                                   <button type="button" class="btn btn-warning deletion" onclick="deleteField(this)">X</button>\
-                               </div>\
-                           </div>'
-               document.getElementById("fieldToAdd").innerHTML += code
-               count++
-           }
+          var count = 1
+          // function to add new field when "ADD FIELD" is pressed   
+          function addField(){
+              var code = '<div><br><br>\
+                              <div class="col-sm-2">\
+                                  <select class="form-control selectionQuery" id="field' + count.toString()+ '"value="course_name">\
+                                      <option value="course_id">course_id</option>\
+                                      <option value="term">term</option>\
+                                      <option value="call_number">call_number</option>\
+                                      <option value="course_name" selected="selected">course_name</option>\
+                                      <option value="bulletin_flags">bulletin_flags</option>\
+                                      <option value="division_code">division_code</option>\
+                                      <option value="prefix_name">prefix_name</option>\
+                                      <option value="prefix_long_name">prefix_long_name</option>\
+                                      <option value="instructor_name">instructor_name</option>\
+                                      <option value="approval">approval</option>\
+                                      <option value="school_code">school_code</option>\
+                                      <option value="school_name">school_name</option>\
+                                      <option value="campus_code">campus_code</option>\
+                                      <option value="campus_name">campus_name</option>\
+                                      <option value="type_code">type_code</option>\
+                                      <option value="type_name">type_name</option>\
+                                      <option value="num_enrolled">num_enrolled</option>\
+                                      <option value="max_size">max_size</option>\
+                                      <option value="min_units">min_units</option>\
+                                      <option value="num_fixed_units">num_fixed_units</option>\
+                                      <option value="class_notes">class_notes</option>\
+                                      <option value="meeting_times">meeting_times</option>\
+                                  </select>\
+                              </div>' +           
+                              '<div class="col-sm-9">\
+                                  <input class="form-control" id="value'+count.toString()+'" type="text" value="DATA%20STRUCTURES%20IN%20JAVA">\
+                              </div>' +
+                              '<div class="col-sm-1">\
+                                  <button type="button" class="btn btn-warning deletion" onclick="deleteField(this)">X</button>\
+                              </div>\
+                          </div>'
+              document.getElementById("fieldToAdd").innerHTML += code
+              count++
+          }
 
-           // deletes field when "X" is pressed
-           function deleteField(button) {
-               $(button).parent().parent().remove();
-           }
+          // deletes field when "X" is pressed
+          function deleteField(button) {
+              $(button).parent().parent().remove();
+          }
 
-           // returns queried data in JSON format for both "SELECT" and "SEARCH"
-           function queryFunction(endpoint) {
-               var req = endpoint + "Request";
-               var resp = endpoint + "ResponseBlock";
-               
-               var apiCall = new XMLHttpRequest();
-               apiCall.onreadystatechange = function() {
-                   document.getElementById(req).innerHTML = apiRequest;
-                   if (apiCall.readyState == XMLHttpRequest.DONE && this.status == 200) {
-                       var obj = JSON.parse(apiCall.responseText);
+          // returns queried data in JSON format for both "SELECT" and "SEARCH"
+          function queryFunction(endpoint) {
+              var req = endpoint + "Request";
+              var resp = endpoint + "ResponseBlock";
+              
+              var apiCall = new XMLHttpRequest();
+              apiCall.onreadystatechange = function() {
+                  document.getElementById(req).innerHTML = apiRequest;
+                  if (apiCall.readyState == XMLHttpRequest.DONE && this.status == 200) {
+                      var obj = JSON.parse(apiCall.responseText);
 
-                       // if we have endpoint = "select", the data is returned as a dict
-                       // if we have endpoint = "search", the data is returned as array of dicts
-                       // to uniformize the data, I store results in array of dicts, no matter which endpoint
-                       totalData =[]
-                       if (endpoint == "select"){
-                           totalData[0]=obj.data
-                       }
-                       if (endpoint == "search"){
-                           totalData=obj.data
-                       }
+                      // if we have endpoint = "select", the data is returned as a dict
+                      // if we have endpoint = "search", the data is returned as array of dicts
+                      // to uniformize the data, I store results in array of dicts, no matter which endpoint
+                      totalData =[]
+                      if (endpoint == "select"){
+                          totalData[0]=obj.data
+                      }
+                      if (endpoint == "search"){
+                          totalData=obj.data
+                      }
 
-                       var result = ""
-                       // each possible result in array of dicts is printed in JSON form
-                       // for endpoint = select, only one JSON block is printed (array has length 1)
-                       // for endpoint = search, 
-                       for (i=0; i<totalData.length;i++){
-                           data = totalData[i]
-                           // text to be inserted into HTML block
-                           var temp_text = "<pre class='text-success' prettyprint lang=js>\n\
-                               {\n\
-                                   &quot;status_code&quot;: 200,\n\
-                                   &quot;data&quot;: [\n\
-                                       { \n\
-                                           &quot;approval&quot;: &quot;" +data.approval+ "&quot;,\n\
-                                           &quot;bulletin_flags&quot;: &quot;" + data.bulletin_flags + "&quot;,\n\
-                                           &quot;call_number&quot;: " +data.call_number+ ",\n\
-                                           &quot;campus_code&quot;: &quot;" +data.campus_code+ "&quot;,\n\
-                                           &quot;campus_name&quot;: &quot;" +data.campus_name+ "&quot;,\n\
-                                           &quot;class_notes&quot;: &quot;" +data.class_notes+ "&quot;,\n\
-                                           &quot;course_id&quot;: &quot;" +data.course_id+ "&quot;,\n\
-                                           &quot;course_name&quot;: &quot;" +data.course_name+ "&quot;,\n\
-                                           &quot;division_code&quot;: &quot;" +data.division_code+ "&quot;,\n\
-                                           &quot;instructor_name&quot;: &quot;" +data.instructor_name+ "&quot;,\n\
-                                           &quot;max_size&quot;: " +data.max_size+ ",\n\
-                                           &quot;meeting_times&quot;: &quot;" +data.meeting_times+ "&quot;,\n\
-                                           &quot;min_units&quot;: " +data.min_units+ ",\n\
-                                           &quot;num_enrolled&quot;: " +data.num_enrolled+ ",\n\
-                                           &quot;num_fixed_units&quot;: " +data.num_fixed_units+ ",\n\
-                                           &quot;prefix_long_name&quot;: &quot;" +data.prefix_long_name+ "&quot;,\n\
-                                           &quot;prefix_name&quot;: &quot;" +data.prefix_name+ "&quot;,\n\
-                                           &quot;school_code&quot;: &quot;" +data.school_code+ "&quot;,\n\
-                                           &quot;school_name&quot;: &quot;" +data.school_name+ "&quot;,\n\
-                                           &quot;term&quot;: &quot;" +data.term+ "&quot;,\n\
-                                           &quot;type_code&quot;: &quot;" +data.type_code+ "&quot;,\n\
-                                           &quot;type_name&quot;: &quot;" +data.type_name+ "&quot;\n\
-                                       }\n\
-                                   ],\n\
-                                   &quot;status_txt&quot;: &quot;OK&quot;\n\
-                               }\n\
-                           </pre>"
-                           result+=temp_text
-                       }
-                       // sets height at 600px and makes response scrollable
-                       var respElement = document.getElementById(resp)
-                       respElement.classList.add("searchResponseBlock")
-                       respElement.innerHTML = result;
-                       respElement.style.color = "green";
+                      var result = ""
+                      // each possible result in array of dicts is printed in JSON form
+                      // for endpoint = select, only one JSON block is printed (array has length 1)
+                      // for endpoint = search, 
+                      for (i=0; i<totalData.length;i++){
+                          data = totalData[i]
+                          // text to be inserted into HTML block
+                          var temp_text = "<pre class='text-success' prettyprint lang=js>\n\
+                              {\n\
+                                  &quot;status_code&quot;: 200,\n\
+                                  &quot;data&quot;: [\n\
+                                      { \n\
+                                          &quot;approval&quot;: &quot;" +data.approval+ "&quot;,\n\
+                                          &quot;bulletin_flags&quot;: &quot;" + data.bulletin_flags + "&quot;,\n\
+                                          &quot;call_number&quot;: " +data.call_number+ ",\n\
+                                          &quot;campus_code&quot;: &quot;" +data.campus_code+ "&quot;,\n\
+                                          &quot;campus_name&quot;: &quot;" +data.campus_name+ "&quot;,\n\
+                                          &quot;class_notes&quot;: &quot;" +data.class_notes+ "&quot;,\n\
+                                          &quot;course_id&quot;: &quot;" +data.course_id+ "&quot;,\n\
+                                          &quot;course_name&quot;: &quot;" +data.course_name+ "&quot;,\n\
+                                          &quot;division_code&quot;: &quot;" +data.division_code+ "&quot;,\n\
+                                          &quot;instructor_name&quot;: &quot;" +data.instructor_name+ "&quot;,\n\
+                                          &quot;max_size&quot;: " +data.max_size+ ",\n\
+                                          &quot;meeting_times&quot;: &quot;" +data.meeting_times+ "&quot;,\n\
+                                          &quot;min_units&quot;: " +data.min_units+ ",\n\
+                                          &quot;num_enrolled&quot;: " +data.num_enrolled+ ",\n\
+                                          &quot;num_fixed_units&quot;: " +data.num_fixed_units+ ",\n\
+                                          &quot;prefix_long_name&quot;: &quot;" +data.prefix_long_name+ "&quot;,\n\
+                                          &quot;prefix_name&quot;: &quot;" +data.prefix_name+ "&quot;,\n\
+                                          &quot;school_code&quot;: &quot;" +data.school_code+ "&quot;,\n\
+                                          &quot;school_name&quot;: &quot;" +data.school_name+ "&quot;,\n\
+                                          &quot;term&quot;: &quot;" +data.term+ "&quot;,\n\
+                                          &quot;type_code&quot;: &quot;" +data.type_code+ "&quot;,\n\
+                                          &quot;type_name&quot;: &quot;" +data.type_name+ "&quot;\n\
+                                      }\n\
+                                  ],\n\
+                                  &quot;status_txt&quot;: &quot;OK&quot;\n\
+                              }\n\
+                          </pre>"
+                          result+=temp_text
+                      }
+                      // sets height at 600px and makes response scrollable
+                      var respElement = document.getElementById(resp)
+                      respElement.classList.add("searchResponseBlock")
+                      respElement.innerHTML = result;
+                      respElement.style.color = "green";
 
-                   // if key is incorrect
-                   } else {
-                       // sets height at 100%, preventing large+empty response block
-                       var responseObj = JSON.parse(this.response);
-                       var respElement = document.getElementById(resp)
-                       respElement.classList.remove("searchResponseBlock")
-                       respElement.innerHTML = "ERROR " + this.status + ": " + responseObj.message;
-                       respElement.style.color = "red";
-                       respElement.classList.add("nopadding")
+                  // if key is incorrect
+                  } else {
+                      // sets height at 100%, preventing large+empty response block
+                      var responseObj = JSON.parse(this.response);
+                      var respElement = document.getElementById(resp)
+                      respElement.classList.remove("searchResponseBlock")
+                      respElement.innerHTML = "ERROR " + this.status + ": " + responseObj.message;
+                      respElement.style.color = "red";
+                      respElement.classList.add("nopadding")
+                  }
+              }
+
+              // returns single JSON block for "SELECT"
+              if (endpoint == "select") {
+                   apiRequest = "http://127.0.0.1:5000/api/courses/select?course_id="
+                                      + document.getElementById("inputCourseID").value
+                                      + "&term="
+                                      + document.getElementById("inputTerm").value
+                                      + "&key="
+                                      + document.getElementById("inputKey1").value;
+              }
+
+              // returns at least one JSON block (if exists multiple results) for "SEARCH"
+              else if (endpoint == "search") {
+                   apiRequest = "http://127.0.0.1:5000/api/courses/search?"
+                                      + document.getElementById("inputParameter").value
+                                      + "="
+                                      + document.getElementById("inputParameterValue").value;
+                   for (i = 1; i < count; i++){
+                       option_id = "field" + i.toString()
+                       val_id = "value" + i.toString()
+                       element = document.getElementById(option_id).value
+                       value = document.getElementById(val_id).value
+                       apiRequest = apiRequest+"&"+element+"="+value;
                    }
-               }
-
-               // returns single JSON block for "SELECT"
-               if (endpoint == "select") {
-                    apiRequest = "http://127.0.0.1:5000/api/courses/select?course_id="
-                                       + document.getElementById("inputCourseID").value
-                                       + "&term="
-                                       + document.getElementById("inputTerm").value
-                                       + "&key="
-                                       + document.getElementById("inputKey1").value;
-               }
-
-               // returns at least one JSON block (if exists multiple results) for "SEARCH"
-               else if (endpoint == "search") {
-                    apiRequest = "http://127.0.0.1:5000/api/courses/search?"
-                                       + document.getElementById("inputParameter").value
-                                       + "="
-                                       + document.getElementById("inputParameterValue").value;
-                    for (i = 1; i < count; i++){
-                        option_id = "field" + i.toString()
-                        val_id = "value" + i.toString()
-                        element = document.getElementById(option_id).value
-                        value = document.getElementById(val_id).value
-                        apiRequest = apiRequest+"&"+element+"="+value;
-                    }
-                    apiRequest=apiRequest+"&key="+document.getElementById("inputKey2").value
-               } 
-               apiCall.open("GET", apiRequest);
-               apiCall.send();
-           }
-   
-       </script>
-   
-       </section>
-    </div> 
-   
-    {% endblock %}
-    {% block styles %}
-    {{super()}}
-    <link rel="stylesheet"
-         href="{{url_for('static', filename='assets/api_page.css')}}">
-    {% endblock %}
+                   apiRequest=apiRequest+"&key="+document.getElementById("inputKey2").value
+              } 
+              apiCall.open("GET", apiRequest);
+              apiCall.send();
+          }
+  
+      </script>
+  
+      </section>
+   </div> 
+  
+   {% endblock %}
+   {% block styles %}
+   {{super()}}
+   <link rel="stylesheet"
+        href="{{url_for('static', filename='assets/api_page.css')}}">
+   {% endblock %}
 
