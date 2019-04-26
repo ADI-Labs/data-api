@@ -20,8 +20,89 @@ Data@CU’s stack is currently as follows:
         - Project continuous integration managed in collaboration with Github and Slack.
   
 ## Deployment:
-git remote add dokku dokku@208.68.37.106:data-api
-git push dokku master
+
+Deployment to data2.adicu.com is an automatic process that occurs on every successful merge into the repository
+The website is deployed as an extension to the ADI CU website.
+
+## API endpoints:
+
+All the APIs have two endpoints - Select and Search
+
+Select returns one specific result
+Search returns a list of relevant results
+
+### Courses
+
+##### SELECT
+
+Requires course id, term, and key - returns a single result
+/api/courses/select?course_id=<course_id>&term=<term>&key=<key> 
+
+##### SEARCH
+
+Accepts any combination of one or more parameters, requires key - returns a list
+/api/courses/search?course_name=<course_name>&key=<key> 
+        
+##### PARAMETERS
+
+['course_id', 'term', 'course_name', 'call_number', 'bulletin_flags', 'division_code', 'credit_amount', 'prefix_name', 'prefix_long_name', 'instructor_name', 'approval', 'school_code', 'school_name', 'campus_code', 'campus_name', 'type_code', 'type_name', 'num_enrolled', 'max_size', 'min_units', 'num_fixed_units', 'class_notes', 'meeting_times']
+
+
+### Residences
+
+##### SELECT
+
+Requires name, and key - returns a single result
+/api/courses/select?name=<name>&key=<key> 
+
+##### SEARCH
+
+Accepts any combination of one or more parameters, requires key - returns a list
+/api/courses/search?name=<name>&key=<key> 
+        
+        Special residences: 
+	        For each type (FSL and residential brownstones, SIC housing), a grouped entry and split entries both exist.                   Specify a “expand_special” option in the search api: if false, only returns grouped, if true, returns all                     relevant entries as usual
+
+##### PARAMETERS
+* - searchable
+
+*name
+street_address
+*residential_area
+*building_type
+*room_type
+*class_make_up
+rate
+entrance_info
+num_res_floors
+num_singles
+num_doubles
+*bathroom
+laundry
+flooring
+*kitchen
+lounge
+cleaning_schedule
+*bike_storage
+*print_station
+*fitness_room
+*computer_lab
+*ac
+*piano
+description
+features
+
+### Students
+
+SELECT
+
+SEARCH
+
+### Notes
+
+When querying, must replace each space with “%20”
+
+## Contributors
 
 ### Current Contributors:
 - Anavi Lohia (Product Manager)
