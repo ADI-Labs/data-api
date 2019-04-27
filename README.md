@@ -36,12 +36,16 @@ Search returns a list of relevant results - accepts any combination of paramters
 ##### SELECT
 
 Requires course id, term, and key - returns a single result
-/api/courses/select?course_id=<course_id>&term=<term>&key=<key> 
+```
+/api/courses/select?course_id=<course_id>&term=<term>&key=<key>
+```
 
 ##### SEARCH
 
 Accepts any combination of one or more parameters, requires key - returns a list
-/api/courses/search?course_name=<course_name>&key=<key> 
+```
+/api/courses/search?course_name=<course_name>&key=<key>
+```
         
 ##### PARAMETERS
 
@@ -60,7 +64,9 @@ Requires name, and key - returns a single result
 ##### SEARCH
 
 Accepts any combination of one or more parameters, requires key - returns a list
-/api/courses/search?kitchen=<kitchen>&key=<key> 
+```
+/api/courses/search?kitchen=<kitchen>&key=<key>
+```
         
 Special residences: 
 
@@ -101,12 +107,16 @@ features
 ##### SELECT
 
 Requires uni, and key - returns a single result
-/api/courses/select?uni=<uni>&key=<key> 
+```
+/api/courses/select?uni=<uni>&key=<key>
+```
 	
 ##### SEARCH
 
 Accepts any combination of one or more parameters, requires key - returns a list
-/api/courses/search?name=<name>&key=<key> 
+```
+/api/courses/search?name=<name>&key=<key>
+```
 	
 ##### PARAMETERS
 
