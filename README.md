@@ -53,7 +53,9 @@ Accepts any combination of one or more parameters, requires key - returns a list
 ##### SELECT
 
 Requires name, and key - returns a single result
-/api/courses/select?name=<name>&key=<key> 
+```
+/api/courses/select?name=<name>&key=<key>
+```
 
 ##### SEARCH
 
