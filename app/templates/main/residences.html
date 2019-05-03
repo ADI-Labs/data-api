@@ -25,6 +25,15 @@
                         <td >
                             {{ item["name"] }}
                         </td>
+                        <td >
+                            {{ item["street_address"] }}
+                        </td>
+                        <td >
+                            {{ item["class_make_up"] }}
+                        </td>
+                        <td >
+                            {{ item["room_type"] }}
+                        </td>
                     </tr>
                 {% endfor %}
             </table>
@@ -37,15 +46,14 @@
        <br>
        <h3>There are two residence endpoints: residences/select and residences/search.</h3>
        <br>
-
-<!--    
+ 
        <div class="panel panel-default endpoint-select" >
            <div class="panel-heading" data-toggle="collapse" data-target="#select_panel"><h4>Select</h4></div>
            <div class="panel-body">
                <div class="container-fluid">
                    <div class="row">
                        <span class="label label-primary col-1">GET</span>
-                       <span class="panel-text col-11" id="selectRequest">/api/courses/select?course_id=course_id&term=term&key=key</span>
+                       <span class="panel-text col-11" id="selectRequest">/api/residences/select?name=name&key=key</span>
                    </div>
                </div>
                <div id="select_panel" class="collapse">
@@ -59,15 +67,9 @@
                            </div>
                        </div>
                        <div class="form-group">
-                           <label class="col-sm-2 control-label">Course_id:</label>
+                           <label class="col-sm-2 control-label">Name:</label>
                            <div class="col-sm-10">
-                               <input class="form-control" id="inputCourseID" type="text" value="COMS3134S001">
-                           </div>
-                       </div>
-                       <div class="form-group">
-                           <label class="col-sm-2 control-label">Term:</label>
-                           <div class="col-sm-10">
-                               <input class="form-control" id="inputTerm" type="text" value="20192">
+                               <input class="form-control" id="inputName" type="text" value="Hartley%20Hall">
                            </div>
                        </div>
                        <div class="form-group">
@@ -85,45 +87,48 @@
                                    &quot;status_code&quot;: 200,
                                    &quot;data&quot;: [
                                        {
-                                           &quot;approval&quot;: &quot;&quot;,
-                                           &quot;bulletin_flags&quot;: &quot;CEFKGRUXI&quot;,
-                                           &quot;call_number&quot;: 11307,
-                                           &quot;campus_code&quot;: &quot;MORN&quot;,
-                                           &quot;campus_name&quot;: &quot;MORNINGSIDE&quot;,
-                                           &quot;class_notes&quot;: &quot;&quot;,
-                                           &quot;course_id&quot;: &quot;COMS3134S001&quot;,
-                                           &quot;course_name&quot;: &quot;DATA STRUCTURES IN JAVA&quot;,
-                                           &quot;division_code&quot;: &quot;SS&quot;,
-                                           &quot;instructor_name&quot;: &quot;BLAER, PAUL S&quot;,
-                                           &quot;max_size&quot;: 999,
-                                           &quot;meeting_times&quot;: &quot;MW     05:30P-08:40PBTBA            RTBA&quot;,
-                                           &quot;min_units&quot;: 000,
-                                           &quot;num_enrolled&quot;: ,
-                                           &quot;num_fixed_units&quot;: 030,
-                                           &quot;prefix_long_name&quot;: &quot;COMPUTER SCIENCE&quot;,
-                                           &quot;prefix_name&quot;: &quot;COMPUT SCI&quot;,
-                                           &quot;school_code&quot;: &quot;SPEC&quot;,
-                                           &quot;school_name&quot;: &quot;SCHOOL OF PROFESSIONAL STUDIES&quot;,
-                                           &quot;term&quot;: &quot;20182&quot;,
-                                           &quot;type_code&quot;: &quot;LC&quot;,
-                                           &quot;type_name&quot;: &quot;LECTURE&quot;
+                                           &quot;name&quot;: &quot;Hartley Hall&quot;,
+                                           &quot;street_address&quot;: &quot;1124 Amsterdam Avenue&quot;,
+                                           &quot;residential_area&quot;: &quot;First Year Area&quot;,
+                                           &quot;building_type&quot;: &quot;Suite-style&quot;,
+                                           &quot;room_type&quot;: &quot;suite doubles, suite singles&quot;,
+                                           &quot;class_make_up&quot;: &quot;Freshmen, Sophomores&quot;,
+                                           &quot;rate&quot;: &quot;First Year $8,412/year; Upperclass: $9,538/year&quot;,
+                                           &quot;entrance_info&quot;: &quot;Inside campus between 115th and 116th Streets&quot;,
+                                           &quot;num_res_floors&quot;: 10,
+                                           &quot;num_singles&quot;: 158,
+                                           &quot;num_doubles&quot;: 36,
+                                           &quot;bathroom&quot;: &quot;Semi-Private, Within suite&quot;,
+                                           &quot;laundry&quot;: &quot;In basement&quot;,
+                                           &quot;flooring&quot;: &quot;Hallways and rooms carpeted&quot;,
+                                           &quot;kitchen&quot;: &quot;Private, per suite&quot;,
+                                           &quot;lounge&quot;: &quot;Building Lounge, 1st floor with game room including pool and ping pong tables, Study Lounge, 10th floor, Common Area, Per suite with cable TV&quot;,
+                                           &quot;cleaning_schedule&quot;: &quot;Bathrooms, Twice weekly, Kitchens, Resident responsibility, Trash Removal (Room/Suite), Resident responsibility, Recycling, Twice weekly&quot;,
+                                           &quot;bike_storage&quot;: false,
+                                           &quot;print_station&quot;: false,
+                                           &quot;fitness_room&quot;: false,
+                                           &quot;computer_lab&quot;: true,
+                                           &quot;ac&quot;: false,
+                                           &quot;piano&quot;: false,
+                                           &quot;description&quot;: &quot;Large duplex suites with singles and doubles, 2 building elevators&quot;,
+                                           &quot;features&quot;: &quot;Vending machines located in building&quot;
                                        }
                                    ],
-                                   &quot;status_txt&quot;: &quot;OK&quot;
-                               }
+                                    &quot;status_txt&quot;: &quot;OK&quot;
+                                }
                            </pre>
                    </div>
                </div>  
            </div>
        </div>
-     
+
        <div class="panel panel-default endpoint-search" >
            <div class="panel-heading" data-toggle="collapse" data-target="#search_panel"><h4>Search</h4></div>
            <div class="panel-body">
                <div class="container-fluid">
                    <div class="row">
                        <span class="label label-primary col-1">GET</span>
-                       <span class="panel-text col-11" id="searchRequest">/api/courses/search?course_name=course_name&key=key</span>
+                       <span class="panel-text col-11" id="searchRequest">/api/residences/search?name=name&key=key</span>
                    </div>
                </div>
              
@@ -139,35 +144,26 @@
                            </div>
                        </div>
                        <div class="form-group" id = "fieldToAdd">
-                           <div class="col-sm-2"> -->
+                           <div class="col-sm-2">
                                <!-- scroll bar to select type of search -->
-                               <!-- <select class="form-control selectionQuery" id="inputParameter" value="course_name">
-                                   <option value="course_id">course_id</option>
-                                   <option value="term">term</option>
-                                   <option value="call_number">call_number</option>
-                                   <option value="course_name" selected="selected">course_name</option>
-                                   <option value="bulletin_flags">bulletin_flags</option>
-                                   <option value="division_code">division_code</option>
-                                   <option value="prefix_name">prefix_name</option>
-                                   <option value="prefix_long_name">prefix_long_name</option>
-                                   <option value="instructor_name">instructor_name</option>
-                                   <option value="approval">approval</option>
-                                   <option value="school_code">school_code</option>
-                                   <option value="school_name">school_name</option>
-                                   <option value="campus_code">campus_code</option>
-                                   <option value="campus_name">campus_name</option>
-                                   <option value="type_code">type_code</option>
-                                   <option value="type_name">type_name</option>
-                                   <option value="num_enrolled">num_enrolled</option>
-                                   <option value="max_size">max_size</option>
-                                   <option value="min_units">min_units</option>
-                                   <option value="num_fixed_units">num_fixed_units</option>
-                                   <option value="class_notes">class_notes</option>
-                                   <option value="meeting_times">meeting_times</option>
+                               <select class="form-control selectionQuery" id="inputParameter" value="name">
+                                   <option value="name">name</option>
+                                   <option value="residential_area">residential_area</option>
+                                   <option value="building_type">building_type</option>
+                                   <option value="room_type">room_type</option>
+                                   <option value="class_make_up" selected="selected">class_make_up</option>
+                                   <option value="bathroom">bathroom</option>
+                                   <option value="kitchen">kitchen</option>
+                                   <option value="bike_storage">bike_storage</option>
+                                   <option value="print_station">print_station</option>
+                                   <option value="fitness_room">fitness_room</option>
+                                   <option value="computer_lab">computer_lab</option>
+                                   <option value="ac">ac</option>
+                                   <option value="piano">piano</option>
                                </select>
                            </div>            
                            <div class="col-sm-10">
-                               <input class="form-control" id="inputParameterValue" type="text" value="DATA%20STRUCTURES%20IN%20JAVA">
+                               <input class="form-control" id="inputParameterValue" type="text" value="Freshmen">
                            </div>
                        </div>
                        <div class="form-group">
@@ -185,28 +181,31 @@
                                    &quot;status_code&quot;: 200,
                                    &quot;data&quot;: [
                                        {
-                                           &quot;approval&quot;: &quot;&quot;,
-                                           &quot;bulletin_flags&quot;: &quot;CEFKGRUXI&quot;,
-                                           &quot;call_number&quot;: 11307,
-                                           &quot;campus_code&quot;: &quot;MORN&quot;,
-                                           &quot;campus_name&quot;: &quot;MORNINGSIDE&quot;,
-                                           &quot;class_notes&quot;: &quot;&quot;,
-                                           &quot;course_id&quot;: &quot;COMS3134S001&quot;,
-                                           &quot;course_name&quot;: &quot;DATA STRUCTURES IN JAVA&quot;,
-                                           &quot;division_code&quot;: &quot;SS&quot;,
-                                           &quot;instructor_name&quot;: &quot;BLAER, PAUL S&quot;,
-                                           &quot;max_size&quot;: 999,
-                                           &quot;meeting_times&quot;: &quot;MW     05:30P-08:40PBTBA            RTBA&quot;,
-                                           &quot;min_units&quot;: 000,
-                                           &quot;num_enrolled&quot;: ,
-                                           &quot;num_fixed_units&quot;: 030,
-                                           &quot;prefix_long_name&quot;: &quot;COMPUTER SCIENCE&quot;,
-                                           &quot;prefix_name&quot;: &quot;COMPUT SCI&quot;,
-                                           &quot;school_code&quot;: &quot;SPEC&quot;,
-                                           &quot;school_name&quot;: &quot;SCHOOL OF PROFESSIONAL STUDIES&quot;,
-                                           &quot;term&quot;: &quot;20182&quot;,
-                                           &quot;type_code&quot;: &quot;LC&quot;,
-                                           &quot;type_name&quot;: &quot;LECTURE&quot;
+                                        &quot;name&quot;: &quot;Hartley Hall&quot;,
+                                        &quot;street_address&quot;: &quot;1124 Amsterdam Avenue&quot;,
+                                        &quot;residential_area&quot;: &quot;First Year Area&quot;,
+                                        &quot;building_type&quot;: &quot;Suite-style&quot;,
+                                        &quot;room_type&quot;: &quot;suite doubles, suite singles&quot;,
+                                        &quot;class_make_up&quot;: &quot;Freshmen, Sophomores&quot;,
+                                        &quot;rate&quot;: &quot;First Year $8,412/year; Upperclass: $9,538/year&quot;,
+                                        &quot;entrance_info&quot;: &quot;Inside campus between 115th and 116th Streets&quot;,
+                                        &quot;num_res_floors&quot;: 10,
+                                        &quot;num_singles&quot;: 158,
+                                        &quot;num_doubles&quot;: 36,
+                                        &quot;bathroom&quot;: &quot;Semi-Private, Within suite&quot;,
+                                        &quot;laundry&quot;: &quot;In basement&quot;,
+                                        &quot;flooring&quot;: &quot;Hallways and rooms carpeted&quot;,
+                                        &quot;kitchen&quot;: &quot;Private, per suite&quot;,
+                                        &quot;lounge&quot;: &quot;Building Lounge, 1st floor with game room including pool and ping pong tables, Study Lounge, 10th floor, Common Area, Per suite with cable TV&quot;,
+                                        &quot;cleaning_schedule&quot;: &quot;Bathrooms, Twice weekly, Kitchens, Resident responsibility, Trash Removal (Room/Suite), Resident responsibility, Recycling, Twice weekly&quot;,
+                                        &quot;bike_storage&quot;: false,
+                                        &quot;print_station&quot;: false,
+                                        &quot;fitness_room&quot;: false,
+                                        &quot;computer_lab&quot;: true,
+                                        &quot;ac&quot;: false,
+                                        &quot;piano&quot;: false,
+                                        &quot;description&quot;: &quot;Large duplex suites with singles and doubles, 2 building elevators&quot;,
+                                        &quot;features&quot;: &quot;Vending machines located in building&quot;
                                        }
                                    ],
                                    &quot;status_txt&quot;: &quot;OK&quot;
@@ -254,7 +253,7 @@
                    {% endif %}
                </div>
            </div>
-       </div> -->
+       </div>
    
        <script>
           var count = 1
@@ -262,33 +261,25 @@
           function addField(){
               var code = '<div><br><br>\
                               <div class="col-sm-2">\
-                                  <select class="form-control selectionQuery" id="field' + count.toString()+ '"value="course_name">\
-                                      <option value="course_id">course_id</option>\
-                                      <option value="term">term</option>\
-                                      <option value="call_number">call_number</option>\
-                                      <option value="course_name" selected="selected">course_name</option>\
-                                      <option value="bulletin_flags">bulletin_flags</option>\
-                                      <option value="division_code">division_code</option>\
-                                      <option value="prefix_name">prefix_name</option>\
-                                      <option value="prefix_long_name">prefix_long_name</option>\
-                                      <option value="instructor_name">instructor_name</option>\
-                                      <option value="approval">approval</option>\
-                                      <option value="school_code">school_code</option>\
-                                      <option value="school_name">school_name</option>\
-                                      <option value="campus_code">campus_code</option>\
-                                      <option value="campus_name">campus_name</option>\
-                                      <option value="type_code">type_code</option>\
-                                      <option value="type_name">type_name</option>\
-                                      <option value="num_enrolled">num_enrolled</option>\
-                                      <option value="max_size">max_size</option>\
-                                      <option value="min_units">min_units</option>\
-                                      <option value="num_fixed_units">num_fixed_units</option>\
-                                      <option value="class_notes">class_notes</option>\
-                                      <option value="meeting_times">meeting_times</option>\
+                                  <select class="form-control selectionQuery" id="field' + count.toString()+ '"value="name">\
+                                    <option value="name" selected="selected">name</option>\
+                                    <option value="residential_area">residential_area</option>\
+                                    <option value="building_type">building_type</option>\
+                                    <option value="room_type">room_type</option>\
+                                    <option value="class_make_up">class_make_up</option>\
+                                    <option value="bathroom">bathroom</option>\
+                                    <option value="kitchen">kitchen</option>\
+                                    <option value="lounge">lounge</option>\
+                                    <option value="bike_storage">bike_storage</option>\
+                                    <option value="print_station">print_station</option>\
+                                    <option value="fitness_room">fitness_room</option>\
+                                    <option value="computer_lab">computer_lab</option>\
+                                    <option value="ac">ac</option>\
+                                    <option value="piano">piano</option>\
                                   </select>\
                               </div>' +           
                               '<div class="col-sm-9">\
-                                  <input class="form-control" id="value'+count.toString()+'" type="text" value="DATA%20STRUCTURES%20IN%20JAVA">\
+                                  <input class="form-control" id="value'+count.toString()+'" type="text" value="Hartley%20Hall">\
                               </div>' +
                               '<div class="col-sm-1">\
                                   <button type="button" class="btn btn-warning deletion" onclick="deleteField(this)">X</button>\
@@ -337,28 +328,31 @@
                                   &quot;status_code&quot;: 200,\n\
                                   &quot;data&quot;: [\n\
                                       { \n\
-                                          &quot;approval&quot;: &quot;" +data.approval+ "&quot;,\n\
-                                          &quot;bulletin_flags&quot;: &quot;" + data.bulletin_flags + "&quot;,\n\
-                                          &quot;call_number&quot;: " +data.call_number+ ",\n\
-                                          &quot;campus_code&quot;: &quot;" +data.campus_code+ "&quot;,\n\
-                                          &quot;campus_name&quot;: &quot;" +data.campus_name+ "&quot;,\n\
-                                          &quot;class_notes&quot;: &quot;" +data.class_notes+ "&quot;,\n\
-                                          &quot;course_id&quot;: &quot;" +data.course_id+ "&quot;,\n\
-                                          &quot;course_name&quot;: &quot;" +data.course_name+ "&quot;,\n\
-                                          &quot;division_code&quot;: &quot;" +data.division_code+ "&quot;,\n\
-                                          &quot;instructor_name&quot;: &quot;" +data.instructor_name+ "&quot;,\n\
-                                          &quot;max_size&quot;: " +data.max_size+ ",\n\
-                                          &quot;meeting_times&quot;: &quot;" +data.meeting_times+ "&quot;,\n\
-                                          &quot;min_units&quot;: " +data.min_units+ ",\n\
-                                          &quot;num_enrolled&quot;: " +data.num_enrolled+ ",\n\
-                                          &quot;num_fixed_units&quot;: " +data.num_fixed_units+ ",\n\
-                                          &quot;prefix_long_name&quot;: &quot;" +data.prefix_long_name+ "&quot;,\n\
-                                          &quot;prefix_name&quot;: &quot;" +data.prefix_name+ "&quot;,\n\
-                                          &quot;school_code&quot;: &quot;" +data.school_code+ "&quot;,\n\
-                                          &quot;school_name&quot;: &quot;" +data.school_name+ "&quot;,\n\
-                                          &quot;term&quot;: &quot;" +data.term+ "&quot;,\n\
-                                          &quot;type_code&quot;: &quot;" +data.type_code+ "&quot;,\n\
-                                          &quot;type_name&quot;: &quot;" +data.type_name+ "&quot;\n\
+                                          &quot;name&quot;: &quot;" +data.name+ "&quot;,\n\
+                                          &quot;street_address&quot;: &quot;" +data.street_address+ "&quot;,\n\
+                                          &quot;residential_area&quot;: " +data.residential_area+ ",\n\
+                                          &quot;building_type&quot;: &quot;" +data.building_type+ "&quot;,\n\
+                                          &quot;room_type&quot;: &quot;" +data.room_type+ "&quot;,\n\
+                                          &quot;class_make_up&quot;: &quot;" +data.class_make_up+ "&quot;,\n\
+                                          &quot;rate&quot;: &quot;" +data.rate+ "&quot;,\n\
+                                          &quot;entrance_info&quot;: &quot;" +data.entrance_info+ "&quot;,\n\
+                                          &quot;num_res_floors&quot;: " +data.num_res_floors+ ",\n\
+                                          &quot;num_singles&quot;: " +data.num_singles+ ",\n\
+                                          &quot;num_doubles&quot;: " +data.num_doubles+ ",\n\
+                                          &quot;bathroom&quot;: " +data.bathroom+ ",\n\
+                                          &quot;laundry&quot;: &quot;" +data.laundry+ "&quot;,\n\
+                                          &quot;flooring&quot;: " +data.flooring+ ",\n\
+                                          &quot;kitchen&quot;: " +data.kitchen+ ",\n\
+                                          &quot;lounge&quot;: " +data.lounge+ ",\n\
+                                          &quot;cleaning_schedule&quot;: &quot;" +data.cleaning_schedule+ "&quot;,\n\
+                                          &quot;bike_storage&quot;: " +data.bike_storage+ ",\n\
+                                          &quot;print_station&quot;: " +data.print_station+ ",\n\
+                                          &quot;fitness_room&quot;: " +data.fitness_room+ ",\n\
+                                          &quot;computer_lab&quot;: " +data.computer_lab+ ",\n\
+                                          &quot;ac&quot;: " +data.ac+ ",\n\
+                                          &quot;piano&quot;: " +data.piano+ ",\n\
+                                          &quot;description&quot;: " +data.description+ ",\n\
+                                          &quot;features&quot;: &quot;" +data.features+ "&quot;,\n\
                                       }\n\
                                   ],\n\
                                   &quot;status_txt&quot;: &quot;OK&quot;\n\
@@ -386,17 +380,15 @@
 
               // returns single JSON block for "SELECT"
               if (endpoint == "select") {
-                   apiRequest = "http://127.0.0.1:5000/api/courses/select?course_id="
-                                      + document.getElementById("inputCourseID").value
-                                      + "&term="
-                                      + document.getElementById("inputTerm").value
+                   apiRequest = "http://127.0.0.1:5000/api/residences/select?name="
+                                      + document.getElementById("inputName").value
                                       + "&key="
                                       + document.getElementById("inputKey1").value;
               }
 
               // returns at least one JSON block (if exists multiple results) for "SEARCH"
               else if (endpoint == "search") {
-                   apiRequest = "http://127.0.0.1:5000/api/courses/search?"
+                   apiRequest = "http://127.0.0.1:5000/api/residences/search?"
                                       + document.getElementById("inputParameter").value
                                       + "="
                                       + document.getElementById("inputParameterValue").value;
@@ -424,4 +416,3 @@
    <link rel="stylesheet"
         href="{{url_for('static', filename='assets/api_page.css')}}">
    {% endblock %}
-

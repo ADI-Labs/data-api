@@ -216,3 +216,9 @@ def get_primary_keys(model, obj):
     key_names = [pk.name for pk in model.__table__.primary_key]
     keys = list(map(lambda key: getattr(obj, key), key_names))
     return keys
+
+def get_primary_key_names(model):
+    """
+    Returns an ordered list of the names of the primary keys
+    """
+    return [pk.name for pk in model.__table__.primary_key]

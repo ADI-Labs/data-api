@@ -1,5 +1,5 @@
 from . import db
-from .models import get_column_names, get_primary_keys
+from .models import *
 import os
 
 

@@ -1,7 +1,7 @@
 from flask import jsonify
 from flask_restful import Api, Resource, abort, reqparse
 from ..models import Course, User, Student, Residence
-from ..models import get_column_names, get_primary_keys
+from ..models import get_column_names, get_primary_key_names
 from . import api_bp
 
 api = Api(api_bp)
@@ -19,7 +19,9 @@ class Courses(Resource):
             parser = reqparse.RequestParser()
             # note that an error in passing in arguments here will not result
             # in 400 error
-            required_terms = get_primary_keys(Course).append("key")
+            required_terms = get_primary_key_names(Course)
+            required_terms.append("key")
+            print(required_terms)
             add_required_to_parser(parser, required_terms)
 
         # search api can accept any number and combination of parameters
@@ -95,7 +97,8 @@ class Students(Resource):
             parser = reqparse.RequestParser()
             # note that an error in passing in arguments here will not result
             # in 400 error
-            required_terms = get_primary_keys(Course).append("key")
+            required_terms = get_primary_key_names(Student)
+            required_terms.append("key")
             add_required_to_parser(parser, required_terms)
 
         # search api can accept any number and combination of prameters
@@ -194,7 +197,8 @@ class Residences(Resource):
             parser = reqparse.RequestParser()
             # note that an error in passing in arguments here will not result
             # in 400 error
-            required_terms = get_primary_keys(Residence).append("key")
+            required_terms = get_primary_key_names(Residence)
+            required_terms.append("key")
             add_required_to_parser(parser, required_terms)
 
         # search api can accept any number and combination of prameters

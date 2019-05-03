@@ -16,6 +16,7 @@ def search(term, where):
     # in the interest of "time" lol ironic
 
     # FIX: for students.html, alld is empty list
+    # FIX: for courses.html, alld is empty list too!
     alld = where.query.all()
     # print(alld)
     for one in alld:
@@ -30,21 +31,28 @@ def search(term, where):
                     result.append({"course_id": things["course_id"],
                                    "term": things["term"],
                                    "name": things["course_name"]})
+                    break
                 # more ifs based on models here
                 if where == Student:
-                    result.append({"Name": things["Name"],
-                                    "UNI": things["UNI"]})
+                    result.append({"name": things["Name"],
+                                    "uni": things["UNI"]})
+                    break
                 if where == Residence:
-                    result.append({"Name": things["Name"]})
+                    result.append({"name": things["name"],
+                                    "street_address": things["street_address"],
+                                    "class_make_up": things["class_make_up"],
+                                    "room_type": things["room_type"]})
+                    break
                 continue
-
+    
     return result
 
 
 def get_parameters(filename):
     parameters = []
 
-    new_path = os.path.abspath('./app/static/metadata/courses.txt')
+    path = './app/static/metadata/' + str(filename)
+    new_path = os.path.abspath(path)
 
     f = open(new_path, "r")
 
@@ -87,7 +95,9 @@ def residences():
     search_results = []
     if request.form:
         term = request.form["searchTerm"]
+        print(term) # term = search query
         search_results = search(term, Residence)
+    print(search_results)
 
     return render_template(
         'main/residences.html',
