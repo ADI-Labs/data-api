@@ -35,16 +35,15 @@ def search(term, where):
                 # more ifs based on models here
                 if where == Student:
                     result.append({"name": things["Name"],
-                                    "uni": things["UNI"]})
+                                   "uni": things["UNI"]})
                     break
                 if where == Residence:
                     result.append({"name": things["name"],
-                                    "street_address": things["street_address"],
-                                    "class_make_up": things["class_make_up"],
-                                    "room_type": things["room_type"]})
+                                   "street_address": things["street_address"],
+                                   "class_make_up": things["class_make_up"],
+                                   "room_type": things["room_type"]})
                     break
                 continue
-    
     return result
 
 
@@ -95,7 +94,7 @@ def residences():
     search_results = []
     if request.form:
         term = request.form["searchTerm"]
-        print(term) # term = search query
+        print(term)  # term = search query
         search_results = search(term, Residence)
     print(search_results)
 
@@ -122,7 +121,7 @@ def student():
 
     if request.form:
         term = request.form["searchTerm"]
-        print(term) # term = search query
+        print(term)  # term = search query
         search_results = search(term, Student)
     print(search_results)
 
