@@ -18,7 +18,6 @@ def search(term, where):
     # FIX: for students.html, alld is empty list
     # FIX: for courses.html, alld is empty list too!
     alld = where.query.all()
-    # print(alld)
     for one in alld:
         things = remove_hidden_attr(one.__dict__)
         for attr in things:
@@ -94,9 +93,9 @@ def residences():
     search_results = []
     if request.form:
         term = request.form["searchTerm"]
-        print(term)  # term = search query
+        # print(term)  # term = search query
         search_results = search(term, Residence)
-    print(search_results)
+    # print(search_results)
 
     return render_template(
         'main/residences.html',
@@ -121,9 +120,9 @@ def student():
 
     if request.form:
         term = request.form["searchTerm"]
-        print(term)  # term = search query
+        # print(term)  # term = search query
         search_results = search(term, Student)
-    print(search_results)
+    # print(search_results)
 
     return render_template(
         'main/students.html',

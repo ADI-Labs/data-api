@@ -20,6 +20,10 @@
        {% if current_user.is_authenticated %}
             {% if results != [] %}
             <table class="table-striped table-bordered center-block" padding width="90%">
+                <td >Name</td>
+                <td >Street Address</td>
+                <td >Class Makeup</td>
+                <td >Room Type</td>
                 {% for item in results %}
                     <tr width="100%">
                         <td >
@@ -150,8 +154,8 @@
                                    <option value="name">name</option>
                                    <option value="residential_area">residential_area</option>
                                    <option value="building_type">building_type</option>
-                                   <option value="room_type">room_type</option>
-                                   <option value="class_make_up" selected="selected">class_make_up</option>
+                                   <option value="room_type" selected="selected">room_type</option>
+                                   <option value="class_make_up">class_make_up</option>
                                    <option value="bathroom">bathroom</option>
                                    <option value="kitchen">kitchen</option>
                                    <option value="bike_storage">bike_storage</option>
@@ -163,7 +167,7 @@
                                </select>
                            </div>            
                            <div class="col-sm-10">
-                               <input class="form-control" id="inputParameterValue" type="text" value="Freshmen">
+                               <input class="form-control" id="inputParameterValue" type="text" value="singles,%20doubles">
                            </div>
                        </div>
                        <div class="form-group">
@@ -398,9 +402,12 @@
                        val_id = "value" + i.toString()
                        element = document.getElementById(option_id).value
                        value = document.getElementById(val_id).value
-                       apiRequest = apiRequest+"&"+element+"="+value;
+                       apiRequest += "&"+element+"="+value;
                    }
-                   apiRequest=apiRequest+"&key="+document.getElementById("inputKey2").value
+                   if (document.getElementById("expand").checked){
+                       apiRequest += "&expand_special=true"
+                   }
+                   apiRequest += "&key="+document.getElementById("inputKey2").value
               } 
               apiCall.open("GET", apiRequest);
               apiCall.send();

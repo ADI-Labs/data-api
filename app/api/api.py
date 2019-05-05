@@ -224,7 +224,6 @@ class Residences(Resource):
             # will return processed arguments, if there is an incorrect
             # argument then it will return the first incorrect argument
             args = process_args(args)
-            self.set_expand_group(args)
 
             if isinstance(args, str):
                 abort(
@@ -248,6 +247,7 @@ class Residences(Resource):
                         response['data'] = remove_hidden_attr(result.__dict__)
 
                 elif typ == 'search':
+                    self.set_expand_group(args)
                     # for search api, use filter through db
                     result = Residence.query
                     for key, val in args.items():
