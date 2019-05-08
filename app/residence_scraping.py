@@ -185,7 +185,7 @@ def standardize_residence(raw_json):
     class_str = raw_json["class_make_up"].replace("First-Year", "Freshmen")
     db_entry["class_make_up"] = class_str
 
-    # building type, options are suite, apartement, or corridor style
+    # building type, options are suite, apartment, or corridor style
     if "suite" in raw_json["building_type"].lower():
         db_entry["building_type"] = "Suite-style"
     else:

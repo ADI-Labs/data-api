@@ -1,0 +1,426 @@
+{% extends  "base.html" %}
+{% block content %}
+<div id="content" class="container">
+
+       <section id="students" class="api-page">
+       <h1>Residences</h1>
+       <hr>
+   
+       <h3>Try it!</h3>
+       <br>
+       <form method='post' >
+           <div>
+               <input class="form-control lead" name="searchTerm" placeholder="Search for residences with a specific name here"/>
+           </div>
+           <div>
+               <input class="btn" name="submit" type="submit" value='Search' />
+           </div>
+       </form>
+       <!-- results of search displayed if user is authenticated, otherwise error message -->
+       {% if current_user.is_authenticated %}
+            {% if results != [] %}
+            <table class="table-striped table-bordered center-block" padding width="90%">
+                <td >Name</td>
+                <td >Street Address</td>
+                <td >Class Makeup</td>
+                <td >Room Type</td>
+                {% for item in results %}
+                    <tr width="100%">
+                        <td >
+                            {{ item["name"] }}
+                        </td>
+                        <td >
+                            {{ item["street_address"] }}
+                        </td>
+                        <td >
+                            {{ item["class_make_up"] }}
+                        </td>
+                        <td >
+                            {{ item["room_type"] }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+            {% endif %}
+       {% endif %}
+       {% if not current_user.is_authenticated %}
+            <br><p style="color: red">*Must sign in to use search function</p>
+       {% endif %}
+   
+       <br>
+       <h3>There are two residence endpoints: residences/select and residences/search.</h3>
+       <br>
+ 
+       <div class="panel panel-default endpoint-select" >
+           <div class="panel-heading" data-toggle="collapse" data-target="#select_panel"><h4>Select</h4></div>
+           <div class="panel-body">
+               <div class="container-fluid">
+                   <div class="row">
+                       <span class="label label-primary col-1">GET</span>
+                       <span class="panel-text col-11" id="selectRequest">/api/residences/select?name=name&key=key</span>
+                   </div>
+               </div>
+               <div id="select_panel" class="collapse">
+                   <h3>Request</h3>
+                   <br>
+                   <div class="form-horizontal">
+                       <div class="form-group">
+                           <label class="col-sm-2 control-label">Key:</label>
+                           <div class="col-sm-10">
+                               <input class="form-control" id="inputKey1" type="text" placeholder="Insert key here">
+                           </div>
+                       </div>
+                       <div class="form-group">
+                           <label class="col-sm-2 control-label">Name:</label>
+                           <div class="col-sm-10">
+                               <input class="form-control" id="inputName" type="text" value="Hartley%20Hall">
+                           </div>
+                       </div>
+                       <div class="form-group">
+                           <span class="col-sm-2 control-label"></span>
+                           <div class="col-sm-10">
+                               <button type="button" class="btn" onclick="queryFunction('select')">GET</button>
+   
+                           </div>
+                       </div>          
+                   </div>         
+                   <h3>Response</h3>
+                   <div id = "selectResponseBlock">
+                           <pre class="text-success" prettyprint lang=js>
+                               {
+                                   &quot;status_code&quot;: 200,
+                                   &quot;data&quot;: [
+                                       {
+                                           &quot;name&quot;: &quot;Hartley Hall&quot;,
+                                           &quot;street_address&quot;: &quot;1124 Amsterdam Avenue&quot;,
+                                           &quot;residential_area&quot;: &quot;First Year Area&quot;,
+                                           &quot;building_type&quot;: &quot;Suite-style&quot;,
+                                           &quot;room_type&quot;: &quot;suite doubles, suite singles&quot;,
+                                           &quot;class_make_up&quot;: &quot;Freshmen, Sophomores&quot;,
+                                           &quot;rate&quot;: &quot;First Year $8,412/year; Upperclass: $9,538/year&quot;,
+                                           &quot;entrance_info&quot;: &quot;Inside campus between 115th and 116th Streets&quot;,
+                                           &quot;num_res_floors&quot;: 10,
+                                           &quot;num_singles&quot;: 158,
+                                           &quot;num_doubles&quot;: 36,
+                                           &quot;bathroom&quot;: &quot;Semi-Private, Within suite&quot;,
+                                           &quot;laundry&quot;: &quot;In basement&quot;,
+                                           &quot;flooring&quot;: &quot;Hallways and rooms carpeted&quot;,
+                                           &quot;kitchen&quot;: &quot;Private, per suite&quot;,
+                                           &quot;lounge&quot;: &quot;Building Lounge, 1st floor with game room including pool and ping pong tables, Study Lounge, 10th floor, Common Area, Per suite with cable TV&quot;,
+                                           &quot;cleaning_schedule&quot;: &quot;Bathrooms, Twice weekly, Kitchens, Resident responsibility, Trash Removal (Room/Suite), Resident responsibility, Recycling, Twice weekly&quot;,
+                                           &quot;bike_storage&quot;: false,
+                                           &quot;print_station&quot;: false,
+                                           &quot;fitness_room&quot;: false,
+                                           &quot;computer_lab&quot;: true,
+                                           &quot;ac&quot;: false,
+                                           &quot;piano&quot;: false,
+                                           &quot;description&quot;: &quot;Large duplex suites with singles and doubles, 2 building elevators&quot;,
+                                           &quot;features&quot;: &quot;Vending machines located in building&quot;
+                                       }
+                                   ],
+                                    &quot;status_txt&quot;: &quot;OK&quot;
+                                }
+                           </pre>
+                   </div>
+               </div>  
+           </div>
+       </div>
+
+       <div class="panel panel-default endpoint-search" >
+           <div class="panel-heading" data-toggle="collapse" data-target="#search_panel"><h4>Search</h4></div>
+           <div class="panel-body">
+               <div class="container-fluid">
+                   <div class="row">
+                       <span class="label label-primary col-1">GET</span>
+                       <span class="panel-text col-11" id="searchRequest">/api/residences/search?name=name&key=key</span>
+                   </div>
+               </div>
+             
+             
+               <div id="search_panel" class="collapse">
+                   <h3>Request</h3>
+                   <br>
+                   <div class="form-horizontal">
+                       <div class="form-group">
+                           <label class="col-sm-2 control-label">Key:</label>
+                           <div class="col-sm-10">
+                               <input class="form-control" id="inputKey2" type="text">
+                           </div>
+                       </div>
+                       <div class="form-group" id = "fieldToAdd">
+                           <div class="col-sm-2">
+                               <!-- scroll bar to select type of search -->
+                               <select class="form-control selectionQuery" id="inputParameter" value="name">
+                                   <option value="name">name</option>
+                                   <option value="residential_area">residential_area</option>
+                                   <option value="building_type">building_type</option>
+                                   <option value="room_type" selected="selected">room_type</option>
+                                   <option value="class_make_up">class_make_up</option>
+                                   <option value="bathroom">bathroom</option>
+                                   <option value="kitchen">kitchen</option>
+                                   <option value="bike_storage">bike_storage</option>
+                                   <option value="print_station">print_station</option>
+                                   <option value="fitness_room">fitness_room</option>
+                                   <option value="computer_lab">computer_lab</option>
+                                   <option value="ac">ac</option>
+                                   <option value="piano">piano</option>
+                               </select>
+                           </div>            
+                           <div class="col-sm-10">
+                               <input class="form-control" id="inputParameterValue" type="text" value="singles,%20doubles">
+                           </div>
+                       </div>
+                       <div class="form-group">
+                           <span class="col-sm-2 control-label"></span>
+                           <div class="col-sm-10">
+                               <button type="button" class="btn" onclick="queryFunction('search')">GET</button>
+                               <button type="button" class="btn" onclick="addField()">ADD FIELD</button>
+                               &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id = "expand"><small>Expand</small>
+                           </div>
+                       </div>
+                   </div>         
+                   <h3>Response</h3>
+                   <div id="searchResponseBlock" class = "searchResponseBlock">
+                       <pre class="text-success prettyprint lang=js">
+                               {
+                                   &quot;status_code&quot;: 200,
+                                   &quot;data&quot;: [
+                                       {
+                                        &quot;name&quot;: &quot;Hartley Hall&quot;,
+                                        &quot;street_address&quot;: &quot;1124 Amsterdam Avenue&quot;,
+                                        &quot;residential_area&quot;: &quot;First Year Area&quot;,
+                                        &quot;building_type&quot;: &quot;Suite-style&quot;,
+                                        &quot;room_type&quot;: &quot;suite doubles, suite singles&quot;,
+                                        &quot;class_make_up&quot;: &quot;Freshmen, Sophomores&quot;,
+                                        &quot;rate&quot;: &quot;First Year $8,412/year; Upperclass: $9,538/year&quot;,
+                                        &quot;entrance_info&quot;: &quot;Inside campus between 115th and 116th Streets&quot;,
+                                        &quot;num_res_floors&quot;: 10,
+                                        &quot;num_singles&quot;: 158,
+                                        &quot;num_doubles&quot;: 36,
+                                        &quot;bathroom&quot;: &quot;Semi-Private, Within suite&quot;,
+                                        &quot;laundry&quot;: &quot;In basement&quot;,
+                                        &quot;flooring&quot;: &quot;Hallways and rooms carpeted&quot;,
+                                        &quot;kitchen&quot;: &quot;Private, per suite&quot;,
+                                        &quot;lounge&quot;: &quot;Building Lounge, 1st floor with game room including pool and ping pong tables, Study Lounge, 10th floor, Common Area, Per suite with cable TV&quot;,
+                                        &quot;cleaning_schedule&quot;: &quot;Bathrooms, Twice weekly, Kitchens, Resident responsibility, Trash Removal (Room/Suite), Resident responsibility, Recycling, Twice weekly&quot;,
+                                        &quot;bike_storage&quot;: false,
+                                        &quot;print_station&quot;: false,
+                                        &quot;fitness_room&quot;: false,
+                                        &quot;computer_lab&quot;: true,
+                                        &quot;ac&quot;: false,
+                                        &quot;piano&quot;: false,
+                                        &quot;description&quot;: &quot;Large duplex suites with singles and doubles, 2 building elevators&quot;,
+                                        &quot;features&quot;: &quot;Vending machines located in building&quot;
+                                       }
+                                   ],
+                                   &quot;status_txt&quot;: &quot;OK&quot;
+                               }
+                           </pre>
+                   </div>
+               </div>  
+           </div>
+       </div>
+     
+       <br>
+       <h3>The query parameters for the two endpoints are the same.</h3>
+       <br>
+   
+       <div class="panel panel-default" data-toggle="collapse" data-target="#query_panel">
+           <div class="panel-body">
+               <h5>Query Parameters</h5>
+               <div id="query_panel" class="collapse">
+   
+                   {% if parameters != [] %}
+                   <table class="table table-bordered">
+                       <thead>
+                           <tr>
+                               <th>Name</th>
+                               <th>Type</th>
+                               <th>Description</th>
+                           </tr>
+                       </thead>
+                       <tbody>
+                           {% for item in parameters %}
+                               <tr width="100%">
+                                   <td >
+                                       {{ item["name"] }}
+                                   </td>
+                                   <td >
+                                       {{ item["type"] }}
+                                   </td>
+                                   <td >
+                                       {{ item["description"] }}
+                                   </td>
+                               </tr>
+                           {% endfor %}
+                       </tbody>
+                   </table>
+                   {% endif %}
+               </div>
+           </div>
+       </div>
+   
+       <script>
+          var count = 1
+          // function to add new field when "ADD FIELD" is pressed   
+          function addField(){
+              var code = '<div><br><br>\
+                              <div class="col-sm-2">\
+                                  <select class="form-control selectionQuery" id="field' + count.toString()+ '"value="name">\
+                                    <option value="name" selected="selected">name</option>\
+                                    <option value="residential_area">residential_area</option>\
+                                    <option value="building_type">building_type</option>\
+                                    <option value="room_type">room_type</option>\
+                                    <option value="class_make_up">class_make_up</option>\
+                                    <option value="bathroom">bathroom</option>\
+                                    <option value="kitchen">kitchen</option>\
+                                    <option value="lounge">lounge</option>\
+                                    <option value="bike_storage">bike_storage</option>\
+                                    <option value="print_station">print_station</option>\
+                                    <option value="fitness_room">fitness_room</option>\
+                                    <option value="computer_lab">computer_lab</option>\
+                                    <option value="ac">ac</option>\
+                                    <option value="piano">piano</option>\
+                                  </select>\
+                              </div>' +           
+                              '<div class="col-sm-9">\
+                                  <input class="form-control" id="value'+count.toString()+'" type="text" value="Hartley%20Hall">\
+                              </div>' +
+                              '<div class="col-sm-1">\
+                                  <button type="button" class="btn btn-warning deletion" onclick="deleteField(this)">X</button>\
+                              </div>\
+                          </div>'
+              document.getElementById("fieldToAdd").innerHTML += code
+              count++
+          }
+
+          // deletes field when "X" is pressed
+          function deleteField(button) {
+              $(button).parent().parent().remove();
+          }
+
+          // returns queried data in JSON format for both "SELECT" and "SEARCH"
+          function queryFunction(endpoint) {
+              var req = endpoint + "Request";
+              var resp = endpoint + "ResponseBlock";
+              
+              var apiCall = new XMLHttpRequest();
+              apiCall.onreadystatechange = function() {
+                  document.getElementById(req).innerHTML = apiRequest;
+                  if (apiCall.readyState == XMLHttpRequest.DONE && this.status == 200) {
+                      var obj = JSON.parse(apiCall.responseText);
+
+                      // if we have endpoint = "select", the data is returned as a dict
+                      // if we have endpoint = "search", the data is returned as array of dicts
+                      // to uniformize the data, I store results in array of dicts, no matter which endpoint
+                      totalData =[]
+                      if (endpoint == "select"){
+                          totalData[0]=obj.data
+                      }
+                      if (endpoint == "search"){
+                          totalData=obj.data
+                      }
+
+                      var result = ""
+                      // each possible result in array of dicts is printed in JSON form
+                      // for endpoint = select, only one JSON block is printed (array has length 1)
+                      // for endpoint = search, 
+                      for (i=0; i<totalData.length;i++){
+                          data = totalData[i]
+                          // text to be inserted into HTML block
+                          var temp_text = "<pre class='text-success' prettyprint lang=js>\n\
+                              {\n\
+                                  &quot;status_code&quot;: 200,\n\
+                                  &quot;data&quot;: [\n\
+                                      { \n\
+                                          &quot;name&quot;: &quot;" +data.name+ "&quot;,\n\
+                                          &quot;street_address&quot;: &quot;" +data.street_address+ "&quot;,\n\
+                                          &quot;residential_area&quot;: " +data.residential_area+ ",\n\
+                                          &quot;building_type&quot;: &quot;" +data.building_type+ "&quot;,\n\
+                                          &quot;room_type&quot;: &quot;" +data.room_type+ "&quot;,\n\
+                                          &quot;class_make_up&quot;: &quot;" +data.class_make_up+ "&quot;,\n\
+                                          &quot;rate&quot;: &quot;" +data.rate+ "&quot;,\n\
+                                          &quot;entrance_info&quot;: &quot;" +data.entrance_info+ "&quot;,\n\
+                                          &quot;num_res_floors&quot;: " +data.num_res_floors+ ",\n\
+                                          &quot;num_singles&quot;: " +data.num_singles+ ",\n\
+                                          &quot;num_doubles&quot;: " +data.num_doubles+ ",\n\
+                                          &quot;bathroom&quot;: " +data.bathroom+ ",\n\
+                                          &quot;laundry&quot;: &quot;" +data.laundry+ "&quot;,\n\
+                                          &quot;flooring&quot;: " +data.flooring+ ",\n\
+                                          &quot;kitchen&quot;: " +data.kitchen+ ",\n\
+                                          &quot;lounge&quot;: " +data.lounge+ ",\n\
+                                          &quot;cleaning_schedule&quot;: &quot;" +data.cleaning_schedule+ "&quot;,\n\
+                                          &quot;bike_storage&quot;: " +data.bike_storage+ ",\n\
+                                          &quot;print_station&quot;: " +data.print_station+ ",\n\
+                                          &quot;fitness_room&quot;: " +data.fitness_room+ ",\n\
+                                          &quot;computer_lab&quot;: " +data.computer_lab+ ",\n\
+                                          &quot;ac&quot;: " +data.ac+ ",\n\
+                                          &quot;piano&quot;: " +data.piano+ ",\n\
+                                          &quot;description&quot;: " +data.description+ ",\n\
+                                          &quot;features&quot;: &quot;" +data.features+ "&quot;,\n\
+                                      }\n\
+                                  ],\n\
+                                  &quot;status_txt&quot;: &quot;OK&quot;\n\
+                              }\n\
+                          </pre>"
+                          result+=temp_text
+                      }
+                      // sets height at 600px and makes response scrollable
+                      var respElement = document.getElementById(resp)
+                      respElement.classList.add("searchResponseBlock")
+                      respElement.innerHTML = result;
+                      respElement.style.color = "green";
+
+                  // if key is incorrect
+                  } else {
+                      // sets height at 100%, preventing large+empty response block
+                      var responseObj = JSON.parse(this.response);
+                      var respElement = document.getElementById(resp)
+                      respElement.classList.remove("searchResponseBlock")
+                      respElement.innerHTML = "ERROR " + this.status + ": " + responseObj.message;
+                      respElement.style.color = "red";
+                      respElement.classList.add("nopadding")
+                  }
+              }
+
+              // returns single JSON block for "SELECT"
+              if (endpoint == "select") {
+                   apiRequest = "http://127.0.0.1:5000/api/residences/select?name="
+                                      + document.getElementById("inputName").value
+                                      + "&key="
+                                      + document.getElementById("inputKey1").value;
+              }
+
+              // returns at least one JSON block (if exists multiple results) for "SEARCH"
+              else if (endpoint == "search") {
+                   apiRequest = "http://127.0.0.1:5000/api/residences/search?"
+                                      + document.getElementById("inputParameter").value
+                                      + "="
+                                      + document.getElementById("inputParameterValue").value;
+                   for (i = 1; i < count; i++){
+                       option_id = "field" + i.toString()
+                       val_id = "value" + i.toString()
+                       element = document.getElementById(option_id).value
+                       value = document.getElementById(val_id).value
+                       apiRequest += "&"+element+"="+value;
+                   }
+                   if (document.getElementById("expand").checked){
+                       apiRequest += "&expand_special=true"
+                   }
+                   apiRequest += "&key="+document.getElementById("inputKey2").value
+              } 
+              apiCall.open("GET", apiRequest);
+              apiCall.send();
+          }
+  
+      </script>
+  
+      </section>
+   </div> 
+  
+   {% endblock %}
+   {% block styles %}
+   {{super()}}
+   <link rel="stylesheet"
+        href="{{url_for('static', filename='assets/api_page.css')}}">
+   {% endblock %}

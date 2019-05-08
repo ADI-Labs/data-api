@@ -1,5 +1,5 @@
 from flask import render_template, request
-from ..models import Course, Dining, Student
+from ..models import Course, Dining, Student, Residence
 from . import main
 import os
 from flask_cors import cross_origin
@@ -15,6 +15,8 @@ def search(term, where):
     # Very inefficient implementation
     # in the interest of "time" lol ironic
 
+    # FIX: for students.html, alld is empty list
+    # FIX: for courses.html, alld is empty list too!
     alld = where.query.all()
     for one in alld:
         things = remove_hidden_attr(one.__dict__)
@@ -24,21 +26,31 @@ def search(term, where):
                 # from here, ifs become essential since
                 # returnables are very dependent on
                 # model type
-
                 if where == Course:
                     result.append({"course_id": things["course_id"],
                                    "term": things["term"],
                                    "name": things["course_name"]})
+                    break
                 # more ifs based on models here
+                if where == Student:
+                    result.append({"name": things["Name"],
+                                   "uni": things["UNI"]})
+                    break
+                if where == Residence:
+                    result.append({"name": things["name"],
+                                   "street_address": things["street_address"],
+                                   "class_make_up": things["class_make_up"],
+                                   "room_type": things["room_type"]})
+                    break
                 continue
-
     return result
 
 
 def get_parameters(filename):
     parameters = []
 
-    new_path = os.path.abspath('./app/static/metadata/courses.txt')
+    path = './app/static/metadata/' + str(filename)
+    new_path = os.path.abspath(path)
 
     f = open(new_path, "r")
 
@@ -65,9 +77,9 @@ def courses():
     search_results = []
     if request.form:
         term = request.form["searchTerm"]
-        print(term)
+        # print(term)
         search_results = search(term, Course)
-    print(search_results)
+    # print(search_results)
 
     return render_template(
         'main/courses.html',
@@ -76,17 +88,19 @@ def courses():
 
 
 # not implementable yet. Model hasn't been built
-@main.route('/housing', methods=['GET', 'POST'])
-def housing():
+@main.route('/residences', methods=['GET', 'POST'])
+def residences():
     search_results = []
     if request.form:
         term = request.form["searchTerm"]
-        search_results = search(term, "Housing")
+        # print(term)  # term = search query
+        search_results = search(term, Residence)
+    # print(search_results)
 
     return render_template(
-        'main/housing.html',
+        'main/residences.html',
         results=search_results,
-        parameters=get_parameters('housing.txt'))
+        parameters=get_parameters('residences.txt'))
 
 
 @main.route('/dining', methods=['GET', 'POST'])
@@ -106,7 +120,9 @@ def student():
 
     if request.form:
         term = request.form["searchTerm"]
+        # print(term)  # term = search query
         search_results = search(term, Student)
+    # print(search_results)
 
     return render_template(
         'main/students.html',

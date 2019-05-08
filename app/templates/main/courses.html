@@ -20,6 +20,9 @@
        {% if current_user.is_authenticated %}
             {% if results != [] %}
             <table class="table-striped table-bordered center-block" padding width="90%">
+                <td >Name</td>
+                <td >Course ID</td>
+                <td >Term</td>
                 {% for item in results %}
                     <tr width="100%">
                         <td >
@@ -64,7 +67,7 @@
                            </div>
                        </div>
                        <div class="form-group">
-                           <label class="col-sm-2 control-label">Course_id:</label>
+                           <label class="col-sm-2 control-label">Course_ID:</label>
                            <div class="col-sm-10">
                                <input class="form-control" id="inputCourseID" type="text" value="COMS3134S001">
                            </div>
