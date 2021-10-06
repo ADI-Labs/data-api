@@ -40,7 +40,7 @@ python-http-client==3.0.0
 pytz==2017.3
 queuelib==1.5.0
 requests==2.18.4
-Scrapy==1.5.0
+Scrapy==1.8.1
 service-identity==17.0.0
 six==1.11.0
 SQLAlchemy==1.2.2
