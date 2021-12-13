@@ -25,7 +25,7 @@ robobrowser==0.5.3
 incremental==17.5.0
 itsdangerous==1.1.0
 Jinja2==2.10
-lxml==4.2.1
+lxml==4.6.5
 MarkupSafe==1.1.0
 mccabe==0.6.1
 parsel==1.4.0
